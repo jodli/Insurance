@@ -15,15 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Helpers;
+package jodli.Client.Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,5 +66,13 @@ public class AppUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void downloadToFile(URL url, File file) throws IOException {
+		file.getParentFile().mkdirs();
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		fos.close();
 	}
 }
