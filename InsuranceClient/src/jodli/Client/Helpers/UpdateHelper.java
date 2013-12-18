@@ -17,6 +17,7 @@
  */
 package jodli.Client.Helpers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,8 +25,12 @@ import java.net.URL;
 
 public class UpdateHelper {
 
-	private final static String changeLogURL = "";
-	private final static String versionURL = "";
+	private final static String changeLogURL = "file:///"
+			+ System.getProperty("user.dir") + File.separator + "res"
+			+ File.separator + "changelog.txt";
+	private final static String versionURL = "file:///"
+			+ System.getProperty("user.dir") + File.separator + "res"
+			+ File.separator + "version.txt";
 
 	public static String getLatestVersion() {
 		String data = getData(versionURL);

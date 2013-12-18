@@ -1,0 +1,6 @@
+[changelog]
+First test of changelog
+and version check
+for updating
+application.
+[/changelog]
