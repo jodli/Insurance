@@ -24,6 +24,7 @@ import java.net.URLDecoder;
 
 import jodli.Client.Application.App;
 import jodli.Client.Updater.SelfUpdate;
+import jodli.Client.Updater.UpdateInfo;
 import jodli.Client.log.Logger;
 
 import org.w3c.dom.Document;
@@ -86,26 +87,6 @@ public class UpdateChecker {
 	}
 
 	public void update() {
-		String path = null;
-		try {
-			path = new File(App.class.getProtectionDomain().getCodeSource()
-					.getLocation().getPath()).getCanonicalPath();
-			path = URLDecoder.decode(path, "UTF-8");
-		} catch (IOException e) {
-			Logger.logError("Couldn't get path to current Application.", e);
-		}
-
-		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation()
-				+ "updatetemp" + File.separator
-				+ path.substring(path.lastIndexOf(File.separator) + 1);
-
-		try {
-			File temporaryUpdate = new File(temporaryUpdatePath);
-			temporaryUpdate.getParentFile().mkdir();
-			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
-			SelfUpdate.runUpdate(path, temporaryUpdatePath);
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-		}
+		UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress);
 	}
 }

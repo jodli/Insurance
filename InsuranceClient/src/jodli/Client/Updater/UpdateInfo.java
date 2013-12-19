@@ -21,6 +21,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -28,6 +32,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import jodli.Client.Application.App;
+import jodli.Client.Utilities.AppUtils;
+import jodli.Client.Utilities.OSUtils;
+import jodli.Client.log.Logger;
+
+@SuppressWarnings("serial")
 public class UpdateInfo extends JFrame {
 	private JEditorPane infoPane;
 	private JScrollPane scp;
@@ -36,12 +46,18 @@ public class UpdateInfo extends JFrame {
 	private JPanel pan1;
 	private JPanel pan2;
 
-	public UpdateInfo(String info) {
+	private String downloadAddress;
+
+	public UpdateInfo(String changelog, String downloadAddress) {
 		initComponents();
-		infoPane.setText(info);
+
+		infoPane.setText(changelog);
+		this.downloadAddress = downloadAddress;
 	}
 
 	private void initComponents() {
+
+		this.setVisible(false);
 
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		this.setTitle("New Update Found");
@@ -58,6 +74,7 @@ public class UpdateInfo extends JFrame {
 		scp.setViewportView(infoPane);
 
 		ok = new JButton("Update");
+
 		ok.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -78,18 +95,33 @@ public class UpdateInfo extends JFrame {
 		pan1.add(scp, BorderLayout.CENTER);
 		this.add(pan1);
 		pack();
-		show();
 		this.setSize(300, 200);
+
+		this.setVisible(true);
 	}
 
 	private void update() {
-		String[] run = { "java", "-jar", "updater/update.jar" };
-		try {
-			Runtime.getRuntime().exec(run);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		System.exit(0);
-	}
 
+		String path = null;
+		try {
+			path = new File(App.class.getProtectionDomain().getCodeSource()
+					.getLocation().getPath()).getCanonicalPath();
+			path = URLDecoder.decode(path, "UTF-8");
+		} catch (IOException e) {
+			Logger.logError("Couldn't get path to current Application.", e);
+		}
+
+		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation()
+				+ "updatetemp" + File.separator
+				+ path.substring(path.lastIndexOf(File.separator) + 1);
+
+		try {
+			File temporaryUpdate = new File(temporaryUpdatePath);
+			temporaryUpdate.getParentFile().mkdir();
+			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
+			SelfUpdate.runUpdate(path, temporaryUpdatePath);
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
+		}
+	}
 }
