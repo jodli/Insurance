@@ -1,1 +1,9 @@
-<updateinfo currentBuild="1" downloadURL="test"/>
+<?xml version="1.0"?>
+<update>
+	<updateinfo currentBuild="01" downloadURL="test"/>
+	<changelog>
+Changed bla bla.
+Changed this.
+Changed that.
+	</changelog>
+</update>

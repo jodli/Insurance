@@ -27,7 +27,8 @@ import jodli.Client.Updater.SelfUpdate;
 import jodli.Client.log.Logger;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class UpdateChecker {
 
@@ -35,6 +36,7 @@ public class UpdateChecker {
 	private int latest;
 	public static String verString = "";
 	private String downloadAddress = "";
+	private String changeLog = "";
 
 	private final static String updateFileURL = "\\\\home.audivo.local\\_users\\beckerjo\\updateFile.xml";
 
@@ -56,17 +58,25 @@ public class UpdateChecker {
 			if (doc == null) {
 				return;
 			}
-			NamedNodeMap updateAttributes = doc.getDocumentElement()
-					.getAttributes();
-			this.latest = Integer.parseInt(updateAttributes.getNamedItem(
-					"currentBuild").getTextContent());
-			char[] tmp = String.valueOf(latest).toCharArray();
+			Element updateInfoNode = (Element) doc.getElementsByTagName(
+					"updateinfo").item(0);
+
+			String ver = updateInfoNode.getAttribute("currentBuild");
+			this.latest = Integer.parseInt(ver);
+			char[] tmp = ver.toCharArray();
 			for (int i = 0; i < (tmp.length - 1); i++) {
 				verString += tmp[i] + ".";
 			}
 			verString += tmp[tmp.length - 1];
-			downloadAddress = updateAttributes.getNamedItem("downloadURL")
+			Logger.logInfo("Current build: " + ver);
+
+			downloadAddress = updateInfoNode.getAttribute("downloadURL");
+			Logger.logInfo(downloadAddress);
+
+			changeLog = doc.getElementsByTagName("changelog").item(0)
 					.getTextContent();
+			Logger.logInfo(changeLog);
+
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 		}
