@@ -88,5 +88,6 @@ public class UpdateChecker {
 
 	public void update() {
 		UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress);
+		ui.showFrame();
 	}
 }

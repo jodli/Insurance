@@ -96,7 +96,9 @@ public class UpdateInfo extends JFrame {
 		this.add(pan1);
 		pack();
 		this.setSize(300, 200);
+	}
 
+	public void showFrame() {
 		this.setVisible(true);
 	}
 
@@ -122,6 +124,8 @@ public class UpdateInfo extends JFrame {
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
+			// show messagebox
+			UpdateInfo.this.dispose();
 		}
 	}
 }
