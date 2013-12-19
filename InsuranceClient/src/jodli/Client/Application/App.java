@@ -17,16 +17,52 @@
  */
 package jodli.Client.Application;
 
+import java.awt.EventQueue;
+
+import jodli.Client.Updater.MainConsole;
 import jodli.Client.Utilities.UpdateChecker;
+import jodli.Client.log.Logger;
 
 public class App {
 
-	public static void main(String[] args) {
-		UpdateChecker uc = new UpdateChecker(0);
+	private static String version = "0.1";
+	private static int buildNumber = 0;
 
-		if (uc.shouldUpdate()) {
-			uc.update();
-		}
+	public static void main(String[] args) {
+
+		Logger.logInfo("Insurance client starting up (Version " + version + ")");
+		Logger.logInfo("Java version: " + System.getProperty("java.version"));
+		Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
+		Logger.logInfo("Java home: " + System.getProperty("java.home"));
+		Logger.logInfo("Java specification: "
+				+ System.getProperty("java.vm.specification.name")
+				+ " version: "
+				+ System.getProperty("java.vm.specification.version") + " by "
+				+ System.getProperty("java.vm.specification.vendor"));
+		Logger.logInfo("Java vm: " + System.getProperty("java.vm.name")
+				+ " version: " + System.getProperty("java.vm.version") + " by "
+				+ System.getProperty("java.vm.vendor"));
+		Logger.logInfo("OS: " + System.getProperty("os.arch") + " "
+				+ System.getProperty("os.name") + " "
+				+ System.getProperty("os.version"));
+
+		EventQueue.invokeLater(new Runnable() {
+
+			public void run() {
+
+				MainFrame frm = new MainFrame(version);
+				MainConsole con = new MainConsole();
+
+				frm.showFrame();
+				con.showFrame();
+
+				UpdateChecker uc = new UpdateChecker(buildNumber);
+
+				if (uc.shouldUpdate()) {
+					uc.update();
+				}
+			}
+		});
 
 	}
 }
