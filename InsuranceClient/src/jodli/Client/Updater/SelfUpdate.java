@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jodli.Client.Utilities.FileUtils;
+import jodli.Client.log.Logger;
 
 public class SelfUpdate {
 	public static void runUpdate(String currentPath, String temporaryUpdatePath) {
 		List<String> arguments = new ArrayList<String>();
 
-		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin"
-				+ separator + "java";
+		String javaPath = System.getProperty("java.home") + File.separator
+				+ "bin" + File.separator + "java";
 
 		arguments.add(javaPath);
 		arguments.add("-cp");
@@ -44,6 +44,7 @@ public class SelfUpdate {
 		try {
 			processBuilder.start();
 		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
 		}
 		System.exit(0);
 	}
@@ -51,29 +52,30 @@ public class SelfUpdate {
 	public static void main(String[] args) {
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException ignored) {
+		} catch (InterruptedException e) {
+			Logger.logError(e.getMessage(), e);
 		}
 
-		String launcherPath = args[0];
+		String executablePath = args[0];
 		String temporaryUpdatePath = args[1];
 
-		File launcher = new File(launcherPath);
+		File executable = new File(executablePath);
 		File temporaryUpdate = new File(temporaryUpdatePath);
 		try {
-			FileUtils.delete(launcher);
-			FileUtils.copyFile(temporaryUpdate, launcher);
+			FileUtils.delete(executable);
+			FileUtils.copyFile(temporaryUpdate, executable);
 		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
 		}
 
 		List<String> arguments = new ArrayList<String>();
 
-		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin"
-				+ separator + "java";
+		String javaPath = System.getProperty("java.home") + File.separator
+				+ "bin" + File.separator + "java";
 
 		arguments.add(javaPath);
 		arguments.add("-jar");
-		arguments.add(launcherPath);
+		arguments.add(executablePath);
 
 		ProcessBuilder processBuilder = new ProcessBuilder();
 		processBuilder.command(arguments);
@@ -81,6 +83,7 @@ public class SelfUpdate {
 		try {
 			processBuilder.start();
 		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 }

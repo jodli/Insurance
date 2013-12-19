@@ -24,6 +24,7 @@ import java.net.URLDecoder;
 
 import jodli.Client.Application.App;
 import jodli.Client.Updater.SelfUpdate;
+import jodli.Client.log.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -35,12 +36,17 @@ public class UpdateChecker {
 	public static String verString = "";
 	private String downloadAddress = "";
 
-	private final static String updateFileURL = System.getProperty("user.dir")
-			+ File.separator + "res" + File.separator + "updateFile.xml";
+	private final static String updateFileURL = "\\\\home.audivo.local\\_users\\beckerjo\\updateFile.xml";
 
 	public UpdateChecker(int version) {
 		this.version = version;
 		loadInfo();
+		try {
+			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(),
+					"updatetemp"));
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
+		}
 	}
 
 	private void loadInfo() {
@@ -62,6 +68,7 @@ public class UpdateChecker {
 			downloadAddress = updateAttributes.getNamedItem("downloadURL")
 					.getTextContent();
 		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 
@@ -76,17 +83,20 @@ public class UpdateChecker {
 					.getLocation().getPath()).getCanonicalPath();
 			path = URLDecoder.decode(path, "UTF-8");
 		} catch (IOException e) {
+			Logger.logError("Couldn't get path to current Application.", e);
 		}
 
-		String temporaryUpdatePath = System.getenv("APPDATA") + File.separator
+		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation()
 				+ "updatetemp" + File.separator
 				+ path.substring(path.lastIndexOf(File.separator) + 1);
+
 		try {
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
 			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
 		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 }
