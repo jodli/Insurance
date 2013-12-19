@@ -29,7 +29,6 @@ public class LogEntry {
 	private String location;
 	private final String dateString;
 	private final Date date;
-	private final Map<LogType, String> messageCache = new HashMap<LogType, String>();
 	private static final String dateFormatString = "HH:mm:ss";
 
 	public LogEntry() {
@@ -85,9 +84,6 @@ public class LogEntry {
 	}
 
 	public String toString(LogType type) {
-		if (messageCache.containsKey(type)) {
-			return messageCache.get(type);
-		}
 		StringBuilder entryMessage = new StringBuilder();
 		if (type.includes(LogType.EXTENDED)) {
 			entryMessage.append("[").append(dateString).append("] ");
@@ -108,7 +104,6 @@ public class LogEntry {
 			}
 		}
 		String message = entryMessage.toString();
-		messageCache.put(type, message);
 		return message;
 	}
 
