@@ -63,19 +63,18 @@ public class UpdateChecker {
 
 			String ver = updateInfoNode.getAttribute("currentBuild");
 			this.latest = Integer.parseInt(ver);
+
 			char[] tmp = ver.toCharArray();
 			for (int i = 0; i < (tmp.length - 1); i++) {
 				verString += tmp[i] + ".";
 			}
 			verString += tmp[tmp.length - 1];
-			Logger.logInfo("Current build: " + ver);
+			Logger.logInfo("Current build: " + verString);
 
 			downloadAddress = updateInfoNode.getAttribute("downloadURL");
-			Logger.logInfo(downloadAddress);
 
 			changeLog = doc.getElementsByTagName("changelog").item(0)
 					.getTextContent();
-			Logger.logInfo(changeLog);
 
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
