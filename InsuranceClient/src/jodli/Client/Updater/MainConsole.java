@@ -50,16 +50,13 @@ import jodli.Client.log.LogType;
 import jodli.Client.log.LogWriter;
 import jodli.Client.log.Logger;
 
-import com.sun.scenario.Settings;
-
 @SuppressWarnings("serial")
-public class MainConsole extends JFrame implements ILogListener {
+public class MainConsole extends JPanel implements ILogListener {
 	private final static String launcherLogFile = "FTBLauncherLog.txt";
-	private final static String minecraftLogFile = "MinecraftLog.txt";
 	private JEditorPane displayArea;
 	private HTMLEditorKit kit;
 	private HTMLDocument doc;
-	private JComboBox<LogType> logTypeComboBox;
+	private JComboBox logTypeComboBox;
 	private LogType logType = LogType.DEBUG;
 
 	private class OutputOverride extends PrintStream {
@@ -96,41 +93,15 @@ public class MainConsole extends JFrame implements ILogListener {
 	}
 
 	public MainConsole() {
-		setTitle("Console");
-		setMinimumSize(new Dimension(800, 400));
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		setMinimumSize(new Dimension(400, 200));
+		setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
 
-		getContentPane().add(panel, BorderLayout.SOUTH);
+		add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-		JButton pastebin = new JButton("Paste my log to pastebin.com");
-		pastebin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane pane = new JOptionPane(
-						"The log will be copied to your clipboard and pastebin.com will be opened now");
-				Object[] options = new String[] { "Yes do it", "Cancel" };
-				pane.setOptions(options);
-				JDialog dialog = pane.createDialog(new JFrame(),
-						"Paste to pastebin.com");
-				dialog.setVisible(true);
-				Object obj = pane.getValue();
-				int result = -1;
-				for (int i = 0; i < options.length; i++) {
-					if (options[i].equals(obj)) {
-						result = i;
-					}
-				}
-				if (result == 0) {
-					// PastebinPoster thread = new PastebinPoster();
-					// thread.start();
-				}
-			}
-		});
-		panel.add(pastebin);
-
-		logTypeComboBox = new JComboBox<LogType>(LogType.values());
+		logTypeComboBox = new JComboBox(LogType.values());
 		logTypeComboBox.setSelectedItem(logType);
 		logTypeComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,7 +120,7 @@ public class MainConsole extends JFrame implements ILogListener {
 		scrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		getContentPane().add(scrollPane);
+		add(scrollPane);
 
 		refreshLogs();
 		Logger.addListener(this);
