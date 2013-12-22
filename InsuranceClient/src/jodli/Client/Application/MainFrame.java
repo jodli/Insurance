@@ -17,47 +17,35 @@
  */
 package jodli.Client.Application;
 
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import jodli.Client.Utilities.OSUtils;
-import jodli.Client.Utilities.OSUtils.OS;
-
-import com.sun.imageio.plugins.common.I18N;
-import com.sun.scenario.Settings;
+import jodli.Client.Updater.MainConsole;
+import jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
 	public static JPanel panel;
-	private JPanel footer = new JPanel();
-	private JButton launch = new JButton(), edit = new JButton(),
-			donate = new JButton(), serverbutton = new JButton(),
-			mapInstall = new JButton(), serverMap = new JButton(),
-			tpInstall = new JButton();
+	private MainConsole console;
+	private JTabbedPane tabbedPane;
+	private MenuBar menuBar;
+	private Menu menuFile;
 
-	private static MainFrame instance = null;
 	private final String version;
-
-	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
 	public MainFrame(String version) {
 		this.version = version;
@@ -67,39 +55,38 @@ public class MainFrame extends JFrame {
 	private void initComponents() {
 		this.setVisible(false);
 
-		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
-		setResizable(false);
 		setTitle("Insurance Client v" + version);
+		setMinimumSize(new Dimension(800, 400));
+
+		menuBar = new MenuBar();
+		menuFile = new Menu("File");
+		menuFile.add(new MenuItem("Quit"));
+		menuFile.getItem(0).addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				Logger.logInfo("Quit menu item pressed");
+			}
+		});
+		menuBar.add(menuFile);
 
 		panel = new JPanel();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-			setBounds(100, 100, 842, 480);
-		} else {
-			setBounds(100, 100, 850, 480);
-		}
 		panel.setBounds(0, 0, 850, 480);
-		panel.setLayout(null);
-		footer.setBounds(0, 380, 850, 100);
-		footer.setLayout(null);
+		panel.setLayout(new BorderLayout());
+
+		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		tabbedPane.setBounds(0, 0, 850, 380);
+
+		console = new MainConsole();
+		tabbedPane.add(console);
 		panel.add(tabbedPane);
-		panel.add(footer);
-		setContentPane(panel);
 
-		footer.add(edit);
-		footer.add(launch);
-		footer.add(donate);
-		footer.add(serverbutton);
-		footer.add(mapInstall);
-		footer.add(serverMap);
-		footer.add(tpInstall);
-
-		getRootPane().setDefaultButton(launch);
+		getContentPane().add(panel);
+		setMenuBar(menuBar);
 
 		pack();
-		this.setSize(800, 600);
+		this.setSize(566, 40);
 	}
 
 	public void showFrame() {
