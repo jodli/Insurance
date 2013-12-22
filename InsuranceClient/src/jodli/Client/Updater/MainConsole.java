@@ -134,10 +134,6 @@ public class MainConsole extends JPanel implements ILogListener {
 		}
 	}
 
-	public void showFrame() {
-		this.setVisible(true);
-	}
-
 	synchronized private void refreshLogs() {
 		doc = new HTMLDocument();
 		displayArea.setDocument(doc);
