@@ -18,10 +18,7 @@
 package jodli.Client.Application;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.LayoutManager;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -31,6 +28,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 import jodli.Client.Updater.MainConsole;
@@ -41,6 +39,7 @@ public class MainFrame extends JFrame {
 
 	public static JPanel panel;
 	private MainConsole console;
+	private JTable table;
 	private JTabbedPane tabbedPane;
 	private MenuBar menuBar;
 	private Menu menuFile;
@@ -72,14 +71,15 @@ public class MainFrame extends JFrame {
 		panel = new JPanel();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(new BorderLayout());
 
 		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		tabbedPane.setBounds(0, 0, 850, 380);
+
+		table = new JTable(5, 5);
+		tabbedPane.addTab("Table", table);
 
 		console = new MainConsole();
-		tabbedPane.add(console);
+		tabbedPane.addTab("Console", console);
 		panel.add(tabbedPane);
 
 		getContentPane().add(panel);
