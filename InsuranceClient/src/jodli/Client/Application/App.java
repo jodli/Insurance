@@ -26,7 +26,7 @@ import jodli.Client.log.Logger;
 public class App {
 
 	private static String version = "0.1";
-	private static int buildNumber = 0;
+	private static int buildNumber = 01;
 
 	public static void main(String[] args) {
 
@@ -46,15 +46,16 @@ public class App {
 				+ System.getProperty("os.name") + " "
 				+ System.getProperty("os.version"));
 
+		Logger.logWarn("Test color warning");
+		Logger.logError("Test color error");
+
 		EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
 
 				MainFrame frm = new MainFrame(version);
-				MainConsole con = new MainConsole();
 
 				frm.showFrame();
-				con.showFrame();
 
 				UpdateChecker uc = new UpdateChecker(buildNumber);
 
