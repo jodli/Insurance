@@ -18,18 +18,13 @@
 package jodli.Client.Utilities;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 
-import jodli.Client.Application.App;
-import jodli.Client.Updater.SelfUpdate;
 import jodli.Client.Updater.UpdateInfo;
 import jodli.Client.log.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class UpdateChecker {
 
@@ -39,7 +34,7 @@ public class UpdateChecker {
 	private String downloadAddress = "";
 	private String changeLog = "";
 
-	private final static String updateFileURL = "\\\\home.audivo.local\\_users\\beckerjo\\updateFile.xml";
+	private final static String updateFileURL = "https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/updateFile.xml";
 
 	public UpdateChecker(int version) {
 		this.version = version;
@@ -54,8 +49,7 @@ public class UpdateChecker {
 
 	private void loadInfo() {
 		try {
-			File url = new File(updateFileURL);
-			Document doc = AppUtils.downloadXML(url.toURI().toURL());
+			Document doc = AppUtils.downloadXML(new URL(updateFileURL));
 			if (doc == null) {
 				return;
 			}
