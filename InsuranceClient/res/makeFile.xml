@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project InsuranceClient with libraries in sub-folder">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="create_run_jar">
+		<jar destfile="/home/jodli/Documents/Insurance/App.jar">
+			<manifest>
+				<attribute name="Main-Class" value="jodli.Client.Application.App" />
+				<attribute name="Class-Path" value=". App_lib/db4o-8.0.249.16098-all-java5.jar" />
+			</manifest>
+			<fileset dir="/home/jodli/workspace/Insurance/InsuranceClient/bin" />
+		</jar>
+		<chmod file="/home/jodli/Documents/Insurance/App.jar" perm="ugo+x" />
+		<delete dir="/home/jodli/Documents/Insurance/App_lib" />
+		<mkdir dir="/home/jodli/Documents/Insurance/App_lib" />
+		<copy file="/home/jodli/workspace/Insurance/InsuranceClient/lib/db4o-8.0.249.16098-all-java5.jar" todir="/home/jodli/Documents/Insurance/App_lib" />
+	</target>
+</project>
