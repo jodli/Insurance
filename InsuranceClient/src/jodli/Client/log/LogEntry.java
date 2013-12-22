@@ -89,7 +89,7 @@ public class LogEntry {
 			entryMessage.append("[").append(dateString).append("] ");
 			entryMessage.append("[").append(level).append("] ");
 		}
-		if (location != null && type.includes(LogType.EXTENDED)) {
+		if (location != null && type.includes(LogType.DEBUG)) {
 			entryMessage.append(location).append(": ");
 		}
 		entryMessage.append(message);
