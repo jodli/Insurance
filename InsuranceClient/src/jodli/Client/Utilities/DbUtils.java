@@ -18,6 +18,7 @@
 package src.jodli.Client.Utilities;
 
 import java.io.File;
+import java.time.LocalDate;
 
 import src.jodli.Client.log.Logger;
 
@@ -26,11 +27,12 @@ import com.almworks.sqlite4java.SQLiteQueue;
 
 public class DbUtils {
 	private File databaseFile;
-	private static final String DB_PATH = "database.sqlite";
+	private static final String DB_PATH = "database_"
+			+ LocalDate.now().getYear() + ".sqlite";
 	private SQLiteQueue queue;
 	private static DbUtils instance = null;
 
-	private DbUtils() {
+	private DbUtils() throws SQLiteException {
 
 		Logger.logInfo("Disabling sqlite4java logging.");
 		java.util.logging.Logger.getLogger("com.almworks.sqlite4java")
@@ -38,15 +40,19 @@ public class DbUtils {
 
 		databaseFile = new File(DB_PATH);
 
-		Logger.logInfo("Creating / Opening database at path: " + DB_PATH);
+		Logger.logInfo("Opening database at path: " + DB_PATH);
 
 		queue = new SQLiteQueue(databaseFile);
 		queue.start();
 	}
 
-	public static synchronized DbUtils get() throws SQLiteException {
+	public static synchronized DbUtils instance() {
 		if (instance == null) {
-			instance = new DbUtils();
+			try {
+				instance = new DbUtils();
+			} catch (SQLiteException e) {
+				Logger.logError(e.getMessage(), e);
+			}
 
 			Logger.logInfo("Running initialization job.");
 			instance.queue.execute(new initJob());
@@ -60,5 +66,9 @@ public class DbUtils {
 			Logger.logInfo("Trying to close database connection.");
 			queue.stop(true).join();
 		}
+	}
+
+	public String getVersion() {
+		return "01";
 	}
 }
