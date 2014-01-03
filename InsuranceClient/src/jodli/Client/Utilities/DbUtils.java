@@ -19,6 +19,8 @@ package src.jodli.Client.Utilities;
 
 import java.io.File;
 
+import src.jodli.Client.log.Logger;
+
 import com.almworks.sqlite4java.SQLiteQueue;
 
 public class DbUtils {
@@ -30,6 +32,8 @@ public class DbUtils {
 	private DbUtils() {
 		databaseFile = new File(DB_PATH);
 
+		Logger.logInfo("Creating / Opening database at path: " + DB_PATH);
+
 		queue = new SQLiteQueue(databaseFile);
 		queue.start();
 	}
@@ -37,6 +41,8 @@ public class DbUtils {
 	public static synchronized DbUtils get() {
 		if (instance == null) {
 			instance = new DbUtils();
+
+			Logger.logInfo("Running initialization job.");
 			instance.queue.execute(new initJob());
 		}
 
@@ -45,6 +51,7 @@ public class DbUtils {
 
 	public void dispose() throws InterruptedException {
 		if (queue != null) {
+			Logger.logInfo("Trying to close database connection.");
 			queue.stop(true).join();
 		}
 	}
