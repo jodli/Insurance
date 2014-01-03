@@ -15,44 +15,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Updater;
+package src.jodli.Client.Updater;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URI;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import jodli.Client.log.ILogListener;
-import jodli.Client.log.LogEntry;
-import jodli.Client.log.LogLevel;
-import jodli.Client.log.LogType;
-import jodli.Client.log.LogWriter;
-import jodli.Client.log.Logger;
+import src.jodli.Client.log.ILogListener;
+import src.jodli.Client.log.LogEntry;
+import src.jodli.Client.log.LogLevel;
+import src.jodli.Client.log.LogType;
+import src.jodli.Client.log.LogWriter;
+import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
 public class MainConsole extends JPanel implements ILogListener {
-	private final static String launcherLogFile = "FTBLauncherLog.txt";
+	private final static String launcherLogFile = "InsuranceClientLog.txt";
 	private JEditorPane displayArea;
 	private HTMLEditorKit kit;
 	private HTMLDocument doc;

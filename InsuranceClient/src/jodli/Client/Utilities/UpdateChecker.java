@@ -15,16 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Utilities;
+package src.jodli.Client.Utilities;
 
 import java.io.File;
 import java.net.URL;
 
-import jodli.Client.Updater.UpdateInfo;
-import jodli.Client.log.Logger;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import src.jodli.Client.Updater.UpdateInfo;
+import src.jodli.Client.log.Logger;
 
 public class UpdateChecker {
 

@@ -15,15 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Updater;
+package src.jodli.Client.Updater;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jodli.Client.Utilities.FileUtils;
-import jodli.Client.log.Logger;
+import src.jodli.Client.Utilities.FileUtils;
+import src.jodli.Client.log.Logger;
 
 public class SelfUpdate {
 	public static void runUpdate(String currentPath, String temporaryUpdatePath) {

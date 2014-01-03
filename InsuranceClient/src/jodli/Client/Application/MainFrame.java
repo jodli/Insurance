@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Application;
+package src.jodli.Client.Application;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,8 +31,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-import jodli.Client.Updater.MainConsole;
-import jodli.Client.log.Logger;
+import src.jodli.Client.Updater.MainConsole;
+import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Updater;
+package src.jodli.Client.Updater;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -32,10 +32,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import jodli.Client.Application.App;
-import jodli.Client.Utilities.AppUtils;
-import jodli.Client.Utilities.OSUtils;
-import jodli.Client.log.Logger;
+import src.jodli.Client.Application.App;
+import src.jodli.Client.Utilities.AppUtils;
+import src.jodli.Client.Utilities.OSUtils;
+import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
 public class UpdateInfo extends JFrame {

@@ -15,13 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package jodli.Client.Application;
+package src.jodli.Client.Application;
 
 import java.awt.EventQueue;
+import src.jodli.Client.Utilities.DbUtils;
+import src.jodli.Client.Utilities.UpdateChecker;
+import src.jodli.Client.log.Logger;
 
-import jodli.Client.Updater.MainConsole;
-import jodli.Client.Utilities.UpdateChecker;
-import jodli.Client.log.Logger;
+import com.almworks.sqlite4java.SQLiteException;
 
 public class App {
 
@@ -61,6 +62,12 @@ public class App {
 
 				if (uc.shouldUpdate()) {
 					uc.update();
+				}
+
+				try {
+					DbUtils.get();
+				} catch (SQLiteException e) {
+					Logger.logError(e.getMessage(), e);
 				}
 			}
 		});
