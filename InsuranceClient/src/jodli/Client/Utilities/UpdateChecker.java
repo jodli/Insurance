@@ -28,16 +28,15 @@ import src.jodli.Client.log.Logger;
 
 public class UpdateChecker {
 
-	private int version;
-	private int latest;
-	public static String verString = "";
+	private int buildNumber;
+	private int latestBuild;
 	private String downloadAddress = "";
 	private String changeLog = "";
 
 	private final static String updateFileURL = "https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/updateFile.xml";
 
-	public UpdateChecker(int version) {
-		this.version = version;
+	public UpdateChecker(String buildNumber) {
+		this.buildNumber = Integer.parseInt(buildNumber);
 		loadInfo();
 		try {
 			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(),
@@ -57,14 +56,9 @@ public class UpdateChecker {
 					"updateinfo").item(0);
 
 			String ver = updateInfoNode.getAttribute("currentBuild");
-			this.latest = Integer.parseInt(ver);
+			this.latestBuild = Integer.parseInt(ver);
 
-			char[] tmp = ver.toCharArray();
-			for (int i = 0; i < (tmp.length - 1); i++) {
-				verString += tmp[i] + ".";
-			}
-			verString += tmp[tmp.length - 1];
-			Logger.logInfo("Current build: " + verString);
+			Logger.logInfo("Current build: " + AppUtils.getVersion(ver));
 
 			downloadAddress = updateInfoNode.getAttribute("downloadURL");
 
@@ -77,7 +71,7 @@ public class UpdateChecker {
 	}
 
 	public boolean shouldUpdate() {
-		return version < latest;
+		return buildNumber < latestBuild;
 	}
 
 	public void update() {

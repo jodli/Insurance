@@ -32,24 +32,30 @@ public class SelfUpdate {
 		String javaPath = System.getProperty("java.home") + File.separator
 				+ "bin" + File.separator + "java";
 
+		// path to java executable
 		arguments.add(javaPath);
+		// sets classpath to SelfUpdate.class
 		arguments.add("-cp");
 		arguments.add(temporaryUpdatePath);
 		arguments.add(SelfUpdate.class.getCanonicalName());
+		// add commandline arguments to current path (path of current
+		// application) and temp path (path of updated application)
 		arguments.add(currentPath);
 		arguments.add(temporaryUpdatePath);
 
-		ProcessBuilder processBuilder = new ProcessBuilder();
-		processBuilder.command(arguments);
+		ProcessBuilder processUpdate = new ProcessBuilder();
+		processUpdate.command(arguments);
 		try {
-			processBuilder.start();
+			processUpdate.start();
 		} catch (IOException e) {
 			Logger.logError(e.getMessage(), e);
 		}
+		// exit application.
 		System.exit(0);
 	}
 
 	public static void main(String[] args) {
+		// wait a second until application is closed.
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -59,8 +65,10 @@ public class SelfUpdate {
 		String executablePath = args[0];
 		String temporaryUpdatePath = args[1];
 
+		// get old and new application from commandline arguments.
 		File executable = new File(executablePath);
 		File temporaryUpdate = new File(temporaryUpdatePath);
+		// delete old and replace with new application.
 		try {
 			FileUtils.delete(executable);
 			FileUtils.copyFile(temporaryUpdate, executable);
@@ -68,20 +76,26 @@ public class SelfUpdate {
 			Logger.logError(e.getMessage(), e);
 		}
 
+		// TODO: Add new build number to database after making sure the update
+		// was successful.
+
 		List<String> arguments = new ArrayList<String>();
 
 		String javaPath = System.getProperty("java.home") + File.separator
 				+ "bin" + File.separator + "java";
 
+		// path to java executable
 		arguments.add(javaPath);
+		// sets to run updated jar executable
 		arguments.add("-jar");
 		arguments.add(executablePath);
 
-		ProcessBuilder processBuilder = new ProcessBuilder();
-		processBuilder.command(arguments);
+		ProcessBuilder processUpdate = new ProcessBuilder();
+		processUpdate.command(arguments);
 
+		// start updated application.
 		try {
-			processBuilder.start();
+			processUpdate.start();
 		} catch (IOException e) {
 			Logger.logError(e.getMessage(), e);
 		}

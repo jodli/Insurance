@@ -75,4 +75,15 @@ public class AppUtils {
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		fos.close();
 	}
+
+	public static String getVersion(String buildNumber) {
+		String version = "";
+
+		char[] tmp = buildNumber.toCharArray();
+		for (int i = 0; i < (tmp.length - 1); i++) {
+			version += tmp[i] + ".";
+		}
+		version += tmp[tmp.length - 1];
+		return version;
+	}
 }

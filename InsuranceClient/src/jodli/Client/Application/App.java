@@ -18,18 +18,34 @@
 package src.jodli.Client.Application;
 
 import java.awt.EventQueue;
+
+import src.jodli.Client.Utilities.AppUtils;
 import src.jodli.Client.Utilities.DbUtils;
 import src.jodli.Client.Utilities.UpdateChecker;
 import src.jodli.Client.log.Logger;
 
-import com.almworks.sqlite4java.SQLiteException;
-
 public class App {
 
-	private static String version = "0.1";
-	private static int buildNumber = 01;
+	private final static String buildNumber = DbUtils.instance().getVersion();
+	private final static String version = AppUtils.getVersion(buildNumber);
 
 	public static void main(String[] args) {
+
+		EventQueue.invokeLater(new Runnable() {
+
+			public void run() {
+				MainFrame frm = new MainFrame(version);
+
+				frm.showFrame();
+
+				UpdateChecker uc = new UpdateChecker(buildNumber);
+
+				if (uc.shouldUpdate()) {
+					uc.update();
+				}
+
+			}
+		});
 
 		Logger.logInfo("Insurance client starting up (Version " + version + ")");
 		Logger.logInfo("Java version: " + System.getProperty("java.version"));
@@ -49,28 +65,6 @@ public class App {
 
 		Logger.logWarn("Test color warning");
 		Logger.logError("Test color error");
-
-		EventQueue.invokeLater(new Runnable() {
-
-			public void run() {
-
-				MainFrame frm = new MainFrame(version);
-
-				frm.showFrame();
-
-				UpdateChecker uc = new UpdateChecker(buildNumber);
-
-				if (uc.shouldUpdate()) {
-					uc.update();
-				}
-
-				try {
-					DbUtils.get();
-				} catch (SQLiteException e) {
-					Logger.logError(e.getMessage(), e);
-				}
-			}
-		});
 
 	}
 }
