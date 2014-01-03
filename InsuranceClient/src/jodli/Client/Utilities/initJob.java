@@ -26,19 +26,25 @@ public class initJob extends SQLiteJob<Object> {
 
 	@Override
 	protected Object job(SQLiteConnection connection) throws Throwable {
-		Logger.logInfo("Creating customer table");
-		// create customer table
+		Logger.logInfo("Creating settings table.");
 		String st = null;
+		st = "CREATE TABLE IF NOT EXISTS settings ("
+				+ "BuildNumber TEXT NOT NULL)";
+		connection.exec(st);
+
+		Logger.logInfo("Creating customer table.");
 		st = "CREATE TABLE IF NOT EXISTS customer ("
 				+ "ID Integer PRIMARY KEY AUTOINCREMENT)";
 		connection.exec(st);
 
-		// create insurance table
-		st = "CREATE TABLE IF NOT EXISTS insurance (" + ")";
+		Logger.logInfo("Creating insurance table.");
+		st = "CREATE TABLE IF NOT EXISTS insurance ("
+				+ "ID Integer PRIMARY KEY AUTOINCREMENT)";
 		connection.exec(st);
 
-		// create employee table
-		st = "CREATE TABLE IF NOT EXISTS employee (" + ")";
+		Logger.logInfo("Creating employee table.");
+		st = "CREATE TABLE IF NOT EXISTS employee ("
+				+ "ID Integer PRIMARY KEY AUTOINCREMENT)";
 		connection.exec(st);
 
 		return new Object();
@@ -46,17 +52,18 @@ public class initJob extends SQLiteJob<Object> {
 
 	@Override
 	protected void jobStarted(SQLiteConnection connection) throws Throwable {
-		Logger.logInfo(this.toString() + " started.");
+		Logger.logInfo("Initializing database job started.");
 		super.jobStarted(connection);
 	}
 
 	@Override
 	protected void jobFinished(Object result) throws Throwable {
 		if (result == null) {
-			Logger.logError(this.toString() + " finished with an error.",
+			Logger.logError(
+					"Initializing database job finished with an error.",
 					this.getError());
 		} else {
-			Logger.logInfo(this.toString() + " finished.");
+			Logger.logInfo("Initializing database job finished.");
 		}
 		super.jobFinished(result);
 	}
