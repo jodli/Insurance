@@ -17,6 +17,8 @@
  */
 package src.jodli.Client.Utilities;
 
+import src.jodli.Client.log.Logger;
+
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteJob;
 
@@ -24,21 +26,38 @@ public class initJob extends SQLiteJob<Object> {
 
 	@Override
 	protected Object job(SQLiteConnection connection) throws Throwable {
+		Logger.logInfo("Creating customer table");
 		// create customer table
 		String st = null;
-		st = "CREATE TABLE IF NO EXISTS customer ("
+		st = "CREATE TABLE IF NOT EXISTS customer ("
 				+ "ID Integer PRIMARY KEY AUTOINCREMENT)";
 		connection.exec(st);
 
 		// create insurance table
-		st = "CREATE TABLE IF NO EXISTS insurance (" + ")";
+		st = "CREATE TABLE IF NOT EXISTS insurance (" + ")";
 		connection.exec(st);
 
 		// create employee table
-		st = "CREATE TABLE IF NO EXISTS employee (" + ")";
+		st = "CREATE TABLE IF NOT EXISTS employee (" + ")";
 		connection.exec(st);
 
-		return null;
+		return new Object();
 	}
 
+	@Override
+	protected void jobStarted(SQLiteConnection connection) throws Throwable {
+		Logger.logInfo(this.toString() + " started.");
+		super.jobStarted(connection);
+	}
+
+	@Override
+	protected void jobFinished(Object result) throws Throwable {
+		if (result == null) {
+			Logger.logError(this.toString() + " finished with an error.",
+					this.getError());
+		} else {
+			Logger.logInfo(this.toString() + " finished.");
+		}
+		super.jobFinished(result);
+	}
 }

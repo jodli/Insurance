@@ -21,15 +21,21 @@ import java.io.File;
 
 import src.jodli.Client.log.Logger;
 
+import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteQueue;
 
 public class DbUtils {
 	private File databaseFile;
-	private static final String DB_PATH = "db/database";
+	private static final String DB_PATH = "database.sqlite";
 	private SQLiteQueue queue;
 	private static DbUtils instance = null;
 
 	private DbUtils() {
+
+		Logger.logInfo("Disabling sqlite4java logging.");
+		java.util.logging.Logger.getLogger("com.almworks.sqlite4java")
+				.setLevel(java.util.logging.Level.OFF);
+
 		databaseFile = new File(DB_PATH);
 
 		Logger.logInfo("Creating / Opening database at path: " + DB_PATH);
@@ -38,7 +44,7 @@ public class DbUtils {
 		queue.start();
 	}
 
-	public static synchronized DbUtils get() {
+	public static synchronized DbUtils get() throws SQLiteException {
 		if (instance == null) {
 			instance = new DbUtils();
 
