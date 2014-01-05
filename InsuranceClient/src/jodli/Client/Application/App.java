@@ -30,7 +30,7 @@ import src.jodli.Client.log.Logger;
 
 public class App {
 
-	private static String buildNumber;
+	private static String buildNumber = "0";
 	private static String version;
 
 	public static void main(String[] args) {
@@ -51,15 +51,17 @@ public class App {
 										+ Setting.BUILDNUMBER.getKey()))
 						.complete();
 				buildNumber = DbUtils.instance().getVersion();
-				version = AppUtils.getVersion(buildNumber);
 			}
 		}
+
+		version = AppUtils.getVersion(buildNumber);
 
 		EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
 				MainFrame frm = new MainFrame(version);
 
+				DbUtils.instance();
 				frm.showFrame();
 
 				UpdateChecker uc = new UpdateChecker(buildNumber);
