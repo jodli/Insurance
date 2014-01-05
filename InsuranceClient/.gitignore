@@ -4,7 +4,8 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 /bin
+
+/res/makeFile.xml
