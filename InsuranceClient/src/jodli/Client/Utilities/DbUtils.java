@@ -18,7 +18,7 @@
 package src.jodli.Client.Utilities;
 
 import java.io.File;
-import java.time.LocalDate;
+import java.util.Calendar;
 
 import src.jodli.Client.Utilities.DatabaseJobs.InitJob;
 import src.jodli.Client.Utilities.DatabaseJobs.Setting;
@@ -30,16 +30,17 @@ import com.almworks.sqlite4java.SQLiteQueue;
 
 public class DbUtils {
 	private File databaseFile;
-	private static final String DB_PATH = "database_"
-			+ LocalDate.now().getYear() + ".sqlite";
+	private static final String DB_PATH = System.getProperty("user.dir")
+			+ File.separator + "database_"
+			+ Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
 	private SQLiteQueue queue;
 	private static DbUtils instance = null;
 
 	private DbUtils() throws SQLiteException {
 
-		Logger.logInfo("Disabling sqlite4java logging.");
-		java.util.logging.Logger.getLogger("com.almworks.sqlite4java")
-				.setLevel(java.util.logging.Level.OFF);
+		// Logger.logInfo("Disabling sqlite4java logging.");
+		// java.util.logging.Logger.getLogger("com.almworks.sqlite4java")
+		// .setLevel(java.util.logging.Level.OFF);
 
 		databaseFile = new File(DB_PATH);
 
@@ -53,12 +54,12 @@ public class DbUtils {
 		if (instance == null) {
 			try {
 				instance = new DbUtils();
+
+				Logger.logInfo("Running initialization job.");
+				instance.queue.execute(new InitJob());
 			} catch (SQLiteException e) {
 				Logger.logError(e.getMessage(), e);
 			}
-
-			Logger.logInfo("Running initialization job.");
-			instance.queue.execute(new InitJob());
 		}
 
 		return instance;

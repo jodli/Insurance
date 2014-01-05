@@ -17,6 +17,8 @@
  */
 package src.jodli.Client.Utilities;
 
+import java.io.File;
+
 public class OSUtils {
 	private static String cachedUserHome;
 
@@ -31,9 +33,9 @@ public class OSUtils {
 	public static String getDynamicStorageLocation() {
 		switch (getCurrentOS()) {
 		case WINDOWS:
-			return System.getenv("APPDATA") + "/ftblauncher/";
+			return System.getProperty("user.dir") + File.separator;
 		case UNIX:
-			return cachedUserHome + "/.ftblauncher/";
+			return cachedUserHome + "/.insurance/";
 		default:
 			return null;
 		}

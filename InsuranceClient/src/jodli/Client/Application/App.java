@@ -22,14 +22,38 @@ import java.awt.EventQueue;
 import src.jodli.Client.Utilities.AppUtils;
 import src.jodli.Client.Utilities.DbUtils;
 import src.jodli.Client.Utilities.UpdateChecker;
+import src.jodli.Client.Utilities.DatabaseJobs.InsertJob;
+import src.jodli.Client.Utilities.DatabaseJobs.Setting;
+import src.jodli.Client.Utilities.DatabaseJobs.Table;
+import src.jodli.Client.Utilities.DatabaseJobs.UpdateJob;
 import src.jodli.Client.log.Logger;
 
 public class App {
 
-	private final static String buildNumber = DbUtils.instance().getVersion();
-	private final static String version = AppUtils.getVersion(buildNumber);
+	private static String buildNumber;
+	private static String version;
 
 	public static void main(String[] args) {
+
+		if (args[0] != null) {
+			if (DbUtils
+					.instance()
+					.getQueue()
+					.execute(
+							new InsertJob(Table.SETTINGS, "key, value",
+									Setting.BUILDNUMBER.getKey() + ", '"
+											+ args[0] + "'")).complete() == null) {
+				DbUtils.instance()
+						.getQueue()
+						.execute(
+								new UpdateJob(Table.SETTINGS, "value='"
+										+ args[0] + "'", "key="
+										+ Setting.BUILDNUMBER.getKey()))
+						.complete();
+				buildNumber = DbUtils.instance().getVersion();
+				version = AppUtils.getVersion(buildNumber);
+			}
+		}
 
 		EventQueue.invokeLater(new Runnable() {
 
