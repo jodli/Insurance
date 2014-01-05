@@ -22,11 +22,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.jodli.Client.Utilities.DbUtils;
 import src.jodli.Client.Utilities.FileUtils;
+import src.jodli.Client.Utilities.DatabaseJobs.InsertJob;
+import src.jodli.Client.Utilities.DatabaseJobs.Setting;
+import src.jodli.Client.Utilities.DatabaseJobs.Table;
+import src.jodli.Client.Utilities.DatabaseJobs.UpdateJob;
 import src.jodli.Client.log.Logger;
 
 public class SelfUpdate {
-	public static void runUpdate(String currentPath, String temporaryUpdatePath) {
+	public static void runUpdate(String currentPath,
+			String temporaryUpdatePath, String latestBuild) {
 		List<String> arguments = new ArrayList<String>();
 
 		String javaPath = System.getProperty("java.home") + File.separator
@@ -42,6 +48,7 @@ public class SelfUpdate {
 		// application) and temp path (path of updated application)
 		arguments.add(currentPath);
 		arguments.add(temporaryUpdatePath);
+		arguments.add(latestBuild);
 
 		ProcessBuilder processUpdate = new ProcessBuilder();
 		processUpdate.command(arguments);
@@ -64,6 +71,7 @@ public class SelfUpdate {
 
 		String executablePath = args[0];
 		String temporaryUpdatePath = args[1];
+		String latestBuild = args[2];
 
 		// get old and new application from commandline arguments.
 		File executable = new File(executablePath);
@@ -78,6 +86,20 @@ public class SelfUpdate {
 
 		// TODO: Add new build number to database after making sure the update
 		// was successful.
+		if (DbUtils
+				.instance()
+				.getQueue()
+				.execute(
+						new InsertJob(Table.SETTINGS, "key, value",
+								Setting.BUILDNUMBER.getKey() + ", '"
+										+ latestBuild + "'")).complete() == null) {
+			DbUtils.instance()
+					.getQueue()
+					.execute(
+							new UpdateJob(Table.SETTINGS, "value='"
+									+ latestBuild + "'", "key="
+									+ Setting.BUILDNUMBER.getKey()));
+		}
 
 		List<String> arguments = new ArrayList<String>();
 

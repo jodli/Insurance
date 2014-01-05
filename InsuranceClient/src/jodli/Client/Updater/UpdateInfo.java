@@ -47,12 +47,16 @@ public class UpdateInfo extends JFrame {
 	private JPanel pan2;
 
 	private String downloadAddress;
+	private String latestBuildNumber;
 
-	public UpdateInfo(String changelog, String downloadAddress) {
+	public UpdateInfo(String changelog, String downloadAddress,
+			String latestBuild) {
+		this.downloadAddress = downloadAddress;
+		this.latestBuildNumber = latestBuild;
+
 		initComponents();
 
 		infoPane.setText(changelog);
-		this.downloadAddress = downloadAddress;
 	}
 
 	private void initComponents() {
@@ -60,7 +64,8 @@ public class UpdateInfo extends JFrame {
 		this.setVisible(false);
 
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		this.setTitle("New Update Found");
+		this.setTitle("New Update Found ver "
+				+ AppUtils.getVersion(latestBuildNumber));
 		pan1 = new JPanel();
 		pan1.setLayout(new BorderLayout());
 
@@ -121,7 +126,7 @@ public class UpdateInfo extends JFrame {
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
 			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
-			SelfUpdate.runUpdate(path, temporaryUpdatePath);
+			SelfUpdate.runUpdate(path, temporaryUpdatePath, latestBuildNumber);
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 			// show messagebox

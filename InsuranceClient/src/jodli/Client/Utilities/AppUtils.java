@@ -34,6 +34,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import src.jodli.Client.log.Logger;
+
 public class AppUtils {
 
 	public static String downloadString(URL url) throws IOException {

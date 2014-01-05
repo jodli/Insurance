@@ -20,6 +20,9 @@ package src.jodli.Client.Utilities;
 import java.io.File;
 import java.time.LocalDate;
 
+import src.jodli.Client.Utilities.DatabaseJobs.InitJob;
+import src.jodli.Client.Utilities.DatabaseJobs.Setting;
+import src.jodli.Client.Utilities.DatabaseJobs.SettingsJob;
 import src.jodli.Client.log.Logger;
 
 import com.almworks.sqlite4java.SQLiteException;
@@ -55,7 +58,7 @@ public class DbUtils {
 			}
 
 			Logger.logInfo("Running initialization job.");
-			instance.queue.execute(new initJob());
+			instance.queue.execute(new InitJob());
 		}
 
 		return instance;
@@ -68,7 +71,12 @@ public class DbUtils {
 		}
 	}
 
+	public SQLiteQueue getQueue() {
+		return queue;
+	}
+
 	public String getVersion() {
-		return "01";
+		return (String) instance.queue.execute(
+				new SettingsJob(Setting.BUILDNUMBER)).complete();
 	}
 }

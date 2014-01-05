@@ -28,8 +28,10 @@ public class InitJob extends JobWrapper<Object> {
 		Logger.logInfo("Creating settings table.");
 		String st = null;
 		st = "CREATE TABLE IF NOT EXISTS Settings ("
-				+ "key Integer PRIMARY KEY," 
-				+ "value TEXT NOT NULL)";
+				+ "key Integer PRIMARY KEY," + "value TEXT NOT NULL)";
+		connection.exec(st);
+
+		st = "INSERT OR IGNORE INTO Settings (key, value) VALUES (0, '0')";
 		connection.exec(st);
 
 		Logger.logInfo("Creating customer table.");

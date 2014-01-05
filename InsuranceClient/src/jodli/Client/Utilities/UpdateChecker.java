@@ -30,6 +30,7 @@ public class UpdateChecker {
 
 	private int buildNumber;
 	private int latestBuild;
+	private String buildString;
 	private String downloadAddress = "";
 	private String changeLog = "";
 
@@ -55,10 +56,10 @@ public class UpdateChecker {
 			Element updateInfoNode = (Element) doc.getElementsByTagName(
 					"updateinfo").item(0);
 
-			String ver = updateInfoNode.getAttribute("currentBuild");
-			this.latestBuild = Integer.parseInt(ver);
+			buildString = updateInfoNode.getAttribute("currentBuild");
+			this.latestBuild = Integer.parseInt(buildString);
 
-			Logger.logInfo("Current build: " + AppUtils.getVersion(ver));
+			Logger.logInfo("Current build: " + AppUtils.getVersion(buildString));
 
 			downloadAddress = updateInfoNode.getAttribute("downloadURL");
 
@@ -75,7 +76,7 @@ public class UpdateChecker {
 	}
 
 	public void update() {
-		UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress);
+		UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress, buildString);
 		ui.showFrame();
 	}
 }
