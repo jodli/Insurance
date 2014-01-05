@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <update>
-	<updateinfo currentBuild="01" downloadURL="test"/>
+	<updateinfo currentBuild="02" downloadURL="test"/>
 	<changelog>
 Changed bla bla.
 Changed this.
