@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <update>
-	<updateinfo currentBuild="03" downloadURL="https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/InsuranceClient.jar"/>
+	<updateinfo currentBuild="04" downloadURL="https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/InsuranceClient.jar"/>
 	<changelog>
 Changed bla bla.
 Changed this.
