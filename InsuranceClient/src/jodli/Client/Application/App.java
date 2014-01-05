@@ -35,7 +35,7 @@ public class App {
 
 	public static void main(String[] args) {
 
-		if (args[0] != null) {
+		if (args.length > 0) {
 			if (DbUtils
 					.instance()
 					.getQueue()
