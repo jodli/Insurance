@@ -23,6 +23,7 @@ import java.util.List;
 import src.jodli.Client.log.Logger;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -96,8 +97,10 @@ public class SettingsUtils {
 	 */
 	public static boolean setValue(ModelSettings m) {
 		try {
-			settingsDao.createOrUpdate(m);
-			loadSettings();
+			CreateOrUpdateStatus status = settingsDao.createOrUpdate(m);
+			if (status.isCreated() || status.isUpdated()) {
+				loadSettings();
+			}
 			return true;
 		} catch (SQLException e) {
 			Logger.logError(e.getMessage(), e);

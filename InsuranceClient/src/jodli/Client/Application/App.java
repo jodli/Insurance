@@ -35,7 +35,7 @@ import src.jodli.Client.log.Logger;
  */
 public class App {
 
-	private static String buildNumber = "0";
+	private static String buildNumber = null;
 	private static String version;
 
 	public static void main(String[] args) {
@@ -47,9 +47,12 @@ public class App {
 
 			public void run() {
 				DatabaseUtils.init();
-				SettingsUtils.setValue(new ModelSettings(Setting.BUILDNUMBER,
-						buildNumber));
+				if (buildNumber != null) {
+					SettingsUtils.setValue(new ModelSettings(
+							Setting.BUILDNUMBER, buildNumber));
+				}
 
+				buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
 				version = AppUtils.getVersion(buildNumber);
 
 				MainFrame frm = new MainFrame(version);
