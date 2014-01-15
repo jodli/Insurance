@@ -17,52 +17,53 @@
  */
 package src.jodli.Client.Utilities;
 
-import src.jodli.Client.log.Logger;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Enum to store settings keys mapped to database key.
+ * Model for the settings database.
  * 
  * @author Jan-Olaf Becker
  * 
  */
-public enum Setting {
-	// add more settings here as we go...
-	// constructor takes the key!
-	/**
-	 * Buildnumber value mapped to key = 0.
-	 */
-	BUILDNUMBER(0);
+@DatabaseTable(tableName = "Settings")
+public class ModelSettings {
 
-	private int Key;
+	// settings database -> key - value
+	@DatabaseField(id = true)
+	private int key;
+	@DatabaseField
+	private String value;
 
-	private Setting(int key) {
-		this.Key = key;
-	}
-
-	public int getKey() {
-		return this.Key;
-	}
-
-	@Override
-	public String toString() {
-		String s = super.toString();
-		return s.substring(0, 1) + s.substring(1).toLowerCase();
+	public ModelSettings() {
 	}
 
 	/**
-	 * Gets enum from a give key.
+	 * Constructor to create new settings for saving in database.
 	 * 
 	 * @param key
-	 *            Integer corresponding to enum.
-	 * @return Setting enum.
-	 * @throws IllegalArgumentException
+	 *            Ordinal of setting according to enum.
+	 * @param val
+	 *            Value of setting.
+	 * @see SettingsUtils
 	 */
-	public static Setting fromKey(int key) throws IllegalArgumentException {
-		try {
-			return Setting.values()[key];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return null;
-	};
+	public ModelSettings(Setting key, String val) {
+		this.key = key.getKey();
+		this.value = val;
+	}
+
+	/**
+	 * @return Enum corresponding to mapped key.
+	 */
+	public Setting getKey() {
+		return Setting.fromKey(this.key);
+	}
+
+	/**
+	 * @return Value for current
+	 */
+	public String getValue() {
+		return value;
+	}
+
 }
