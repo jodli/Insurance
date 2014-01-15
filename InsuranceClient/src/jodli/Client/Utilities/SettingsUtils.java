@@ -20,6 +20,7 @@ package src.jodli.Client.Utilities;
 import java.sql.SQLException;
 import java.util.List;
 
+import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
 import com.j256.ormlite.dao.Dao;
@@ -38,11 +39,9 @@ public class SettingsUtils {
 
 	private static Dao<ModelSettings, Integer> settingsDao = null;
 
-	private static List<ModelSettings> listSettings = null;
-
 	/**
 	 * Constructs new SettingsUtils. Also creates table corresponding to
-	 * ModelSettings if it doesn't exist. Creates Dao and calls loadSettings.
+	 * ModelSettings if it doesn't exist and Dao.
 	 * 
 	 * @param conn
 	 *            Connection variable. Should come from DatabaseUtils.
@@ -53,22 +52,9 @@ public class SettingsUtils {
 		try {
 			TableUtils.createTableIfNotExists(conn, ModelSettings.class);
 			settingsDao = DaoManager.createDao(conn, ModelSettings.class);
-
-			loadSettings();
 		} catch (SQLException e) {
 			Logger.logError(e.getMessage(), e);
 		}
-	}
-
-	/**
-	 * Load settings from database into list.
-	 * 
-	 * @return Number of items in list.
-	 * @throws SQLException
-	 */
-	public static int loadSettings() throws SQLException {
-		listSettings = settingsDao.queryForAll();
-		return listSettings.size();
 	}
 
 	/**
@@ -80,10 +66,13 @@ public class SettingsUtils {
 	 * @see Setting
 	 */
 	public static String getValue(Setting s) {
-		for (ModelSettings set : listSettings) {
-			if (set.getKey() == s) {
-				return set.getValue();
+		try {
+			ModelSettings m = settingsDao.queryForId(s.getKey());
+			if (m != null) {
+				return m.getValue();
 			}
+		} catch (SQLException e) {
+			Logger.logError(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -99,9 +88,8 @@ public class SettingsUtils {
 		try {
 			CreateOrUpdateStatus status = settingsDao.createOrUpdate(m);
 			if (status.isCreated() || status.isUpdated()) {
-				loadSettings();
+				return true;
 			}
-			return true;
 		} catch (SQLException e) {
 			Logger.logError(e.getMessage(), e);
 		}
