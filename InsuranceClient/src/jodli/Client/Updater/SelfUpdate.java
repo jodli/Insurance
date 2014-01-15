@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.ExistingAnnotationsType;
+
 import src.jodli.Client.Utilities.FileUtils;
 import src.jodli.Client.log.Logger;
 
@@ -67,6 +69,11 @@ public class SelfUpdate {
 			Logger.logError(e.getMessage(), e);
 		}
 
+		if (!verifyArgs(args)) {
+			printUsage();
+			System.exit(-1);
+		}
+
 		String executablePath = args[0];
 		String temporaryUpdatePath = args[1];
 		String latestBuild = args[2];
@@ -105,7 +112,17 @@ public class SelfUpdate {
 			Logger.logError(e.getMessage(), e);
 		}
 		// exit application.
-		Logger.logInfo("Restarting application and applying update.");
+		Logger.logInfo("Restarting application and closing updater.");
 		System.exit(0);
+	}
+
+	private static boolean verifyArgs(String[] args) {
+		return args.length == 3 && new File(args[0]).exists()
+				&& new File(args[1]).exists();
+	}
+
+	private static void printUsage() {
+		System.out
+				.println("Run with arguments: <executable path> <update path> <build number>");
 	}
 }
