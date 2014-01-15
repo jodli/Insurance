@@ -20,48 +20,40 @@ package src.jodli.Client.Application;
 import java.awt.EventQueue;
 
 import src.jodli.Client.Utilities.AppUtils;
-import src.jodli.Client.Utilities.DbUtils;
+import src.jodli.Client.Utilities.DatabaseUtils;
+import src.jodli.Client.Utilities.ModelSettings;
+import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.Utilities.UpdateChecker;
-import src.jodli.Client.Utilities.DatabaseJobs.InsertJob;
-import src.jodli.Client.Utilities.DatabaseJobs.Setting;
-import src.jodli.Client.Utilities.DatabaseJobs.Table;
-import src.jodli.Client.Utilities.DatabaseJobs.UpdateJob;
 import src.jodli.Client.log.Logger;
 
+/**
+ * Main entry point for application. Here's where the magic happens...
+ * 
+ * @author Jan-Olaf Becker
+ * 
+ */
 public class App {
 
 	private static String buildNumber = "0";
 	private static String version;
 
 	public static void main(String[] args) {
-
-		if (args.length > 0) {
-			if (DbUtils
-					.instance()
-					.getQueue()
-					.execute(
-							new InsertJob(Table.SETTINGS, "key, value",
-									Setting.BUILDNUMBER.getKey() + ", '"
-											+ args[0] + "'")).complete() == null) {
-				DbUtils.instance()
-						.getQueue()
-						.execute(
-								new UpdateJob(Table.SETTINGS, "value='"
-										+ args[0] + "'", "key="
-										+ Setting.BUILDNUMBER.getKey()))
-						.complete();
-				buildNumber = DbUtils.instance().getVersion();
-			}
+		if (verifyArguments(args)) {
+			buildNumber = args[0];
 		}
-
-		version = AppUtils.getVersion(buildNumber);
 
 		EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
+				DatabaseUtils.init();
+				SettingsUtils.setValue(new ModelSettings(Setting.BUILDNUMBER,
+						buildNumber));
+
+				version = AppUtils.getVersion(buildNumber);
+
 				MainFrame frm = new MainFrame(version);
 
-				DbUtils.instance();
 				frm.showFrame();
 
 				UpdateChecker uc = new UpdateChecker(buildNumber);
@@ -92,5 +84,16 @@ public class App {
 		Logger.logWarn("Test color warning");
 		Logger.logError("Test color error");
 
+	}
+
+	/**
+	 * Verifies command line arguments to check.
+	 * 
+	 * @param args
+	 *            Command line arguments to be verified.
+	 * @return true if arguments are correct; otherwise, false.
+	 */
+	private static boolean verifyArguments(String[] args) {
+		return args.length == 1;
 	}
 }

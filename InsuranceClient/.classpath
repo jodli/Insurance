@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/sqlite/sqlite-jdbc4-3.8.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/sqlite/ormlite-core-4.48.jar" sourcepath="lib/sqlite/ormlite-core-4.48-sources.jar">
