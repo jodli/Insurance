@@ -15,7 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package src.jodli.Client.Utilities;
+package src.jodli.Client.Utilities.DatabaseModels;
+
+import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Utilities.SettingsUtils;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
