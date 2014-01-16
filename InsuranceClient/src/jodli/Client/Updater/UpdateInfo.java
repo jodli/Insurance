@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import src.jodli.Client.Application.App;
+import src.jodli.Client.Application.MainFrame;
 import src.jodli.Client.Utilities.AppUtils;
 import src.jodli.Client.Utilities.OSUtils;
 import src.jodli.Client.log.Logger;
@@ -103,7 +104,9 @@ public class UpdateInfo extends JFrame {
 		pan1.add(pan2, BorderLayout.SOUTH);
 		pan1.add(scp, BorderLayout.CENTER);
 		this.add(pan1);
+
 		pack();
+		this.setLocationRelativeTo(null);
 		this.setSize(300, 200);
 	}
 

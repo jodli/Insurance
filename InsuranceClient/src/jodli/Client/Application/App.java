@@ -21,10 +21,10 @@ import java.awt.EventQueue;
 
 import src.jodli.Client.Utilities.AppUtils;
 import src.jodli.Client.Utilities.DatabaseUtils;
-import src.jodli.Client.Utilities.ModelSettings;
 import src.jodli.Client.Utilities.Setting;
 import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.Utilities.UpdateChecker;
+import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
 /**

@@ -86,6 +86,7 @@ public class MainFrame extends JFrame {
 		setMenuBar(menuBar);
 
 		pack();
+		this.setLocationRelativeTo(null);
 		this.setSize(566, 40);
 	}
 
