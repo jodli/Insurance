@@ -29,6 +29,7 @@ import java.net.URLDecoder;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -48,11 +49,14 @@ public class UpdateInfo extends JFrame {
 
 	private String downloadAddress;
 	private String latestBuildNumber;
+	private String title;
 
 	public UpdateInfo(String changelog, String downloadAddress,
 			String latestBuild) {
 		this.downloadAddress = downloadAddress;
 		this.latestBuildNumber = latestBuild;
+		this.title = "New Update Found ver "
+				+ AppUtils.getVersion(latestBuildNumber);
 
 		initComponents();
 
@@ -64,8 +68,8 @@ public class UpdateInfo extends JFrame {
 		this.setVisible(false);
 
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		this.setTitle("New Update Found ver "
-				+ AppUtils.getVersion(latestBuildNumber));
+
+		this.setTitle(title);
 		pan1 = new JPanel();
 		pan1.setLayout(new BorderLayout());
 
@@ -78,7 +82,7 @@ public class UpdateInfo extends JFrame {
 		scp = new JScrollPane();
 		scp.setViewportView(infoPane);
 
-		ok = new JButton("Update");
+		ok = new JButton("Download Update");
 
 		ok.addActionListener(new ActionListener() {
 
@@ -125,8 +129,22 @@ public class UpdateInfo extends JFrame {
 		try {
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
+
 			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
-			SelfUpdate.runUpdate(path, temporaryUpdatePath, latestBuildNumber);
+
+			if (JOptionPane
+					.showOptionDialog(
+							this,
+							"Update ver "
+									+ AppUtils.getVersion(latestBuildNumber)
+									+ " successfully downloaded.\n Do you want to install now?",
+							title, JOptionPane.YES_NO_OPTION,
+							JOptionPane.PLAIN_MESSAGE, null, null, null) == 0) {
+				SelfUpdate.runUpdate(path, temporaryUpdatePath,
+						latestBuildNumber);
+			} else {
+				UpdateInfo.this.dispose();
+			}
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 			// show messagebox
