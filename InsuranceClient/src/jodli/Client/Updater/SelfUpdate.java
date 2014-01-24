@@ -84,6 +84,7 @@ public class SelfUpdate {
 		// delete old and replace with new application.
 		try {
 			FileUtils.delete(executable);
+			temporaryUpdate.renameTo(executable);
 			FileUtils.copyFile(temporaryUpdate, executable);
 			FileUtils.delete(temporaryUpdate);
 		} catch (IOException e) {

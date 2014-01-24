@@ -21,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -29,28 +31,30 @@ import java.net.URLDecoder;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 import src.jodli.Client.Application.App;
-import src.jodli.Client.Application.MainFrame;
 import src.jodli.Client.Utilities.AppUtils;
+import src.jodli.Client.Utilities.DownloadTask;
 import src.jodli.Client.Utilities.OSUtils;
 import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
-public class UpdateInfo extends JFrame {
+public class UpdateInfo extends JFrame implements PropertyChangeListener {
 	private JEditorPane infoPane;
 	private JScrollPane scp;
 	private JButton ok;
 	private JButton cancel;
 	private JPanel pan1;
 	private JPanel pan2;
+	private JProgressBar progbar;
 
 	private String downloadAddress;
 	private String latestBuildNumber;
 	private String title;
+	private DownloadTask task;
 
 	public UpdateInfo(String changelog, String downloadAddress,
 			String latestBuild) {
@@ -83,6 +87,9 @@ public class UpdateInfo extends JFrame {
 		scp = new JScrollPane();
 		scp.setViewportView(infoPane);
 
+		progbar = new JProgressBar(0, 100);
+		progbar.setStringPainted(true);
+
 		ok = new JButton("Download Update");
 
 		ok.addActionListener(new ActionListener() {
@@ -96,11 +103,13 @@ public class UpdateInfo extends JFrame {
 		cancel.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				UpdateInfo.this.task.cancel(true);
 				UpdateInfo.this.dispose();
 			}
 		});
 		pan2.add(ok);
 		pan2.add(cancel);
+		pan1.add(progbar, BorderLayout.NORTH);
 		pan1.add(pan2, BorderLayout.SOUTH);
 		pan1.add(scp, BorderLayout.CENTER);
 		this.add(pan1);
@@ -126,32 +135,27 @@ public class UpdateInfo extends JFrame {
 		}
 
 		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation()
-				+ "updatetemp" + File.separator
-				+ path.substring(path.lastIndexOf(File.separator) + 1);
-
+				+ "updatetemp" + File.separator;
+		Logger.logInfo("Temporary update path: " + temporaryUpdatePath);
 		try {
-			File temporaryUpdate = new File(temporaryUpdatePath);
-			temporaryUpdate.getParentFile().mkdir();
+			progbar.setValue(0);
+			this.ok.setEnabled(false);
+			task = new DownloadTask(this, new URL(downloadAddress),
+					temporaryUpdatePath, path, latestBuildNumber);
+			task.addPropertyChangeListener(this);
+			task.execute();
 
-			AppUtils.downloadToFile(new URL(downloadAddress), temporaryUpdate);
-
-			if (JOptionPane
-					.showOptionDialog(
-							this,
-							"Update ver "
-									+ AppUtils.getVersion(latestBuildNumber)
-									+ " successfully downloaded.\n Do you want to install now?",
-							title, JOptionPane.YES_NO_OPTION,
-							JOptionPane.PLAIN_MESSAGE, null, null, null) == 0) {
-				SelfUpdate.runUpdate(path, temporaryUpdatePath,
-						latestBuildNumber);
-			} else {
-				UpdateInfo.this.dispose();
-			}
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 			// show messagebox
 			UpdateInfo.this.dispose();
+		}
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("progress")) {
+			int progress = (Integer) evt.getNewValue();
+			progbar.setValue(progress);
 		}
 	}
 }
