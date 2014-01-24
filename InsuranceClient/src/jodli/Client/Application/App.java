@@ -53,6 +53,9 @@ public class App {
 				}
 
 				buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
+				if (buildNumber == null) {
+					buildNumber = "00";
+				}
 				version = AppUtils.getVersion(buildNumber);
 
 				MainFrame frm = new MainFrame(version);
