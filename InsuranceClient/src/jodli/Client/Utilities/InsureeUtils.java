@@ -18,14 +18,15 @@
 package src.jodli.Client.Utilities;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
-import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
+import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -93,5 +94,21 @@ public class InsureeUtils {
 			Logger.logError(e.getMessage(), e);
 		}
 		return false;
+	}
+
+	/**
+	 * Gets a list containing all ModelInsurees in the database.
+	 * 
+	 * @return List of ModelInsurees.
+	 * @see ModelInsuree
+	 */
+	public static List<ModelInsuree> getAll() {
+		List<ModelInsuree> list = new ArrayList<ModelInsuree>();
+		try {
+			list = insureeDao.queryForAll();
+		} catch (SQLException e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		return list;
 	}
 }

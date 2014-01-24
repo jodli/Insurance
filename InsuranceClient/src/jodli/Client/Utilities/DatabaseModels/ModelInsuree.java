@@ -21,7 +21,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Model for the Insuree database.
+ * Model for the Insuree table.
  * 
  * @author Jan-Olaf Becker
  * 
@@ -55,7 +55,6 @@ public class ModelInsuree {
 	}
 
 	/**
-	 * @param iD
 	 * @param prename
 	 * @param surname
 	 * @param street_Address
@@ -65,11 +64,10 @@ public class ModelInsuree {
 	 * @param fax_Number
 	 * @param cellphone_Number
 	 */
-	public ModelInsuree(int iD, String prename, String surname,
-			String street_Address, String zipcode, String city,
-			String telephone_Number, String fax_Number, String cellphone_Number) {
+	public ModelInsuree(String prename, String surname, String street_Address,
+			String zipcode, String city, String telephone_Number,
+			String fax_Number, String cellphone_Number) {
 		super();
-		ID = iD;
 		Prename = prename;
 		Surname = surname;
 		Street_Address = street_Address;
