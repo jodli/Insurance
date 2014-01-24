@@ -32,6 +32,8 @@ import src.jodli.Client.Updater.UpdateInfo;
 import src.jodli.Client.log.Logger;
 
 /**
+ * Async update downloader updating a ProgressBar.
+ * 
  * @author Jan-Olaf Becker
  * 
  */
@@ -44,10 +46,18 @@ public class DownloadTask extends SwingWorker<Void, Void> {
 	private String buildNumber;
 
 	/**
+	 * Creates a new DownloadTask object.
+	 * 
+	 * @param gui
+	 *            Gui to update and dispose.
 	 * @param downloadURL
+	 *            Download file from this URL.
 	 * @param tempUpdatePath
+	 *            Save downloaded file in this path.
 	 * @param executablePath
+	 *            Executable currently running this application.
 	 * @param buildNumber
+	 *            Latest build number corresponding to the downloaded update.
 	 */
 	public DownloadTask(UpdateInfo gui, URL downloadURL, String tempUpdatePath,
 			String executablePath, String buildNumber) {
