@@ -103,7 +103,9 @@ public class UpdateInfo extends JFrame implements PropertyChangeListener {
 		cancel.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				UpdateInfo.this.task.cancel(true);
+				if (UpdateInfo.this.task != null) {
+					UpdateInfo.this.task.cancel(true);
+				}
 				UpdateInfo.this.dispose();
 			}
 		});
