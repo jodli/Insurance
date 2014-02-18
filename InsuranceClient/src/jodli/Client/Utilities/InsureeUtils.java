@@ -17,6 +17,7 @@
  */
 package src.jodli.Client.Utilities;
 
+import com.j256.ormlite.dao.BaseDaoImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,91 +25,110 @@ import java.util.List;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.log.Logger;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableInfo;
 import com.j256.ormlite.table.TableUtils;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Access the insurees stored in database.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
+ *
  */
 public class InsureeUtils {
 
-	private static Dao<ModelInsuree, Integer> insureeDao = null;
+    private static BaseDaoImpl<ModelInsuree, Integer> insureeDao = null;
+    private static TableInfo<ModelInsuree, Integer> tableInfo = null;
 
-	/**
-	 * Constructs new InsureeUtils. Also creates table corresponding to
-	 * ModelInsuree if it doesn't exist and Dao.
-	 * 
-	 * @param conn
-	 *            Connection variable. Should come from DatabaseUtils.
-	 * @see DatabaseUtils
-	 * @see ModelInsuree
-	 */
-	public InsureeUtils(ConnectionSource conn) {
-		try {
-			TableUtils.createTableIfNotExists(conn, ModelInsuree.class);
-			insureeDao = DaoManager.createDao(conn, ModelInsuree.class);
-		} catch (SQLException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+    /**
+     * Constructs new InsureeUtils. Also creates table corresponding to
+     * ModelInsuree if it doesn't exist and Dao.
+     *
+     * @param conn Connection variable. Should come from DatabaseUtils.
+     *
+     * @see DatabaseUtils
+     * @see ModelInsuree
+     */
+    public InsureeUtils ( ConnectionSource conn ) {
+        try {
+            TableUtils.createTableIfNotExists (conn, ModelInsuree.class);
+            insureeDao = DaoManager.createDao (conn, ModelInsuree.class);
 
-	/**
-	 * Gets ModelInsuree corresponding to id from insuree in database.
-	 * 
-	 * @param id
-	 *            ID as key.
-	 * @return ModelInsuree corresponding to ID.
-	 * @see ModelInsuree
-	 */
-	public static ModelInsuree getValue(int id) {
-		ModelInsuree m = null;
-		try {
-			m = insureeDao.queryForId(id);
-		} catch (SQLException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return m;
-	}
+            tableInfo = new TableInfo<ModelInsuree, Integer> (conn, insureeDao, ModelInsuree.class);
+        } catch (SQLException e) {
+            Logger.logError (e.getMessage (), e);
+        }
+    }
 
-	/**
-	 * Inserts or updates ModelInsuree corresponding to key in insuree database.
-	 * 
-	 * @param m
-	 *            New ModelInsuree object to be inserted or updated.
-	 * @return true if the operation was successful; otherwise, false.
-	 * @see ModelInsuree
-	 */
-	public static boolean setValue(ModelInsuree m) {
-		try {
-			CreateOrUpdateStatus status = insureeDao.createOrUpdate(m);
-			if (status.isCreated() || status.isUpdated()) {
-				return true;
-			}
-		} catch (SQLException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return false;
-	}
+    /**
+     * Gets ModelInsuree corresponding to id from insuree in database.
+     *
+     * @param id ID as key.
+     *
+     * @return ModelInsuree corresponding to ID.
+     *
+     * @see ModelInsuree
+     */
+    public static ModelInsuree getValue ( int id ) {
+        ModelInsuree m = null;
+        try {
+            m = insureeDao.queryForId (id);
+        } catch (SQLException e) {
+            Logger.logError (e.getMessage (), e);
+        }
+        return m;
+    }
 
-	/**
-	 * Gets a list containing all ModelInsurees in the database.
-	 * 
-	 * @return List of ModelInsurees.
-	 * @see ModelInsuree
-	 */
-	public static List<ModelInsuree> getAll() {
-		List<ModelInsuree> list = new ArrayList<ModelInsuree>();
-		try {
-			list = insureeDao.queryForAll();
-		} catch (SQLException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return list;
-	}
+    /**
+     * Inserts or updates ModelInsuree corresponding to key in insuree database.
+     *
+     * @param m New ModelInsuree object to be inserted or updated.
+     *
+     * @return true if the operation was successful; otherwise, false.
+     *
+     * @see ModelInsuree
+     */
+    public static boolean setValue ( ModelInsuree m ) {
+        try {
+            CreateOrUpdateStatus status = insureeDao.createOrUpdate (m);
+            if (status.isCreated () || status.isUpdated ()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Logger.logError (e.getMessage (), e);
+        }
+        return false;
+    }
+
+    /**
+     * Gets a list containing all ModelInsurees in the database.
+     *
+     * @return List of ModelInsurees.
+     *
+     * @see ModelInsuree
+     */
+    public static List<ModelInsuree> getAll () {
+        List<ModelInsuree> list = new ArrayList<ModelInsuree> ();
+        try {
+            list = insureeDao.queryForAll ();
+        } catch (SQLException e) {
+            Logger.logError (e.getMessage (), e);
+        }
+        return list;
+    }
+
+    public static DefaultTableModel getModel () {
+        Vector<String> names = new Vector<String> ();
+        for (FieldType field : tableInfo.getFieldTypes ()) {
+            names.add (field.getColumnName ());
+            Logger.logInfo (field.getColumnName ());
+        }
+
+        return new DefaultTableModel (names, 1);
+    }
 }
