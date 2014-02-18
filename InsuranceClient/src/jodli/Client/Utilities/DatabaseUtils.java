@@ -28,44 +28,46 @@ import com.j256.ormlite.support.ConnectionSource;
 
 /**
  * Database utilities. Creates connection and helper classes.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
+ *
  */
 public class DatabaseUtils {
-	private static final String DB_PATH = System.getProperty("user.dir")
-			+ File.separator + "database_"
-			+ Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
 
-	private String databaseUrl = "jdbc:sqlite:" + DB_PATH;
-	private ConnectionSource conn = null;
+    private static final String DB_PATH = System.getProperty ("user.dir")
+                                          + File.separator + "database_"
+                                          + Calendar.getInstance ().get (Calendar.YEAR) + ".sqlite";
 
-	private static DatabaseUtils instance = null;
+    private final String databaseUrl = "jdbc:sqlite:" + DB_PATH;
+    private ConnectionSource conn = null;
 
-	private DatabaseUtils() {
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		}
+    private static DatabaseUtils instance = null;
 
-		Logger.logInfo("Opening database at path: " + DB_PATH);
-		try {
-			conn = new JdbcConnectionSource(databaseUrl);
+    private DatabaseUtils () {
+        try {
+            Class.forName ("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e1) {
+            Logger.logError (e1.getMessage (), e1);
+        }
 
-			// create database utilities
-			new SettingsUtils(conn);
-		} catch (SQLException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+        Logger.logInfo ("Opening database at path: " + DB_PATH);
+        try {
+            conn = new JdbcConnectionSource (databaseUrl);
 
-	/**
-	 * Initializes singleton.
-	 */
-	public static void init() {
-		if (instance == null) {
-			instance = new DatabaseUtils();
-		}
-	}
+            // create database utilities
+            new SettingsUtils (conn);
+            new InsureeUtils (conn);
+        } catch (SQLException e) {
+            Logger.logError (e.getMessage (), e);
+        }
+    }
+
+    /**
+     * Initializes singleton.
+     */
+    public static void init () {
+        if (instance == null) {
+            instance = new DatabaseUtils ();
+        }
+    }
 }
