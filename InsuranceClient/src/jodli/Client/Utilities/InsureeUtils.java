@@ -27,12 +27,10 @@ import src.jodli.Client.log.Logger;
 
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableInfo;
+import com.j256.ormlite.support.DatabaseResults;
 import com.j256.ormlite.table.TableUtils;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
+import java.util.logging.Level;
 
 /**
  * Access the insurees stored in database.
@@ -43,7 +41,19 @@ import javax.swing.table.DefaultTableModel;
 public class InsureeUtils {
 
     private static BaseDaoImpl<ModelInsuree, Integer> insureeDao = null;
-    private static TableInfo<ModelInsuree, Integer> tableInfo = null;
+
+    public static int getRowCount () {
+        try {
+            return (int) insureeDao.countOf ();
+        } catch (SQLException ex) {
+            Logger.logError (ex.getMessage (), ex);
+            return -1;
+        }
+    }
+
+    public static int getColumnCount () {
+        return insureeDao.getTableInfo ().getFieldTypes ().length;
+    }
 
     /**
      * Constructs new InsureeUtils. Also creates table corresponding to
@@ -59,10 +69,13 @@ public class InsureeUtils {
             TableUtils.createTableIfNotExists (conn, ModelInsuree.class);
             insureeDao = DaoManager.createDao (conn, ModelInsuree.class);
 
-            tableInfo = new TableInfo<ModelInsuree, Integer> (conn, insureeDao, ModelInsuree.class);
         } catch (SQLException e) {
             Logger.logError (e.getMessage (), e);
         }
+    }
+
+    public static DatabaseResults getResultSet () {
+        return insureeDao.iterator ().getRawResults ();
     }
 
     /**
@@ -97,6 +110,7 @@ public class InsureeUtils {
         try {
             CreateOrUpdateStatus status = insureeDao.createOrUpdate (m);
             if (status.isCreated () || status.isUpdated ()) {
+                // fire event to tablemodel
                 return true;
             }
         } catch (SQLException e) {
@@ -120,15 +134,5 @@ public class InsureeUtils {
             Logger.logError (e.getMessage (), e);
         }
         return list;
-    }
-
-    public static DefaultTableModel getModel () {
-        Vector<String> names = new Vector<String> ();
-        for (FieldType field : tableInfo.getFieldTypes ()) {
-            names.add (field.getColumnName ());
-            Logger.logInfo (field.getColumnName ());
-        }
-
-        return new DefaultTableModel (names, 1);
     }
 }
