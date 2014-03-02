@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.oracle.xmlns.internal.webservices.jaxws_databinding.ExistingAnnotationsType;
-
 import src.jodli.Client.Utilities.FileUtils;
 import src.jodli.Client.log.Logger;
 

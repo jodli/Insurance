@@ -18,6 +18,7 @@
 package src.jodli.Client.Utilities;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.dao.CloseableIterator;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,17 +43,17 @@ public class InsureeUtils {
 
     private static BaseDaoImpl<ModelInsuree, Integer> insureeDao = null;
 
-    public static int getRowCount () {
+    public static int getRowCount() {
         try {
-            return (int) insureeDao.countOf ();
+            return (int) insureeDao.countOf();
         } catch (SQLException ex) {
-            Logger.logError (ex.getMessage (), ex);
+            Logger.logError(ex.getMessage(), ex);
             return -1;
         }
     }
 
-    public static int getColumnCount () {
-        return insureeDao.getTableInfo ().getFieldTypes ().length;
+    public static int getColumnCount() {
+        return insureeDao.getTableInfo().getFieldTypes().length;
     }
 
     /**
@@ -64,18 +65,18 @@ public class InsureeUtils {
      * @see DatabaseUtils
      * @see ModelInsuree
      */
-    public InsureeUtils ( ConnectionSource conn ) {
+    public InsureeUtils(ConnectionSource conn) {
         try {
-            TableUtils.createTableIfNotExists (conn, ModelInsuree.class);
-            insureeDao = DaoManager.createDao (conn, ModelInsuree.class);
+            TableUtils.createTableIfNotExists(conn, ModelInsuree.class);
+            insureeDao = DaoManager.createDao(conn, ModelInsuree.class);
 
         } catch (SQLException e) {
-            Logger.logError (e.getMessage (), e);
+            Logger.logError(e.getMessage(), e);
         }
     }
 
-    public static DatabaseResults getResultSet () {
-        return insureeDao.iterator ().getRawResults ();
+    public static CloseableIterator<ModelInsuree> getResultSet() {
+        return insureeDao.iterator();
     }
 
     /**
@@ -87,12 +88,12 @@ public class InsureeUtils {
      *
      * @see ModelInsuree
      */
-    public static ModelInsuree getValue ( int id ) {
+    public static ModelInsuree getValue(int id) {
         ModelInsuree m = null;
         try {
-            m = insureeDao.queryForId (id);
+            m = insureeDao.queryForId(id);
         } catch (SQLException e) {
-            Logger.logError (e.getMessage (), e);
+            Logger.logError(e.getMessage(), e);
         }
         return m;
     }
@@ -106,15 +107,15 @@ public class InsureeUtils {
      *
      * @see ModelInsuree
      */
-    public static boolean setValue ( ModelInsuree m ) {
+    public static boolean setValue(ModelInsuree m) {
         try {
-            CreateOrUpdateStatus status = insureeDao.createOrUpdate (m);
-            if (status.isCreated () || status.isUpdated ()) {
+            CreateOrUpdateStatus status = insureeDao.createOrUpdate(m);
+            if (status.isCreated() || status.isUpdated()) {
                 // fire event to tablemodel
                 return true;
             }
         } catch (SQLException e) {
-            Logger.logError (e.getMessage (), e);
+            Logger.logError(e.getMessage(), e);
         }
         return false;
     }
@@ -126,12 +127,12 @@ public class InsureeUtils {
      *
      * @see ModelInsuree
      */
-    public static List<ModelInsuree> getAll () {
-        List<ModelInsuree> list = new ArrayList<ModelInsuree> ();
+    public static List<ModelInsuree> getAll() {
+        List<ModelInsuree> list = new ArrayList<ModelInsuree>();
         try {
-            list = insureeDao.queryForAll ();
+            list = insureeDao.queryForAll();
         } catch (SQLException e) {
-            Logger.logError (e.getMessage (), e);
+            Logger.logError(e.getMessage(), e);
         }
         return list;
     }

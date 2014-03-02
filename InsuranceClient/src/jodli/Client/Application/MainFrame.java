@@ -27,70 +27,72 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 import src.jodli.Client.Updater.MainConsole;
+import src.jodli.Client.Utilities.DatabaseModels.InsureeTableModel;
 import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
-	public static JPanel panel;
-	private MainConsole console;
-	private JTable table;
-	private JTabbedPane tabbedPane;
-	private MenuBar menuBar;
-	private Menu menuFile;
+    public static JPanel panel;
+    private MainConsole console;
+    private JTable table;
+    private JTabbedPane tabbedPane;
+    private MenuBar menuBar;
+    private Menu menuFile;
 
-	private final String version;
+    private final String version;
 
-	public MainFrame(String version) {
-		this.version = version;
-		initComponents();
-	}
+    public MainFrame(String version) {
+        this.version = version;
+        initComponents();
+    }
 
-	private void initComponents() {
-		this.setVisible(false);
+    private void initComponents() {
+        this.setVisible(false);
 
-		setTitle("Insurance Client v" + version);
-		setMinimumSize(new Dimension(800, 400));
+        setTitle("Insurance Client v" + version);
+        setMinimumSize(new Dimension(800, 400));
 
-		menuBar = new MenuBar();
-		menuFile = new Menu("File");
-		menuFile.add(new MenuItem("Quit"));
-		menuFile.getItem(0).addActionListener(new ActionListener() {
+        menuBar = new MenuBar();
+        menuFile = new Menu("File");
+        menuFile.add(new MenuItem("Quit"));
+        menuFile.getItem(0).addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent arg0) {
-				Logger.logInfo("Quit menu item pressed");
-			}
-		});
-		menuBar.add(menuFile);
+            public void actionPerformed(ActionEvent arg0) {
+                Logger.logInfo("Quit menu item pressed");
+            }
+        });
+        menuBar.add(menuFile);
 
-		panel = new JPanel();
+        panel = new JPanel();
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		panel.setLayout(new BorderLayout());
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        panel.setLayout(new BorderLayout());
 
-		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 
-		table = new JTable(5, 5);
-		tabbedPane.addTab("Table", table);
+        table = new JTable(new InsureeTableModel());
+        tabbedPane.addTab("Table", new JScrollPane(table));
 
-		console = new MainConsole();
-		tabbedPane.addTab("Console", console);
-		panel.add(tabbedPane);
+        console = new MainConsole();
+        tabbedPane.addTab("Console", console);
+        panel.add(tabbedPane);
 
-		getContentPane().add(panel);
-		setMenuBar(menuBar);
+        getContentPane().add(panel);
+        setMenuBar(menuBar);
 
-		pack();
-		this.setLocationRelativeTo(null);
-		this.setSize(566, 40);
-	}
+        pack();
+        this.setLocationRelativeTo(null);
+        this.setSize(566, 40);
+    }
 
-	public void showFrame() {
-		this.setVisible(true);
-	}
+    public void showFrame() {
+        this.setVisible(true);
+    }
 }

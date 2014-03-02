@@ -17,12 +17,13 @@
  */
 package src.jodli.Client.Utilities.DatabaseModels;
 
-import com.j256.ormlite.support.DatabaseResults;
-import java.sql.SQLException;
+import com.j256.ormlite.dao.CloseableIterator;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 import src.jodli.Client.Utilities.Insuree;
 import src.jodli.Client.Utilities.InsureeUtils;
-import src.jodli.Client.log.Logger;
 
 /**
  *
@@ -30,39 +31,61 @@ import src.jodli.Client.log.Logger;
  */
 public class InsureeTableModel extends AbstractTableModel {
 
-    public InsureeTableModel () {
-    }
+    private final List<ModelInsuree> insurees;
 
-    public int getRowCount () {
-        return InsureeUtils.getRowCount ();
-    }
+    public InsureeTableModel() {
+        this.insurees = new ArrayList<ModelInsuree>();
 
-    public int getColumnCount () {
-        return InsureeUtils.getColumnCount ();
-    }
+        new SwingWorker<Void, ModelInsuree>() {
 
-    public Object getValueAt ( int row, int column ) {
-        try {
-            DatabaseResults dr = InsureeUtils.getResultSet ();
-
-            for (int i = 0; i < row; i++) {
-                if (!dr.next ()) {
-                    return "";
+            @Override
+            protected Void doInBackground() throws Exception {
+                CloseableIterator<ModelInsuree> res = InsureeUtils.getResultSet();
+                while (res.hasNext()) {
+                    publish(res.next());
                 }
+                return null;
             }
-            return dr.getString (column);
-        } catch (SQLException ex) {
-            Logger.logError (ex.getMessage (), ex);
+
+            @Override
+            protected void process(List<ModelInsuree> chunks) {
+                insurees.addAll(chunks);
+                InsureeTableModel.this.fireTableDataChanged();
+            }
+        }.execute();
+    }
+
+    public int getRowCount() {
+        return this.insurees.size();
+    }
+
+    public int getColumnCount() {
+        return InsureeUtils.getColumnCount();
+    }
+
+    public Object getValueAt(int row, int column) {
+        Object ret = null;
+        ModelInsuree r = this.insurees.get(row);
+
+        switch (Insuree.fromKey(column)) {
+            case PreName:
+                ret = r.getPrename();
+                break;
+            case Default:
+                ret = "";
+                break;
         }
-        return "";
+        return ret;
     }
 
     @Override
-    public String getColumnName ( int i ) {
-        Insuree ins = Insuree.fromKey (i);
+    public String getColumnName(int i) {
+        String ret = "";
+        Insuree ins = Insuree.fromKey(i);
+
         if (ins != null) {
-            return ins.toString ();
+            ret = ins.toString();
         }
-        return "";
+        return ret;
     }
 }
