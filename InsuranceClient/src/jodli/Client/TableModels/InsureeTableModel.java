@@ -24,11 +24,16 @@ import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.Utilities.InsureeUtils;
 
 /**
+ * TableModel to be used to display the Insuree table in the database.
  *
  * @author Jan-Olaf Becker <job87@web.de>
  */
 public class InsureeTableModel extends TableModel<ModelInsuree> {
 
+    /**
+     * Creates a new InsureeTableModel object. Starts the SwingWorker to process
+     * the rows and columns in the database.
+     */
     public InsureeTableModel() {
         new SwingWorker<Void, ModelInsuree>() {
 
@@ -55,7 +60,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
 
     @Override
     public Object getValueAt(int row, int column) {
-        Object ret = null;
+        Object ret;
         ModelInsuree r = this.rows.get(row);
 
         switch (this.columns[column]) {

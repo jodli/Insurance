@@ -22,15 +22,21 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Abstract Table Model to be implemented by Database Models.
  *
  * @author Jan-Olaf Becker <job87@web.de>
+ * @param <T> Database Model Class.
  */
 public abstract class TableModel<T> extends AbstractTableModel {
 
     protected final List<T> rows;
     protected String[] columns;
 
-    public TableModel() {
+    /**
+     * Create a new TableModel object. Initializes the rows list and the column
+     * names array.
+     */
+    protected TableModel() {
         this.rows = new ArrayList();
         this.columns = null;
     }
