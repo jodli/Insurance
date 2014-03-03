@@ -18,10 +18,8 @@
 package src.jodli.Client.TableModels;
 
 import com.j256.ormlite.dao.CloseableIterator;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingWorker;
-import javax.swing.table.AbstractTableModel;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.Utilities.InsureeUtils;
 
@@ -29,14 +27,9 @@ import src.jodli.Client.Utilities.InsureeUtils;
  *
  * @author Jan-Olaf Becker <job87@web.de>
  */
-public class InsureeTableModel extends AbstractTableModel {
-
-    private final List<ModelInsuree> insurees;
-    private String[] columns = null;
+public class InsureeTableModel extends TableModel<ModelInsuree> {
 
     public InsureeTableModel() {
-        this.insurees = new ArrayList();
-
         new SwingWorker<Void, ModelInsuree>() {
 
             @Override
@@ -54,28 +47,18 @@ public class InsureeTableModel extends AbstractTableModel {
 
             @Override
             protected void process(List<ModelInsuree> chunks) {
-                insurees.addAll(chunks);
+                rows.addAll(chunks);
                 InsureeTableModel.this.fireTableDataChanged();
             }
         }.execute();
     }
 
-    public int getRowCount() {
-        return this.insurees.size();
-    }
-
-    public int getColumnCount() {
-        if (columns != null) {
-            return columns.length;
-        }
-        return 0;
-    }
-
+    @Override
     public Object getValueAt(int row, int column) {
         Object ret = null;
-        ModelInsuree r = this.insurees.get(row);
+        ModelInsuree r = this.rows.get(row);
 
-        switch (columns[column]) {
+        switch (this.columns[column]) {
             case "ID":
                 ret = r.getID();
                 break;
@@ -143,12 +126,6 @@ public class InsureeTableModel extends AbstractTableModel {
                 ret = "ERROR";
                 break;
         }
-
         return ret;
-    }
-
-    @Override
-    public String getColumnName(int i) {
-        return columns[i];
     }
 }
