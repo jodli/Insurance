@@ -19,7 +19,11 @@ package src.jodli.Client.TableModels;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
+import src.jodli.Client.log.Logger;
 
 /**
  * Abstract Table Model to be implemented by Database Models.
@@ -27,7 +31,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Jan-Olaf Becker <job87@web.de>
  * @param <T> Database Model Class.
  */
-public abstract class TableModel<T> extends AbstractTableModel {
+public abstract class TableModel<T> extends AbstractTableModel implements TableModelListener {
 
     protected final List<T> rows;
     protected String[] columns;
@@ -39,6 +43,8 @@ public abstract class TableModel<T> extends AbstractTableModel {
     protected TableModel() {
         this.rows = new ArrayList();
         this.columns = null;
+
+        this.addTableModelListener(this);
     }
 
     @Override
@@ -57,5 +63,10 @@ public abstract class TableModel<T> extends AbstractTableModel {
     @Override
     public String getColumnName(int i) {
         return columns[i];
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        Logger.logInfo(e.toString());
     }
 }
