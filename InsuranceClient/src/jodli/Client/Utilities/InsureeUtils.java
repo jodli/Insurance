@@ -111,7 +111,6 @@ public class InsureeUtils {
         try {
             CreateOrUpdateStatus status = insureeDao.createOrUpdate(m);
             if (status.isCreated() || status.isUpdated()) {
-                // fire event to tablemodel
                 return true;
             }
         } catch (SQLException e) {

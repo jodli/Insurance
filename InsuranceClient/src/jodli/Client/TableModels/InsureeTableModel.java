@@ -68,11 +68,21 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        if (this.setColumnValue(this.rows.get(rowIndex), columnIndex, aValue)) {
-            //TODO: update value in database.
-            this.fireTableCellUpdated(rowIndex, columnIndex);
+        // make a copy of the insuree MEMENTO
+        ModelInsuree insuree = new ModelInsuree(this.rows.get(rowIndex));
+        // set column value in copy
+        if (this.setColumnValue(insuree, columnIndex, aValue)) {
+            // update database
+            if (InsureeUtils.setValue(insuree)) {
+                // if updated successful copy in rows list and fire event.
+                this.rows.set(rowIndex, insuree);
+                this.fireTableCellUpdated(rowIndex, columnIndex);
+                Logger.logInfo("Row: " + rowIndex + " Column: " + columnIndex + " Value: " + aValue.toString() + " Updated successfully!");
+                return;
+            }
         }
-        Logger.logInfo("row: " + rowIndex + " col: " + columnIndex + " val: " + aValue.toString());
+        // if database update failed revert state of insuree (NOP)
+        Logger.logError("Row: " + rowIndex + " Column: " + columnIndex + " Value: " + aValue.toString() + "Error while updating; Reverting!");
     }
 
     /**
