@@ -29,77 +29,72 @@ import src.jodli.Client.log.Logger;
 
 /**
  * Main entry point for application. Here's where the magic happens...
- * 
+ *
  * @author Jan-Olaf Becker
- * 
+ *
  */
 public class App {
 
-	private static String buildNumber = null;
-	private static String version;
+    private static String buildNumber = null;
+    private static String version;
 
-	public static void main(String[] args) {
-		if (verifyArguments(args)) {
-			buildNumber = args[0];
-		}
+    public static void main(String[] args) {
+        if (verifyArguments(args)) {
+            buildNumber = args[0];
+        }
 
-		EventQueue.invokeLater(new Runnable() {
+        EventQueue.invokeLater(() -> {
+            DatabaseUtils.init();
+            if (buildNumber != null) {
+                SettingsUtils.setValue(new ModelSettings(
+                        Setting.BUILDNUMBER, buildNumber));
+            }
 
-			public void run() {
-				DatabaseUtils.init();
-				if (buildNumber != null) {
-					SettingsUtils.setValue(new ModelSettings(
-							Setting.BUILDNUMBER, buildNumber));
-				}
+            buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
+            if (buildNumber == null) {
+                buildNumber = "00";
+            }
+            version = AppUtils.getVersion(buildNumber);
 
-				buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
-				if (buildNumber == null) {
-					buildNumber = "00";
-				}
-				version = AppUtils.getVersion(buildNumber);
+            MainFrame frm = new MainFrame(version);
 
-				MainFrame frm = new MainFrame(version);
+            frm.showFrame();
 
-				frm.showFrame();
+            UpdateChecker uc = new UpdateChecker(buildNumber);
 
-				UpdateChecker uc = new UpdateChecker(buildNumber);
+            if (uc.shouldUpdate()) {
+                uc.update();
+            }
+        });
 
-				if (uc.shouldUpdate()) {
-					uc.update();
-				}
+        Logger.logInfo("Insurance client starting up (Version " + version + ")");
+        Logger.logInfo("Java version: " + System.getProperty("java.version"));
+        Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
+        Logger.logInfo("Java home: " + System.getProperty("java.home"));
+        Logger.logInfo("Java specification: "
+                + System.getProperty("java.vm.specification.name")
+                + " version: "
+                + System.getProperty("java.vm.specification.version") + " by "
+                + System.getProperty("java.vm.specification.vendor"));
+        Logger.logInfo("Java vm: " + System.getProperty("java.vm.name")
+                + " version: " + System.getProperty("java.vm.version") + " by "
+                + System.getProperty("java.vm.vendor"));
+        Logger.logInfo("OS: " + System.getProperty("os.arch") + " "
+                + System.getProperty("os.name") + " "
+                + System.getProperty("os.version"));
 
-			}
-		});
+        Logger.logWarn("Test color warning");
+        Logger.logError("Test color error");
 
-		Logger.logInfo("Insurance client starting up (Version " + version + ")");
-		Logger.logInfo("Java version: " + System.getProperty("java.version"));
-		Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
-		Logger.logInfo("Java home: " + System.getProperty("java.home"));
-		Logger.logInfo("Java specification: "
-				+ System.getProperty("java.vm.specification.name")
-				+ " version: "
-				+ System.getProperty("java.vm.specification.version") + " by "
-				+ System.getProperty("java.vm.specification.vendor"));
-		Logger.logInfo("Java vm: " + System.getProperty("java.vm.name")
-				+ " version: " + System.getProperty("java.vm.version") + " by "
-				+ System.getProperty("java.vm.vendor"));
-		Logger.logInfo("OS: " + System.getProperty("os.arch") + " "
-				+ System.getProperty("os.name") + " "
-				+ System.getProperty("os.version"));
+    }
 
-		Logger.logWarn("Test color warning");
-		Logger.logError("Test color error");
-
-	}
-
-	/**
-	 * Verifies command line arguments to check.
-	 * 
-	 * @param args
-	 *            Command line arguments to be verified.
-	 * @return true if arguments are correct; otherwise, false.
-	 */
-	private static boolean verifyArguments(String[] args) {
-		return args.length == 1;
-	}
+    /**
+     * Verifies command line arguments to check.
+     *
+     * @param args Command line arguments to be verified.
+     * @return true if arguments are correct; otherwise, false.
+     */
+    private static boolean verifyArguments(String[] args) {
+        return args.length == 1;
+    }
 }

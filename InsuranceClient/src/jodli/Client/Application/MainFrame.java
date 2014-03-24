@@ -23,17 +23,19 @@ import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
 import src.jodli.Client.Updater.MainConsole;
-import src.jodli.Client.Utilities.DatabaseModels.InsureeTableModel;
+import src.jodli.Client.TableModels.InsureeTableModel;
 import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
@@ -62,11 +64,8 @@ public class MainFrame extends JFrame {
         menuBar = new MenuBar();
         menuFile = new Menu("File");
         menuFile.add(new MenuItem("Quit"));
-        menuFile.getItem(0).addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent arg0) {
-                Logger.logInfo("Quit menu item pressed");
-            }
+        menuFile.getItem(0).addActionListener((ActionEvent arg0) -> {
+            Logger.logInfo("Quit menu item pressed");
         });
         menuBar.add(menuFile);
 
@@ -78,6 +77,20 @@ public class MainFrame extends JFrame {
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 
         table = new JTable(new InsureeTableModel());
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        table.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = ((JTable) e.getSource()).getSelectedRow();
+                    Logger.logInfo("Double Click on row: " + row);
+                    // open new frame to view and change row entry.
+                }
+            }
+        });
+
         tabbedPane.addTab("Table", new JScrollPane(table));
 
         console = new MainConsole();
