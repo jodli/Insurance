@@ -61,6 +61,10 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
         }.execute();
     }
 
+    public int getId(int row) {
+        return this.rows.get(row).getID();
+    }
+
     @Override
     public Object getValueAt(int row, int column) {
         return getColumnValue(this.rows.get(row), column);
