@@ -19,6 +19,7 @@ package src.jodli.Client.Utilities.DatabaseModels;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import java.util.Date;
 
 /**
  * Model for the Insuree table.
@@ -43,9 +44,9 @@ public class ModelInsuree {
     private String Partner_Surname;
 
     @DatabaseField(canBeNull = false)
-    private String BirthDate;
+    private Date BirthDate;
     @DatabaseField
-    private String Partner_BirthDate;
+    private Date Partner_BirthDate;
 
     @DatabaseField(canBeNull = false)
     private String Street_Address;
@@ -137,7 +138,7 @@ public class ModelInsuree {
      * @param job the value of job
      * @param partner_Job the value of partner_Job
      */
-    public ModelInsuree(String prename, String surname, String partner_Prename, String partner_Surname, String birthDate, String partner_BirthDate, String street_Address, String street_Number, String zipcode, String city, String telephone_Number, String fax_Number, String cellphone_Number, String email, boolean contract, String bank_Name, String bank_IBAN, String bank_BIC, String job, String partner_Job) {
+    public ModelInsuree(String prename, String surname, String partner_Prename, String partner_Surname, Date birthDate, Date partner_BirthDate, String street_Address, String street_Number, String zipcode, String city, String telephone_Number, String fax_Number, String cellphone_Number, String email, boolean contract, String bank_Name, String bank_IBAN, String bank_BIC, String job, String partner_Job) {
         this();
 
         this.Prename = prename;
@@ -227,7 +228,7 @@ public class ModelInsuree {
      *
      * @return the value of BirthDate
      */
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return BirthDate;
     }
 
@@ -236,7 +237,7 @@ public class ModelInsuree {
      *
      * @param BirthDate new value of BirthDate
      */
-    public void setBirthDate(String BirthDate) {
+    public void setBirthDate(Date BirthDate) {
         this.BirthDate = BirthDate;
     }
 
@@ -245,7 +246,7 @@ public class ModelInsuree {
      *
      * @return the value of Partner_BirthDate
      */
-    public String getPartner_BirthDate() {
+    public Date getPartner_BirthDate() {
         return Partner_BirthDate;
     }
 
@@ -254,7 +255,7 @@ public class ModelInsuree {
      *
      * @param Partner_BirthDate new value of Partner_BirthDate
      */
-    public void setPartner_BirthDate(String Partner_BirthDate) {
+    public void setPartner_BirthDate(Date Partner_BirthDate) {
         this.Partner_BirthDate = Partner_BirthDate;
     }
 

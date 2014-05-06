@@ -18,6 +18,8 @@
 package src.jodli.Client.TableModels;
 
 import com.j256.ormlite.dao.CloseableIterator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.SwingWorker;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
@@ -31,11 +33,15 @@ import src.jodli.Client.log.Logger;
  */
 public class InsureeTableModel extends TableModel<ModelInsuree> {
 
+    private SimpleDateFormat dateFormatter;
+
     /**
      * Creates a new InsureeTableModel object. Starts the SwingWorker to process
      * the rows and columns in the database.
      */
     public InsureeTableModel() {
+        dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+
         new SwingWorker<Void, ModelInsuree>() {
 
             @Override
@@ -53,12 +59,14 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
             }
 
             @Override
-            protected void process(List<ModelInsuree> chunks) {
+            protected void process(List<ModelInsuree> chunks
+            ) {
                 rows.addAll(chunks);
                 InsureeTableModel.this.fireTableDataChanged();
                 Logger.logInfo("Processing " + chunks.size() + " chunks.");
             }
-        }.execute();
+        }.
+                execute();
     }
 
     public int getId(int row) {
@@ -114,10 +122,10 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
                 ret = row.getPartner_Surname();
                 break;
             case "BirthDate":
-                ret = row.getBirthDate();
+                ret = dateFormatter.format(row.getBirthDate());
                 break;
             case "Partner_BirthDate":
-                ret = row.getPartner_BirthDate();
+                ret = dateFormatter.format(row.getPartner_BirthDate());
                 break;
             case "Street_Address":
                 ret = row.getStreet_Address();
@@ -190,10 +198,10 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
                 row.setPartner_Surname((String) val);
                 break;
             case "BirthDate":
-                row.setBirthDate((String) val);
+                row.setBirthDate((Date) val);
                 break;
             case "Partner_BirthDate":
-                row.setPartner_BirthDate((String) val);
+                row.setPartner_BirthDate((Date) val);
                 break;
             case "Street_Address":
                 row.setStreet_Address((String) val);

@@ -27,43 +27,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btn_Save" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btn_Close" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lbl_PreName" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_SurName" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="btn_Save" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btn_Close" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="txt_SurName" min="-2" pref="125" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="lbl_Partner_SurName" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="txt_PreName" min="-2" pref="125" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="lbl_Partner_PreName" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txt_Partner_PreName" min="-2" pref="125" max="-2" attributes="0"/>
-                          <Component id="txt_Partner_SurName" min="-2" pref="125" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="345" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="tp_Selector" min="-2" pref="628" max="-2" attributes="0"/>
+              <EmptySpace pref="137" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -71,20 +45,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txt_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_Partner_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_Partner_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txt_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_Partner_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_Partner_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="262" max="32767" attributes="0"/>
+              <Component id="tp_Selector" min="-2" pref="231" max="-2" attributes="0"/>
+              <EmptySpace pref="77" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btn_Close" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btn_Save" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -95,11 +57,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="lbl_PreName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="prename"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btn_Close">
       <Properties>
         <Property name="text" type="java.lang.String" value="close"/>
@@ -110,29 +67,119 @@
         <Property name="text" type="java.lang.String" value="save"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_SurName">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lbl_SurName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="surname"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txt_PreName">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lbl_Partner_PreName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="partner prename"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txt_Partner_PreName">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lbl_Partner_SurName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="partner surname"/>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txt_Partner_SurName">
-    </Component>
+    <Container class="javax.swing.JTabbedPane" name="tp_Selector">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="pan_Insuree">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Insuree">
+                <Property name="tabTitle" type="java.lang.String" value="Insuree"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="10"/>
+            <Property name="rows" type="int" value="10"/>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="lbl_PreName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="prename"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txt_PreName">
+              <Properties>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[60, 20]"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lbl_SurName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="surname"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txt_SurName">
+            </Component>
+            <Component class="javax.swing.JLabel" name="lbl_BirthDate">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="birthdate"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="pan_Partner">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Partner">
+                <Property name="tabTitle" type="java.lang.String" value="Partner"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lbl_Partner_PreName" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="lbl_Partner_SurName" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txt_Partner_PreName" min="-2" pref="125" max="-2" attributes="0"/>
+                          <Component id="txt_Partner_SurName" min="-2" pref="125" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="398" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lbl_Partner_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_Partner_PreName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lbl_Partner_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_Partner_SurName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="146" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JTextField" name="txt_Partner_SurName">
+            </Component>
+            <Component class="javax.swing.JLabel" name="lbl_Partner_PreName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="partner prename"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txt_Partner_PreName">
+            </Component>
+            <Component class="javax.swing.JLabel" name="lbl_Partner_SurName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="partner surname"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

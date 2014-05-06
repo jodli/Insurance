@@ -18,6 +18,8 @@
 package src.jodli.Client.Application;
 
 import java.awt.event.ActionEvent;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.Utilities.InsureeUtils;
 import src.jodli.Client.log.Logger;
@@ -41,6 +43,10 @@ public class InsureeFrame extends javax.swing.JFrame {
         Logger.logInfo("Opened Insuree with ID: " + id);
 
         initComponents();
+
+        this.dp_BirthDate = new org.jdesktop.swingx.JXDatePicker();
+        this.dp_BirthDate.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+        this.pan_Insuree.add(this.dp_BirthDate);
 
         // add button actionlisteners.
         btn_Close.addActionListener((ActionEvent e) -> {
@@ -69,6 +75,7 @@ public class InsureeFrame extends javax.swing.JFrame {
         txt_PreName.setText(insuree.getSurname());
         txt_Partner_PreName.setText(insuree.getPartner_Prename());
         txt_Partner_SurName.setText(insuree.getPartner_Surname());
+        dp_BirthDate.setDate(insuree.getBirthDate());
     }
 
     private void getTextBoxes() {
@@ -76,6 +83,7 @@ public class InsureeFrame extends javax.swing.JFrame {
         insuree.setPrename(txt_PreName.getText());
         insuree.setPartner_Prename(txt_Partner_PreName.getText());
         insuree.setPartner_Surname(txt_Partner_SurName.getText());
+        insuree.setBirthDate(dp_BirthDate.getDate());
     }
 
     private boolean verifyChanges() {
@@ -91,84 +99,106 @@ public class InsureeFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lbl_PreName = new javax.swing.JLabel();
         btn_Close = new javax.swing.JButton();
         btn_Save = new javax.swing.JButton();
-        txt_SurName = new javax.swing.JTextField();
-        lbl_SurName = new javax.swing.JLabel();
+        tp_Selector = new javax.swing.JTabbedPane();
+        pan_Insuree = new javax.swing.JPanel();
+        lbl_PreName = new javax.swing.JLabel();
         txt_PreName = new javax.swing.JTextField();
+        lbl_SurName = new javax.swing.JLabel();
+        txt_SurName = new javax.swing.JTextField();
+        lbl_BirthDate = new javax.swing.JLabel();
+        pan_Partner = new javax.swing.JPanel();
+        txt_Partner_SurName = new javax.swing.JTextField();
         lbl_Partner_PreName = new javax.swing.JLabel();
         txt_Partner_PreName = new javax.swing.JTextField();
         lbl_Partner_SurName = new javax.swing.JLabel();
-        txt_Partner_SurName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setResizable(false);
 
-        lbl_PreName.setText("prename");
-
         btn_Close.setText("close");
 
         btn_Save.setText("save");
 
+        pan_Insuree.setLayout(new java.awt.GridLayout(10, 10));
+
+        lbl_PreName.setText("prename");
+        pan_Insuree.add(lbl_PreName);
+
+        txt_PreName.setMinimumSize(new java.awt.Dimension(60, 20));
+        pan_Insuree.add(txt_PreName);
+
         lbl_SurName.setText("surname");
+        pan_Insuree.add(lbl_SurName);
+        pan_Insuree.add(txt_SurName);
+
+        lbl_BirthDate.setText("birthdate");
+        pan_Insuree.add(lbl_BirthDate);
+
+        tp_Selector.addTab("Insuree", pan_Insuree);
 
         lbl_Partner_PreName.setText("partner prename");
 
         lbl_Partner_SurName.setText("partner surname");
         lbl_Partner_SurName.setToolTipText("");
 
+        javax.swing.GroupLayout pan_PartnerLayout = new javax.swing.GroupLayout(pan_Partner);
+        pan_Partner.setLayout(pan_PartnerLayout);
+        pan_PartnerLayout.setHorizontalGroup(
+            pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pan_PartnerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pan_PartnerLayout.createSequentialGroup()
+                        .addComponent(lbl_Partner_PreName)
+                        .addGap(9, 9, 9))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pan_PartnerLayout.createSequentialGroup()
+                        .addComponent(lbl_Partner_SurName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txt_Partner_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Partner_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(398, Short.MAX_VALUE))
+        );
+        pan_PartnerLayout.setVerticalGroup(
+            pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pan_PartnerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_Partner_PreName)
+                    .addComponent(txt_Partner_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pan_PartnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_Partner_SurName)
+                    .addComponent(txt_Partner_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(146, Short.MAX_VALUE))
+        );
+
+        tp_Selector.addTab("Partner", pan_Partner);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_PreName)
-                    .addComponent(lbl_SurName))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btn_Save)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Close))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(txt_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(lbl_Partner_SurName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txt_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(lbl_Partner_PreName)
-                                .addGap(9, 9, 9)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_Partner_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_Partner_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 345, Short.MAX_VALUE)))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btn_Save)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_Close)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tp_Selector, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(137, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_PreName)
-                    .addComponent(lbl_Partner_PreName)
-                    .addComponent(txt_Partner_PreName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_SurName)
-                    .addComponent(lbl_Partner_SurName)
-                    .addComponent(txt_Partner_SurName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 262, Short.MAX_VALUE)
+                .addComponent(tp_Selector, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Close)
                     .addComponent(btn_Save))
@@ -182,13 +212,19 @@ public class InsureeFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Close;
     private javax.swing.JButton btn_Save;
+    private javax.swing.JLabel lbl_BirthDate;
     private javax.swing.JLabel lbl_Partner_PreName;
     private javax.swing.JLabel lbl_Partner_SurName;
     private javax.swing.JLabel lbl_PreName;
     private javax.swing.JLabel lbl_SurName;
+    private javax.swing.JPanel pan_Insuree;
+    private javax.swing.JPanel pan_Partner;
+    private javax.swing.JTabbedPane tp_Selector;
     private javax.swing.JTextField txt_Partner_PreName;
     private javax.swing.JTextField txt_Partner_SurName;
     private javax.swing.JTextField txt_PreName;
     private javax.swing.JTextField txt_SurName;
     // End of variables declaration//GEN-END:variables
+    private org.jdesktop.swingx.JXDatePicker dp_BirthDate;
+    private org.jdesktop.swingx.JXDatePicker dp_Partner_BirthDate;
 }
