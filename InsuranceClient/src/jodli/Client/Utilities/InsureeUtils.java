@@ -29,9 +29,7 @@ import src.jodli.Client.log.Logger;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.support.DatabaseResults;
 import com.j256.ormlite.table.TableUtils;
-import java.util.logging.Level;
 
 /**
  * Access the insurees stored in database.
@@ -127,7 +125,7 @@ public class InsureeUtils {
      * @see ModelInsuree
      */
     public static List<ModelInsuree> getAll() {
-        List<ModelInsuree> list = new ArrayList<ModelInsuree>();
+        List<ModelInsuree> list = new ArrayList<>();
         try {
             list = insureeDao.queryForAll();
         } catch (SQLException e) {

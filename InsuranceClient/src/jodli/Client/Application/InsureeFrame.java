@@ -37,7 +37,7 @@ public class InsureeFrame extends javax.swing.JFrame {
      */
     InsureeFrame(int id) {
         // get insuree from database.
-        insuree = InsureeUtils.getValue(id);
+        this.insuree = InsureeUtils.getValue(id);
         Logger.logInfo("Opened Insuree with ID: " + id);
 
         initComponents();
@@ -48,15 +48,38 @@ public class InsureeFrame extends javax.swing.JFrame {
             this.dispose();
         });
         btn_Save.addActionListener((ActionEvent e) -> {
-            Logger.logInfo("Saving Insuree with ID: " + id);
-            // save to database.
+            //get entries, verify changes and save in database.
+            this.getTextBoxes();
+            if (this.verifyChanges()) {
+                Logger.logInfo("Saving Insuree with ID: " + id);
+                InsureeUtils.setValue(insuree);
+                //TODO: notify mainframe to update this insuree entry.
+                this.dispose();
+            } else {
+                Logger.logWarn("Changes did not compute - Abort save.");
+            }
         });
 
         // fill in the text fields with the text saved in database.
+        this.setTextBoxes();
+    }
+
+    private void setTextBoxes() {
         txt_SurName.setText(insuree.getPrename());
         txt_PreName.setText(insuree.getSurname());
         txt_Partner_PreName.setText(insuree.getPartner_Prename());
         txt_Partner_SurName.setText(insuree.getPartner_Surname());
+    }
+
+    private void getTextBoxes() {
+        insuree.setSurname(txt_SurName.getText());
+        insuree.setPrename(txt_PreName.getText());
+        insuree.setPartner_Prename(txt_Partner_PreName.getText());
+        insuree.setPartner_Surname(txt_Partner_SurName.getText());
+    }
+
+    private boolean verifyChanges() {
+        return true;
     }
 
     /**

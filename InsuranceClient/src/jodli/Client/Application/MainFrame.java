@@ -39,7 +39,7 @@ import src.jodli.Client.TableModels.InsureeTableModel;
 import src.jodli.Client.log.Logger;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame {
+public final class MainFrame extends JFrame {
 
     public static JPanel panel;
     private MainConsole console;
@@ -61,17 +61,9 @@ public class MainFrame extends JFrame {
         setTitle("Insurance Client v" + version);
         setMinimumSize(new Dimension(800, 400));
 
-        menuBar = new MenuBar();
-        menuFile = new Menu("File");
-        menuFile.add(new MenuItem("Quit"));
-        menuFile.getItem(0).addActionListener((ActionEvent arg0) -> {
-            Logger.logInfo("Quit menu item pressed");
-        });
-        menuBar.add(menuFile);
-
         panel = new JPanel();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         panel.setLayout(new BorderLayout());
 
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
@@ -85,8 +77,9 @@ public class MainFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int row = ((JTable) e.getSource()).getSelectedRow();
-                    Logger.logInfo("Double Click on row: " + row);
-                    // open new frame to view and change row entry.
+                    int id = ((InsureeTableModel) table.getModel()).getId(row);
+                    Logger.logInfo("Double Click on row: " + row + " with ID: " + id);
+                    new InsureeFrame(id).setVisible(true);
                 }
             }
         });
@@ -103,6 +96,19 @@ public class MainFrame extends JFrame {
         pack();
         this.setLocationRelativeTo(null);
         this.setSize(566, 40);
+    }
+
+    private void initMenu() {
+        menuBar = new MenuBar();
+
+        menuFile = new Menu("File");
+
+        menuFile.add(new MenuItem("Quit"));
+        menuFile.getItem(0).addActionListener((ActionEvent arg0) -> {
+            Logger.logInfo("Quit menu item pressed");
+        });
+
+        menuBar.add(menuFile);
     }
 
     public void showFrame() {

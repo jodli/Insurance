@@ -96,7 +96,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
      * @param column The column where the value is saved in.
      */
     private Object getColumnValue(ModelInsuree row, int column) {
-        Object ret;
+        Object ret = null;
         switch (this.columns[column]) {
             case "ID":
                 ret = row.getID();

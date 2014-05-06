@@ -90,6 +90,8 @@ public class ModelInsuree {
      * @param m ModelInsuree object to copy.
      */
     public ModelInsuree(ModelInsuree m) {
+        this();
+
         this.ID = m.ID;
         this.Prename = m.Prename;
         this.Surname = m.Surname;
@@ -136,6 +138,8 @@ public class ModelInsuree {
      * @param partner_Job the value of partner_Job
      */
     public ModelInsuree(String prename, String surname, String partner_Prename, String partner_Surname, String birthDate, String partner_BirthDate, String street_Address, String street_Number, String zipcode, String city, String telephone_Number, String fax_Number, String cellphone_Number, String email, boolean contract, String bank_Name, String bank_IBAN, String bank_BIC, String job, String partner_Job) {
+        this();
+
         this.Prename = prename;
         this.Surname = surname;
         this.Partner_Prename = partner_Prename;
