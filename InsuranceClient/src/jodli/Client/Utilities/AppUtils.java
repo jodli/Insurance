@@ -17,75 +17,93 @@
  */
 package src.jodli.Client.Utilities;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
+import java.io.*;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Scanner;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import src.jodli.Client.log.Logger;
-
 public class AppUtils {
 
-	public static String downloadString(URL url) throws IOException {
-		return readString(url.openStream());
-	}
+    public static final int ONE_SPACE = 5;
 
-	public static String readString(InputStream stream) {
-		Scanner scanner = new Scanner(stream).useDelimiter("\\A");
-		return scanner.hasNext() ? scanner.next() : "";
-	}
+    public static String downloadString(URL url) throws IOException {
+        return readString(url.openStream());
+    }
 
-	public static Document downloadXML(URL url) throws IOException,
-			SAXException {
-		return getXML(url.openStream());
-	}
+    public static String readString(InputStream stream) {
+        Scanner scanner = new Scanner(stream).useDelimiter("\\A");
+        return scanner.hasNext() ? scanner.next() : "";
+    }
 
-	public static Document readXML(File file) throws IOException, SAXException {
-		return getXML(new FileInputStream(file));
-	}
+    public static Document downloadXML(URL url) throws IOException,
+            SAXException {
+        return getXML(url.openStream());
+    }
 
-	public static Document getXML(InputStream stream) throws IOException,
-			SAXException {
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory
-				.newInstance();
-		try {
-			return docFactory.newDocumentBuilder().parse(stream);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public static Document readXML(File file) throws IOException, SAXException {
+        return getXML(new FileInputStream(file));
+    }
 
-	public static void downloadToFile(URL url, File file) throws IOException {
-		file.getParentFile().mkdirs();
-		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		fos.close();
-	}
+    public static Document getXML(InputStream stream) throws IOException,
+            SAXException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory
+                .newInstance();
+        try {
+            return docFactory.newDocumentBuilder().parse(stream);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	public static String getVersion(String buildNumber) {
-		String version = "";
+    public static void downloadToFile(URL url, File file) throws IOException {
+        file.getParentFile().mkdirs();
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+        fos.close();
+    }
 
-		char[] tmp = buildNumber.toCharArray();
-		for (int i = 0; i < (tmp.length - 1); i++) {
-			version += tmp[i] + ".";
-		}
-		version += tmp[tmp.length - 1];
-		return version;
-	}
+    public static String getVerboseVersion(String buildNumber) {
+        String version = "";
+
+        char[] tmp = buildNumber.toCharArray();
+        for (int i = 0; i < (tmp.length - 1); i++) {
+            version += tmp[i] + ".";
+        }
+        version += tmp[tmp.length - 1];
+        return version;
+    }
+
+    public static GridBagConstraints getConstraints(int y, int x) {
+        int low = 0;
+        int high = 10;
+        if (!(checkRange(y, low, high) || checkRange(x, low, high))) {
+            return null;
+        }
+
+        GridBagConstraints result = new GridBagConstraints();
+        result.gridy = y;
+        result.gridx = x;
+        result.anchor = GridBagConstraints.WEST;
+        result.insets = new Insets(0, 0, 0, ONE_SPACE);
+        return result;
+    }
+
+    public static boolean checkRange(int n, int low, int high) {
+        if (low > high) {
+            throw new IllegalArgumentException("Low is greater than High.");
+        }
+        return (low <= n && n <= high);
+    }
 }

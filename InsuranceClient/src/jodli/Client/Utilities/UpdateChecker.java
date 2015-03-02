@@ -57,7 +57,7 @@ public class UpdateChecker {
             buildString = updateInfoNode.getAttribute("currentBuild");
             this.latestBuild = Integer.parseInt(buildString);
 
-            Logger.logInfo("Current build: " + AppUtils.getVersion(buildString));
+            Logger.logInfo("Current build: " + AppUtils.getVerboseVersion(buildString));
 
             downloadAddress = updateInfoNode.getAttribute("downloadURL");
 

@@ -22,7 +22,7 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
+
 import src.jodli.Client.log.Logger;
 
 /**
@@ -67,6 +67,6 @@ public abstract class TableModel<T> extends AbstractTableModel implements TableM
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        Logger.logInfo(e.toString());
+        Logger.logDebug(e.toString());
     }
 }

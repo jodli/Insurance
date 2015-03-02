@@ -5,7 +5,7 @@
     <target name="create_run_jar">
         <jar destfile="F:/export/InsuranceClient.jar">
             <manifest>
-                <attribute name="Main-Class" value="src.jodli.Client.Application.App"/>
+                <attribute name="Main-Class" value="src.jodli.Client.Application.Launcher"/>
                 <attribute name="Class-Path" value=". InsuranceClient_lib/sqlite4java.jar"/>
             </manifest>
             <fileset dir="F:/git/Insurance/InsuranceClient/bin"/>

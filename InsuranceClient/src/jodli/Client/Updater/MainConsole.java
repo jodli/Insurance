@@ -153,23 +153,30 @@ public class MainConsole extends JPanel implements ILogListener {
 
 	private String getMessage(LogEntry entry) {
 		String color = "black";
-		switch (entry.level) {
+		switch (entry.m_Level) {
 		case ERROR:
-			color = "#FF7070";
+			color = "red";
 			break;
 		case WARN:
 			color = "yellow";
 		case INFO:
 			break;
+        case DEBUG:
+            color = "gray";
+            break;
 		case UNKNOWN:
 			break;
 		default:
 			break;
 		}
+        String ret = entry.toString(logType);
+        if (ret == null) {
+            return "";
+        }
 		return "<font color=\""
 				+ color
 				+ "\">"
-				+ (entry.toString(logType).replace("<", "&lt;")
+				+ (ret.replace("<", "&lt;")
 						.replace(">", "&gt;").trim().replace("\r\n", "\n")
 						.replace("\n", "<br/>")) + "</font><br/>";
 	}

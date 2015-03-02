@@ -18,5 +18,5 @@
 package src.jodli.Client.log;
 
 public enum LogLevel {
-	INFO, WARN, ERROR, UNKNOWN
+    INFO, WARN, ERROR, DEBUG, UNKNOWN
 }
