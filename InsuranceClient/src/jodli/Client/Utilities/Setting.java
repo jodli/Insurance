@@ -21,48 +21,53 @@ import src.jodli.Client.log.Logger;
 
 /**
  * Enum to store settings keys mapped to database key.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
  */
 public enum Setting {
-	// add more settings here as we go...
-	// constructor takes the key!
-	/**
-	 * Buildnumber value mapped to key = 0.
-	 */
-	BUILDNUMBER(0);
+    // add more settings here as we go...
+    // constructor takes the key!
+    /**
+     * Buildnumber value mapped to key = 0.
+     * CheckUpdate value mapped to key = 1.
+     */
+    BUILDNUMBER(0),
+    CHECKUPDATE(1);
 
-	private int Key;
+    public static final String DEFAULT_BUILDNUMBER = "00";
+    public static final String DEFAULT_CHECKUPDATE = "true";
 
-	private Setting(int key) {
-		this.Key = key;
-	}
+    private int Key;
 
-	public int getKey() {
-		return this.Key;
-	}
+    private Setting(int key) {
+        this.Key = key;
+    }
 
-	@Override
-	public String toString() {
-		String s = super.toString();
-		return s.substring(0, 1) + s.substring(1).toLowerCase();
-	}
+    /**
+     * Gets enum from a give key.
+     *
+     * @param key Integer corresponding to enum.
+     * @return Setting enum.
+     * @throws IllegalArgumentException
+     */
+    public static Setting fromKey(int key) throws IllegalArgumentException {
+        try {
+            return Setting.values()[key];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+        return null;
+    }
 
-	/**
-	 * Gets enum from a give key.
-	 * 
-	 * @param key
-	 *            Integer corresponding to enum.
-	 * @return Setting enum.
-	 * @throws IllegalArgumentException
-	 */
-	public static Setting fromKey(int key) throws IllegalArgumentException {
-		try {
-			return Setting.values()[key];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return null;
-	};
+    public int getKey() {
+        return this.Key;
+    }
+
+    @Override
+    public String toString() {
+        String s = super.toString();
+        return s.substring(0, 1) + s.substring(1).toLowerCase();
+    }
+
+    ;
 }

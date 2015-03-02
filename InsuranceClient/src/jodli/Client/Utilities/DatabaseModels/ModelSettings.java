@@ -17,56 +17,72 @@
  */
 package src.jodli.Client.Utilities.DatabaseModels;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import src.jodli.Client.Utilities.Setting;
 import src.jodli.Client.Utilities.SettingsUtils;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 /**
  * Model for the settings database.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
  */
 @DatabaseTable(tableName = "Settings")
 public class ModelSettings {
 
-	// settings database -> key - value
-	@DatabaseField(id = true)
-	private int key;
-	@DatabaseField
-	private String value;
+    // settings database -> key - value
+    @DatabaseField(id = true)
+    private int key;
+    @DatabaseField
+    private String value;
 
-	public ModelSettings() {
-	}
+    /**
+     * Constructor to create empty settings.
+     *
+     * @see SettingsUtils
+     */
+    public ModelSettings() {
+        this.key = -1;
+        this.value = "";
+    }
 
-	/**
-	 * Constructor to create new settings for saving in database.
-	 * 
-	 * @param key
-	 *            Ordinal of setting according to enum.
-	 * @param val
-	 *            Value of setting.
-	 * @see SettingsUtils
-	 */
-	public ModelSettings(Setting key, String val) {
-		this.key = key.getKey();
-		this.value = val;
-	}
+    /**
+     * Constructor to create new settings for saving in database.
+     *
+     * @param key Ordinal of setting according to enum.
+     * @param val Value of setting.
+     * @see SettingsUtils
+     */
+    public ModelSettings(Setting key, String val) {
+        this.key = key.getKey();
+        this.value = val;
+    }
 
-	/**
-	 * @return Enum corresponding to mapped key.
-	 */
-	public Setting getKey() {
-		return Setting.fromKey(this.key);
-	}
+    /**
+     * @return Get mapping key.
+     */
+    public Setting getKey() {
+        return Setting.fromKey(this.key);
+    }
 
-	/**
-	 * @return Value for current
-	 */
-	public String getValue() {
-		return value;
-	}
+    /**
+     * @param key Set mapping key.
+     */
+    public void setKey(int key) {
+        this.key = key;
+    }
 
+    /**
+     * @return Get value for current key.
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value Set value for current key.
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

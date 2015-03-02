@@ -17,66 +17,64 @@
  */
 package src.jodli.Client.Utilities;
 
-import java.io.File;
-import java.net.URL;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import src.jodli.Client.Updater.UpdateInfo;
 import src.jodli.Client.log.Logger;
 
+import java.io.File;
+import java.net.URL;
+
 public class UpdateChecker {
 
-	private int buildNumber;
-	private int latestBuild;
-	private String buildString;
-	private String downloadAddress = "";
-	private String changeLog = "";
+    private final static String updateFileURL = "https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/updateFile.xml";
+    private int buildNumber;
+    private int latestBuild;
+    private String buildString;
+    private String downloadAddress = "";
+    private String changeLog = "";
 
-	private final static String updateFileURL = "https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/updateFile.xml";
+    public UpdateChecker(String buildNumber) {
+        this.buildNumber = Integer.parseInt(buildNumber);
+        loadInfo();
+        try {
+            FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(),
+                    "updatetemp"));
+        } catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
 
-	public UpdateChecker(String buildNumber) {
-		this.buildNumber = Integer.parseInt(buildNumber);
-		loadInfo();
-		try {
-			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(),
-					"updatetemp"));
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+    private void loadInfo() {
+        try {
+            Document doc = AppUtils.downloadXML(new URL(updateFileURL));
+            if (doc == null) {
+                return;
+            }
+            Element updateInfoNode = (Element) doc.getElementsByTagName(
+                    "updateinfo").item(0);
 
-	private void loadInfo() {
-		try {
-			Document doc = AppUtils.downloadXML(new URL(updateFileURL));
-			if (doc == null) {
-				return;
-			}
-			Element updateInfoNode = (Element) doc.getElementsByTagName(
-					"updateinfo").item(0);
+            buildString = updateInfoNode.getAttribute("currentBuild");
+            this.latestBuild = Integer.parseInt(buildString);
 
-			buildString = updateInfoNode.getAttribute("currentBuild");
-			this.latestBuild = Integer.parseInt(buildString);
+            Logger.logInfo("Current build: " + AppUtils.getVersion(buildString));
 
-			Logger.logInfo("Current build: " + AppUtils.getVersion(buildString));
+            downloadAddress = updateInfoNode.getAttribute("downloadURL");
 
-			downloadAddress = updateInfoNode.getAttribute("downloadURL");
+            changeLog = doc.getElementsByTagName("changelog").item(0)
+                    .getTextContent();
 
-			changeLog = doc.getElementsByTagName("changelog").item(0)
-					.getTextContent();
+        } catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
 
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+    public boolean shouldUpdate() {
+        return buildNumber < latestBuild;
+    }
 
-	public boolean shouldUpdate() {
-		return buildNumber < latestBuild;
-	}
-
-	public void update() {
-		UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress, buildString);
-		ui.showFrame();
-	}
+    public void update() {
+        UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress, buildString);
+        ui.showFrame();
+    }
 }

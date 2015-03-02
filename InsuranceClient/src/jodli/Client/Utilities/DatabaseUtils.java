@@ -17,57 +17,53 @@
  */
 package src.jodli.Client.Utilities;
 
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import src.jodli.Client.log.Logger;
+
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Calendar;
-
-import src.jodli.Client.log.Logger;
-
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
 
 /**
  * Database utilities. Creates connection and helper classes.
  *
  * @author Jan-Olaf Becker
- *
  */
 public class DatabaseUtils {
 
-    private static final String DB_PATH = System.getProperty ("user.dir")
-                                          + File.separator + "database_"
-                                          + Calendar.getInstance ().get (Calendar.YEAR) + ".sqlite";
-
+    private static final String DB_PATH = System.getProperty("user.dir")
+            + File.separator + "database_"
+            + Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
+    private static DatabaseUtils instance = null;
     private final String databaseUrl = "jdbc:sqlite:" + DB_PATH;
     private ConnectionSource conn = null;
 
-    private static DatabaseUtils instance = null;
-
-    private DatabaseUtils () {
+    private DatabaseUtils() {
         try {
-            Class.forName ("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e1) {
-            Logger.logError (e1.getMessage (), e1);
+            Logger.logError(e1.getMessage(), e1);
         }
 
-        Logger.logInfo ("Opening database at path: " + DB_PATH);
+        Logger.logInfo("Opening database at path: " + DB_PATH);
         try {
-            conn = new JdbcConnectionSource (databaseUrl);
+            conn = new JdbcConnectionSource(databaseUrl);
 
             // create database utilities
-            new SettingsUtils (conn);
-            new InsureeUtils (conn);
+            new SettingsUtils(conn);
+            new InsureeUtils(conn);
         } catch (SQLException e) {
-            Logger.logError (e.getMessage (), e);
+            Logger.logError(e.getMessage(), e);
         }
     }
 
     /**
      * Initializes singleton.
      */
-    public static void init () {
+    public static void init() {
         if (instance == null) {
-            instance = new DatabaseUtils ();
+            instance = new DatabaseUtils();
         }
     }
 }

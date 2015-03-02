@@ -17,21 +17,16 @@
  */
 package src.jodli.Client.Application;
 
-import java.awt.EventQueue;
-
-import src.jodli.Client.Utilities.AppUtils;
-import src.jodli.Client.Utilities.DatabaseUtils;
-import src.jodli.Client.Utilities.Setting;
-import src.jodli.Client.Utilities.SettingsUtils;
-import src.jodli.Client.Utilities.UpdateChecker;
+import src.jodli.Client.Utilities.*;
 import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
+
+import java.awt.*;
 
 /**
  * Main entry point for application. Here's where the magic happens...
  *
  * @author Jan-Olaf Becker
- *
  */
 public class App {
 
@@ -51,9 +46,6 @@ public class App {
             }
 
             buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
-            if (buildNumber == null) {
-                buildNumber = "00";
-            }
             version = AppUtils.getVersion(buildNumber);
 
             MainFrame frm = new MainFrame(version);
@@ -62,8 +54,10 @@ public class App {
 
             UpdateChecker uc = new UpdateChecker(buildNumber);
 
-            if (uc.shouldUpdate()) {
-                uc.update();
+            if (Boolean.parseBoolean(SettingsUtils.getValue(Setting.CHECKUPDATE))) {
+                if (uc.shouldUpdate()) {
+                    uc.update();
+                }
             }
         });
 
