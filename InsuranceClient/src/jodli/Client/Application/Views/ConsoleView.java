@@ -69,7 +69,7 @@ public class ConsoleView implements IView, ILogListener {
     }
 
     @Override
-    public JPanel getContent() {
+    public JComponent getContent() {
         return content;
     }
 

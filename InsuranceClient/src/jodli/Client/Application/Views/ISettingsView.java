@@ -20,11 +20,13 @@
 
 package src.jodli.Client.Application.Views;
 
-import javax.swing.*;
-
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/3/2015.
  */
-public interface IView {
-    JComponent getContent();
+public interface ISettingsView extends IView {
+    void saveSettings();
+
+    void loadSettings();
+
+    String getTabTitle();
 }

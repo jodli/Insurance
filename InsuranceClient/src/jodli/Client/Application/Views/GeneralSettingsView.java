@@ -23,13 +23,15 @@ package src.jodli.Client.Application.Views;
 import src.jodli.Client.Utilities.Setting;
 import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.log.LogType;
+import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
+import java.util.Observable;
 
 /**
  * Created by job87 on 3/2/2015.
  */
-public class GeneralSettingsView implements IView {
+public class GeneralSettingsView extends Observable implements ISettingsView {
 
     private final static String m_TitleGeneral = "Allgemein";
 
@@ -49,23 +51,28 @@ public class GeneralSettingsView implements IView {
     }
 
     @Override
-    public JPanel getContent() {
+    public JComponent getContent() {
         return content;
     }
 
+    @Override
     public String getTabTitle() {
         return m_TitleGeneral;
     }
 
+    @Override
     public void saveSettings() {
-        //save settings to database
+        Logger.logInfo("Saving General Settings.");
+        //save settings to prefs
     }
 
     public boolean getCheckUpdate() {
         return chk_CheckUpdate.isSelected();
     }
 
-    private void loadSettings() {
+    @Override
+    public void loadSettings() {
+        Logger.logInfo("Loading General Settings.");
         //load settings from database
         String checkUpdate = SettingsUtils.getValue(Setting.CHECKUPDATE);
         chk_CheckUpdate.setSelected(Boolean.parseBoolean(checkUpdate));

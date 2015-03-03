@@ -44,7 +44,7 @@ public class MainTableView implements IView {
     }
 
     @Override
-    public JPanel getContent() {
+    public JComponent getContent() {
         return content;
     }
 }
