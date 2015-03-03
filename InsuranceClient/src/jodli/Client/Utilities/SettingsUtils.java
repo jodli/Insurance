@@ -19,99 +19,45 @@
  */
 package src.jodli.Client.Utilities;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
-import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
-import java.sql.SQLException;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.prefs.Preferences;
 
 /**
  * Access the settings stored in database.
  *
  * @author Jan-Olaf Becker
  */
-public class SettingsUtils {
+public class SettingsUtils implements Observer {
 
-    private static Dao<ModelSettings, Integer> settingsDao = null;
+    private final static String SETTINGS_NODE = "jodli/Settings";
+    private static SettingsUtils m_Instance = null;
+    private Preferences m_Preferences = Preferences.userRoot().node(SETTINGS_NODE);
 
-    /**
-     * Constructs new SettingsUtils. Also creates table corresponding to
-     * ModelSettings if it doesn't exist and Dao.
-     *
-     * @param conn Connection variable. Should come from DatabaseUtils.
-     * @see DatabaseUtils
-     * @see ModelSettings
-     */
-    public SettingsUtils(ConnectionSource conn) {
-        try {
-            TableUtils.createTableIfNotExists(conn, ModelSettings.class);
-            settingsDao = DaoManager.createDao(conn, ModelSettings.class);
-        } catch (SQLException e) {
-            Logger.logError(e.getMessage(), e);
-        }
+    private SettingsUtils() {
     }
 
-    /**
-     * Gets value corresponding to key from settings in database.
-     * Creates entry in database if it does not exist.
-     *
-     * @param s Enum value as key.
-     * @return Value corresponding to s.
-     * @see Setting
-     */
     public static String getValue(Setting s) {
-        ModelSettings m;
-        try {
-            m = settingsDao.queryForId(s.getKey());
-            if (m != null) {
-                return m.getValue();
-            }
-        } catch (SQLException e) {
-            Logger.logError(e.getMessage(), e);
-        }
-        createSetting(s);
-        return getValue(s);
+        Logger.logInfo("Getting value of " + s.getKey());
+        return getInstance().m_Preferences.get(s.getKey(), s.getDefaultValue());
     }
 
-    /**
-     * Inserts or updates value corresponding to key in settings database.
-     *
-     * @param m New ModelSettings object to be inserted or updated.
-     * @return true if the operation was successful; otherwise, false.
-     */
-    public static boolean setValue(ModelSettings m) {
-        try {
-            CreateOrUpdateStatus status = settingsDao.createOrUpdate(m);
-            if (status.isCreated() || status.isUpdated()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            Logger.logError(e.getMessage(), e);
-        }
-        return false;
+    public static void setValue(Setting s, String value) {
+        getInstance().m_Preferences.put(s.getKey(), value);
+        Logger.logInfo("Setting value of " + s.getKey() + " to " + value);
     }
 
-    private static boolean createSetting(Setting s) {
-        ModelSettings m = new ModelSettings();
-        m.setKey(s.getKey());
-
-        switch (s) {
-            case BUILDNUMBER:
-                m.setValue(s.DEFAULT_BUILDNUMBER);
-                break;
-            case CHECKUPDATE:
-                m.setValue(s.DEFAULT_CHECKUPDATE);
-                break;
-            case LOGTYPE:
-                m.setValue(s.DEFAULT_LOGTYPE);
-                break;
-            default:
-                throw new IllegalArgumentException("No default Setting found.");
+    public static SettingsUtils getInstance() {
+        if (m_Instance == null) {
+            m_Instance = new SettingsUtils();
         }
-        return setValue(m);
+        return m_Instance;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

@@ -17,8 +17,6 @@
  */
 package src.jodli.Client.Utilities.DatabaseModels;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import src.jodli.Client.Utilities.Setting;
 import src.jodli.Client.Utilities.SettingsUtils;
 
@@ -27,62 +25,68 @@ import src.jodli.Client.Utilities.SettingsUtils;
  *
  * @author Jan-Olaf Becker
  */
-@DatabaseTable(tableName = "Settings")
 public class ModelSettings {
 
     // settings database -> key - value
-    @DatabaseField(id = true)
-    private int key;
-    @DatabaseField
-    private String value;
+    private int m_Key;
+    private Object m_Value;
+    private Object m_DefaultValue;
 
     /**
      * Constructor to create empty settings.
      *
      * @see SettingsUtils
      */
-    public ModelSettings() {
-        this.key = -1;
-        this.value = "";
+    public ModelSettings(Setting s) {
+//        m_Key = s.getKey();
+//        m_DefaultValue = s.getDefaultValue();
+        m_Value = null;
     }
 
     /**
      * Constructor to create new settings for saving in database.
      *
-     * @param key Ordinal of setting according to enum.
+     * @param s   Ordinal of setting according to enum.
      * @param val Value of setting.
      * @see SettingsUtils
      */
-    public ModelSettings(Setting key, String val) {
-        this.key = key.getKey();
-        this.value = val;
+    public ModelSettings(Setting s, Object val) {
+        this(s);
+        m_Value = val;
     }
 
     /**
      * @return Get mapping key.
      */
-    public Setting getKey() {
-        return Setting.fromKey(this.key);
-    }
-
-    /**
-     * @param key Set mapping key.
-     */
-    public void setKey(int key) {
-        this.key = key;
+    public String getKey() {
+        return Integer.toString(m_Key);
     }
 
     /**
      * @return Get value for current key.
      */
-    public String getValue() {
-        return value;
+    public Object getValue() {
+        return m_Value;
     }
 
     /**
      * @param value Set value for current key.
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(Object value) {
+        m_Value = value;
+    }
+
+    /**
+     * @return Get default value for current key.
+     */
+    public Object getDefaultValue() {
+        return m_DefaultValue;
+    }
+
+    /**
+     * @param defValue Set default value for current key.
+     */
+    public void setDefaultValue(Object defValue) {
+        m_DefaultValue = defValue;
     }
 }

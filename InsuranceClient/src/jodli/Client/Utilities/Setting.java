@@ -17,8 +17,6 @@
  */
 package src.jodli.Client.Utilities;
 
-import src.jodli.Client.log.Logger;
-
 /**
  * Enum to store settings keys mapped to database key.
  *
@@ -31,38 +29,24 @@ public enum Setting {
      * Buildnumber value mapped to key = 0.
      * CheckUpdate value mapped to key = 1.
      */
-    BUILDNUMBER(0),
-    CHECKUPDATE(1),
-    LOGTYPE(2);
+    BUILDNUMBER("BuildNumber", "00"),
+    CHECKUPDATE("CheckUpdate", "true"),
+    LOGTYPE("LogLype", "MINIMAL");
 
-    public static final String DEFAULT_BUILDNUMBER = "00";
-    public static final String DEFAULT_CHECKUPDATE = "true";
-    public static final String DEFAULT_LOGTYPE = "MINIMAL";
+    private String m_Key;
+    private String m_DefaultValue;
 
-    private int Key;
-
-    private Setting(int key) {
-        this.Key = key;
+    private Setting(String key, String defaultValue) {
+        m_Key = key;
+        m_DefaultValue = defaultValue;
     }
 
-    /**
-     * Gets enum from a give key.
-     *
-     * @param key Integer corresponding to enum.
-     * @return Setting enum.
-     * @throws IllegalArgumentException
-     */
-    public static Setting fromKey(int key) throws IllegalArgumentException {
-        try {
-            return Setting.values()[key];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.logError(e.getMessage(), e);
-        }
-        return null;
+    public String getKey() {
+        return m_Key;
     }
 
-    public int getKey() {
-        return this.Key;
+    public String getDefaultValue() {
+        return m_DefaultValue;
     }
 
     @Override
@@ -70,6 +54,4 @@ public enum Setting {
         String s = super.toString();
         return s.substring(0, 1) + s.substring(1).toLowerCase();
     }
-
-    ;
 }
