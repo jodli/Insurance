@@ -17,101 +17,151 @@
  */
 package src.jodli.Client.Application;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.WindowConstants;
-
-import src.jodli.Client.Updater.MainConsole;
-import src.jodli.Client.TableModels.InsureeTableModel;
+import src.jodli.Client.Actions.ExitAction;
+import src.jodli.Client.Application.Views.ConsoleView;
+import src.jodli.Client.Application.Views.GeneralSettingsView;
+import src.jodli.Client.Application.Views.MainTableView;
+import src.jodli.Client.Utilities.*;
+import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 @SuppressWarnings("serial")
-public final class MainFrame extends JFrame {
+public final class MainFrame {
 
-    public static JPanel panel;
-    private MainConsole console;
-    private JTable table;
-    private JTabbedPane tabbedPane;
-    private MenuBar menuBar;
-    private Menu menuFile;
+    private String m_BuildNumber;
+    private JFrame m_Frame;
+    private JTabbedPane m_MainTabbedPane;
+    private JTabbedPane m_SettingsTabbedPane;
 
-    private final String version;
+    private Action m_ExitAction;
 
-    public MainFrame(String version) {
-        this.version = version;
-        initComponents();
+    private MainTableView m_TableView;
+    private ConsoleView m_ConsoleView;
+    private GeneralSettingsView m_GeneralSettingsView;
+
+    public MainFrame(String buildNumber) {
+        this.m_BuildNumber = buildNumber;
+
+        initDatabase();
+        initFrame();
+        initActions();
+        initGUIComponents();
+        initMainGUI();
+        showMainWindow();
+        checkUpdate();
     }
 
-    private void initComponents() {
-        this.setVisible(false);
+    private void initDatabase() {
+        // Initialise database connection.
+        DatabaseUtils.init();
+        // Save new BuildNumber in database or get saved BuildNumber.
+        if (m_BuildNumber != null) {
+            SettingsUtils.setValue(new ModelSettings(Setting.BUILDNUMBER, m_BuildNumber));
+        } else {
+            m_BuildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
+        }
+    }
 
-        setTitle("Insurance Client v" + version);
-        setMinimumSize(new Dimension(800, 400));
+    private void initFrame() {
+        Logger.logInfo("Initializing Main Window.");
+        m_Frame = new JFrame();
+        m_Frame.setSize(new Dimension(800, 600));
+        updateTitle();
+    }
 
-        panel = new JPanel();
+    private void initActions() {
+        Logger.logInfo("Initializing Actions.");
+        m_ExitAction = new ExitAction();
+    }
 
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        panel.setLayout(new BorderLayout());
+    private void initGUIComponents() {
+        Logger.logInfo("Initializing GUI Components.");
+        m_TableView = new MainTableView();
+        m_ConsoleView = new ConsoleView();
+        m_GeneralSettingsView = new GeneralSettingsView();
+    }
 
-        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+    private void initMainGUI() {
+        Logger.logInfo("Initializing Main GUI.");
+        m_MainTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+        m_SettingsTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 
-        table = new JTable(new InsureeTableModel());
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        m_MainTabbedPane.addTab("Tabelle", m_TableView.getContent());
+        m_MainTabbedPane.addTab("Einstellungen", m_SettingsTabbedPane);
+        m_MainTabbedPane.addTab("Console", m_ConsoleView.getContent());
 
-        table.addMouseListener(new MouseAdapter() {
+        m_SettingsTabbedPane.addTab(m_GeneralSettingsView.getTabTitle(), m_GeneralSettingsView.getContent());
 
+        m_Frame.getContentPane().add(m_MainTabbedPane);
+        m_Frame.setJMenuBar(getMenuBar());
+
+        m_Frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int row = ((JTable) e.getSource()).getSelectedRow();
-                    int id = ((InsureeTableModel) table.getModel()).getId(row);
-                    Logger.logInfo("Double Click on row: " + row + " with ID: " + id);
-                    new InsureeFrame(id).setVisible(true);
-                }
+            public void windowClosing(WindowEvent e) {
+                m_ExitAction.actionPerformed(null);
             }
         });
-
-        tabbedPane.addTab("Table", new JScrollPane(table));
-
-        console = new MainConsole();
-        tabbedPane.addTab("Console", console);
-        panel.add(tabbedPane);
-
-        getContentPane().add(panel);
-        setMenuBar(menuBar);
-
-        pack();
-        this.setLocationRelativeTo(null);
-        this.setSize(566, 40);
     }
 
-    private void initMenu() {
-        menuBar = new MenuBar();
+    private void showMainWindow() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension window = m_Frame.getSize();
 
-        menuFile = new Menu("File");
+        if (window.height > screen.height) {
+            window.height = screen.height;
+        }
+        if (window.width > screen.width) {
+            window.width = screen.width;
+        }
+        int x = screen.width / 2 - window.width / 2;
+        int y = screen.height / 2 - window.height / 2;
 
-        menuFile.add(new MenuItem("Quit"));
-        menuFile.getItem(0).addActionListener((ActionEvent arg0) -> {
-            Logger.logInfo("Quit menu item pressed");
-        });
-
-        menuBar.add(menuFile);
+        m_Frame.setLocation(x, y);
+        m_Frame.setVisible(true);
     }
 
-    public void showFrame() {
-        this.setVisible(true);
+    private void updateTitle() {
+        StringBuilder title = new StringBuilder("Insurance Client v");
+        title.append(AppUtils.getVerboseVersion(m_BuildNumber));
+        title.append(" - ");
+        title.append("database_bla.sqlite");
+
+        // Needs save?
+        title.append(" *");
+
+        m_Frame.setTitle(title.toString());
+    }
+
+    private JMenuBar getMenuBar() {
+        JMenuBar menubar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("Datei");
+        fileMenu.setMnemonic(KeyEvent.VK_D);
+        fileMenu.add(m_ExitAction);
+        menubar.add(fileMenu);
+
+        JMenu editMenu = new JMenu("Bearbeiten");
+        menubar.add(editMenu);
+
+        JMenu infoMenu = new JMenu("Info");
+        menubar.add(infoMenu);
+
+        return menubar;
+    }
+
+    private void checkUpdate() {
+        // Check for update.
+        if (Boolean.parseBoolean(SettingsUtils.getValue(Setting.CHECKUPDATE))) {
+            UpdateChecker uc = new UpdateChecker(m_BuildNumber);
+            if (uc.shouldUpdate()) {
+                uc.update();
+            }
+        }
     }
 }

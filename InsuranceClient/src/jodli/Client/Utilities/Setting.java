@@ -32,10 +32,12 @@ public enum Setting {
      * CheckUpdate value mapped to key = 1.
      */
     BUILDNUMBER(0),
-    CHECKUPDATE(1);
+    CHECKUPDATE(1),
+    LOGTYPE(2);
 
     public static final String DEFAULT_BUILDNUMBER = "00";
     public static final String DEFAULT_CHECKUPDATE = "true";
+    public static final String DEFAULT_LOGTYPE = "MINIMAL";
 
     private int Key;
 

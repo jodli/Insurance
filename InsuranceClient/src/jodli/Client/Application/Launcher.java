@@ -17,8 +17,6 @@
  */
 package src.jodli.Client.Application;
 
-import src.jodli.Client.Utilities.*;
-import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
 import src.jodli.Client.log.Logger;
 
 /**
@@ -29,40 +27,20 @@ import src.jodli.Client.log.Logger;
 public final class Launcher {
 
     public static void main(String[] args) {
-        String buildNumber = null;
-        String version;
-
         // Check if Updater ran.
-        if (verifyArguments(args)) {
-            buildNumber = args[0];
-        }
+        String buildNumber = verifyArguments(args);
 
-        // Initialise database connection.
-        DatabaseUtils.init();
-        // Save new BuildNumber in database or get saved BuildNumber.
-        if (buildNumber != null) {
-            SettingsUtils.setValue(new ModelSettings(Setting.BUILDNUMBER, buildNumber));
-        } else {
-            buildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
-        }
-        version = AppUtils.getVerboseVersion(buildNumber);
-        logBasicSystemInfo(version);
-
-        MainFrame frm = new MainFrame(version);
-
-        frm.showFrame();
-
-        UpdateChecker uc = new UpdateChecker(buildNumber);
-
-        if (Boolean.parseBoolean(SettingsUtils.getValue(Setting.CHECKUPDATE))) {
-            if (uc.shouldUpdate()) {
-                uc.update();
-            }
-        }
+        logBasicSystemInfo();
+        showMainWindow(buildNumber);
     }
 
-    private static void logBasicSystemInfo(String version) {
-        Logger.logInfo("Insurance client starting up (Version " + version + ")");
+    private static void showMainWindow(String buildNumber) {
+        Logger.logInfo("Showing main window.");
+        MainFrame frm = new MainFrame(buildNumber);
+    }
+
+    private static void logBasicSystemInfo() {
+        Logger.logInfo("Insurance client starting up.");
         Logger.logDebug("Java version: " + System.getProperty("java.version"));
         Logger.logDebug("Java specification: "
                 + System.getProperty("java.vm.specification.name")
@@ -87,9 +65,12 @@ public final class Launcher {
      * Verifies command line arguments to check.
      *
      * @param args Command line arguments to be verified.
-     * @return true if arguments are correct; otherwise, false.
+     * @return If specified: New version in arguments; Else null.
      */
-    private static boolean verifyArguments(String[] args) {
-        return args.length == 1;
+    private static String verifyArguments(String[] args) {
+        if (args.length == 1) {
+            return args[0];
+        }
+        return null;
     }
 }

@@ -106,6 +106,9 @@ public class SettingsUtils {
             case CHECKUPDATE:
                 m.setValue(s.DEFAULT_CHECKUPDATE);
                 break;
+            case LOGTYPE:
+                m.setValue(s.DEFAULT_LOGTYPE);
+                break;
             default:
                 throw new IllegalArgumentException("No default Setting found.");
         }
