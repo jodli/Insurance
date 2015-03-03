@@ -20,6 +20,7 @@
 
 package src.jodli.Client.Actions;
 
+import src.jodli.Client.Utilities.DatabaseUtils;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -42,6 +43,7 @@ public class ExitAction extends AbstractAction {
         // Save Database.
 
         // Close Connections.
+        DatabaseUtils.closeDatabase();
 
         System.exit(0);
     }

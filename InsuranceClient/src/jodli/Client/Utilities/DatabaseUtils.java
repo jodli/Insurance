@@ -21,23 +21,21 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import src.jodli.Client.log.Logger;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Observable;
 
 /**
  * Database utilities. Creates connection and helper classes.
  *
  * @author Jan-Olaf Becker
  */
-public class DatabaseUtils {
+public class DatabaseUtils extends Observable {
 
-    private static final String DB_PATH = System.getProperty("user.dir")
-            + File.separator + "database_"
-            + Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
-    private static DatabaseUtils instance = null;
-    private final String databaseUrl = "jdbc:sqlite:" + DB_PATH;
-    private ConnectionSource conn = null;
+    private static DatabaseUtils m_Instance = null;
+    private final String DATABASEURL = "jdbc:sqlite:";
+    private String m_DatabasePath = "database_" + Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
+    private ConnectionSource m_Connection = null;
 
     private DatabaseUtils() {
         try {
@@ -45,16 +43,23 @@ public class DatabaseUtils {
         } catch (ClassNotFoundException e1) {
             Logger.logError(e1.getMessage(), e1);
         }
+        //openConnection();
 
-        Logger.logInfo("Opening database at path: " + DB_PATH);
-        try {
-            conn = new JdbcConnectionSource(databaseUrl);
+        //new InsureeUtils(m_Connection);
+    }
 
-            // create database utilities
-            new SettingsUtils(conn);
-            new InsureeUtils(conn);
-        } catch (SQLException e) {
-            Logger.logError(e.getMessage(), e);
+    public static void openDatabase(String filePath) {
+        closeDatabase();
+        m_Instance.m_DatabasePath = filePath;
+        m_Instance.openConnection();
+
+        m_Instance.setChanged();
+        m_Instance.notifyObservers();
+    }
+
+    public static void closeDatabase() {
+        if (m_Instance.m_Connection != null) {
+            m_Instance.closeConnection();
         }
     }
 
@@ -62,8 +67,35 @@ public class DatabaseUtils {
      * Initializes singleton.
      */
     public static void init() {
-        if (instance == null) {
-            instance = new DatabaseUtils();
+        if (m_Instance == null) {
+            m_Instance = new DatabaseUtils();
         }
+    }
+
+    private void openConnection() {
+        Logger.logInfo("Opening database: " + m_DatabasePath);
+        try {
+            m_Connection = new JdbcConnectionSource(DATABASEURL + m_DatabasePath);
+
+            // create database utilities
+            addObserver(SettingsUtils.getInstance());
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            if (m_Connection.isOpen()) {
+                m_Connection.close();
+            }
+            deleteObservers();
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
+
+    public ConnectionSource getConnection() {
+        return m_Connection;
     }
 }

@@ -24,44 +24,58 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class FileUtils {
-	public static boolean delete(File resource) throws IOException {
-		if (resource.isDirectory()) {
-			File[] childFiles = resource.listFiles();
-			for (File child : childFiles) {
-				delete(child);
-			}
-		}
-		return resource.delete();
-	}
 
-	public static void copyFile(File sourceFile, File destinationFile)
-			throws IOException {
-		copyFile(sourceFile, destinationFile, true);
-	}
+    public static final String SQLITE_EXTENSION = "sqlite";
 
-	public static void copyFile(File sourceFile, File destinationFile,
-			boolean overwrite) throws IOException {
-		if (sourceFile.exists()) {
-			if (!destinationFile.exists()) {
-				destinationFile.getParentFile().mkdirs();
-				destinationFile.createNewFile();
-			} else if (!overwrite)
-				return;
-			FileChannel sourceStream = null, destinationStream = null;
-			try {
-				sourceStream = new FileInputStream(sourceFile).getChannel();
-				destinationStream = new FileOutputStream(destinationFile)
-						.getChannel();
-				destinationStream.transferFrom(sourceStream, 0,
-						sourceStream.size());
-			} finally {
-				if (sourceStream != null) {
-					sourceStream.close();
-				}
-				if (destinationStream != null) {
-					destinationStream.close();
-				}
-			}
-		}
-	}
+    public static boolean delete(File resource) throws IOException {
+        if (resource.isDirectory()) {
+            File[] childFiles = resource.listFiles();
+            for (File child : childFiles) {
+                delete(child);
+            }
+        }
+        return resource.delete();
+    }
+
+    public static void copyFile(File sourceFile, File destinationFile)
+            throws IOException {
+        copyFile(sourceFile, destinationFile, true);
+    }
+
+    public static void copyFile(File sourceFile, File destinationFile,
+                                boolean overwrite) throws IOException {
+        if (sourceFile.exists()) {
+            if (!destinationFile.exists()) {
+                destinationFile.getParentFile().mkdirs();
+                destinationFile.createNewFile();
+            } else if (!overwrite)
+                return;
+            FileChannel sourceStream = null, destinationStream = null;
+            try {
+                sourceStream = new FileInputStream(sourceFile).getChannel();
+                destinationStream = new FileOutputStream(destinationFile)
+                        .getChannel();
+                destinationStream.transferFrom(sourceStream, 0,
+                        sourceStream.size());
+            } finally {
+                if (sourceStream != null) {
+                    sourceStream.close();
+                }
+                if (destinationStream != null) {
+                    destinationStream.close();
+                }
+            }
+        }
+    }
+
+    public static String getExtension(File f) {
+        String ret = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 && i < s.length() - 1) {
+            ret = s.substring(i + 1).toLowerCase();
+        }
+        return ret;
+    }
 }
