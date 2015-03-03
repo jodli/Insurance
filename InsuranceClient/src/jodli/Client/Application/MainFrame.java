@@ -18,11 +18,17 @@
 package src.jodli.Client.Application;
 
 import src.jodli.Client.Actions.ExitAction;
+import src.jodli.Client.Actions.OpenAction;
+import src.jodli.Client.Actions.SettingsAction;
 import src.jodli.Client.Application.Views.ConsoleView;
 import src.jodli.Client.Application.Views.GeneralSettingsView;
+import src.jodli.Client.Application.Views.ISettingsView;
 import src.jodli.Client.Application.Views.MainTableView;
-import src.jodli.Client.Utilities.*;
-import src.jodli.Client.Utilities.DatabaseModels.ModelSettings;
+import src.jodli.Client.Updater.UpdateChecker;
+import src.jodli.Client.Utilities.AppUtils;
+import src.jodli.Client.Utilities.DatabaseUtils;
+import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -30,6 +36,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public final class MainFrame {
@@ -37,8 +44,9 @@ public final class MainFrame {
     private String m_BuildNumber;
     private JFrame m_Frame;
     private JTabbedPane m_MainTabbedPane;
-    private JTabbedPane m_SettingsTabbedPane;
 
+    private Action m_OpenAction;
+    private Action m_SettingsAction;
     private Action m_ExitAction;
 
     private MainTableView m_TableView;
@@ -50,8 +58,8 @@ public final class MainFrame {
 
         initDatabase();
         initFrame();
-        initActions();
         initGUIComponents();
+        initActions();
         initMainGUI();
         showMainWindow();
         checkUpdate();
@@ -60,9 +68,9 @@ public final class MainFrame {
     private void initDatabase() {
         // Initialise database connection.
         DatabaseUtils.init();
-        // Save new BuildNumber in database or get saved BuildNumber.
+
         if (m_BuildNumber != null) {
-            SettingsUtils.setValue(new ModelSettings(Setting.BUILDNUMBER, m_BuildNumber));
+            SettingsUtils.setValue(Setting.BUILDNUMBER, m_BuildNumber);
         } else {
             m_BuildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
         }
@@ -77,6 +85,11 @@ public final class MainFrame {
 
     private void initActions() {
         Logger.logInfo("Initializing Actions.");
+        m_OpenAction = new OpenAction(m_Frame);
+
+        java.util.List<ISettingsView> settingsViews = new ArrayList<>();
+        settingsViews.add(m_GeneralSettingsView);
+        m_SettingsAction = new SettingsAction(m_Frame, settingsViews);
         m_ExitAction = new ExitAction();
     }
 
@@ -90,13 +103,9 @@ public final class MainFrame {
     private void initMainGUI() {
         Logger.logInfo("Initializing Main GUI.");
         m_MainTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-        m_SettingsTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 
         m_MainTabbedPane.addTab("Tabelle", m_TableView.getContent());
-        m_MainTabbedPane.addTab("Einstellungen", m_SettingsTabbedPane);
         m_MainTabbedPane.addTab("Console", m_ConsoleView.getContent());
-
-        m_SettingsTabbedPane.addTab(m_GeneralSettingsView.getTabTitle(), m_GeneralSettingsView.getContent());
 
         m_Frame.getContentPane().add(m_MainTabbedPane);
         m_Frame.setJMenuBar(getMenuBar());
@@ -132,9 +141,6 @@ public final class MainFrame {
         title.append(" - ");
         title.append("database_bla.sqlite");
 
-        // Needs save?
-        title.append(" *");
-
         m_Frame.setTitle(title.toString());
     }
 
@@ -143,6 +149,8 @@ public final class MainFrame {
 
         JMenu fileMenu = new JMenu("Datei");
         fileMenu.setMnemonic(KeyEvent.VK_D);
+        fileMenu.add(m_OpenAction);
+        fileMenu.add(m_SettingsAction);
         fileMenu.add(m_ExitAction);
         menubar.add(fileMenu);
 
