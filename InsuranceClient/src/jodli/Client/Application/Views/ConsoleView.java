@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import src.jodli.Client.Utilities.ESetting;
+import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.log.*;
 
 import javax.swing.*;
@@ -40,10 +42,11 @@ public class ConsoleView implements IView, ILogListener {
     private JEditorPane displayArea;
     private HTMLEditorKit kit;
     private HTMLDocument doc;
-    private ELogType logType = ELogType.DEBUG;
+    private ELogType logType;
 
     public void setLogType(ELogType logType) {
         this.logType = logType;
+        refreshLogs();
     }
 
     private void createUIComponents() {
@@ -56,6 +59,7 @@ public class ConsoleView implements IView, ILogListener {
         scrollPane
                 .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+        logType = ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE));
         refreshLogs();
         Logger.addListener(this);
 
@@ -77,7 +81,7 @@ public class ConsoleView implements IView, ILogListener {
         return content;
     }
 
-    synchronized public void refreshLogs() {
+    synchronized private void refreshLogs() {
         doc = new HTMLDocument();
         displayArea.setDocument(doc);
         java.util.List<LogEntry> entries = Logger.getLogEntries();

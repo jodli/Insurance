@@ -52,7 +52,7 @@ public class DatabaseUtils extends Observable {
         m_Instance.openConnection();
 
         m_Instance.setChanged();
-        m_Instance.notifyObservers();
+        m_Instance.notifyObservers(m_Instance.m_Connection);
     }
 
     public static void closeDatabase() {
@@ -87,13 +87,8 @@ public class DatabaseUtils extends Observable {
             if (m_Connection.isOpen()) {
                 m_Connection.close();
             }
-            deleteObservers();
         } catch (SQLException e) {
             Logger.logError(e.getMessage(), e);
         }
-    }
-
-    public ConnectionSource getConnection() {
-        return m_Connection;
     }
 }

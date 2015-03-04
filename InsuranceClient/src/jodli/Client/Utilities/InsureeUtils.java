@@ -19,51 +19,48 @@ package src.jodli.Client.Utilities;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.CloseableIterator;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
-import src.jodli.Client.log.Logger;
-
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
+import src.jodli.Client.log.Logger;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Access the insurees stored in database.
  *
  * @author Jan-Olaf Becker
- *
  */
-public class InsureeUtils {
+public class InsureeUtils extends Observable implements Observer {
 
     private static BaseDaoImpl<ModelInsuree, Integer> insureeDao = null;
-
-    public static int getRowCount() {
-        try {
-            return (int) insureeDao.countOf();
-        } catch (SQLException ex) {
-            Logger.logError(ex.getMessage(), ex);
-            return -1;
-        }
-    }
-
-    public static int getColumnCount() {
-        return insureeDao.getTableInfo().getFieldTypes().length;
-    }
+    private static InsureeUtils m_Instance;
 
     /**
      * Constructs new InsureeUtils. Also creates table corresponding to
      * ModelInsuree if it doesn't exist and Dao.
      *
      * @param conn Connection variable. Should come from DatabaseUtils.
-     *
      * @see DatabaseUtils
      * @see ModelInsuree
      */
-    public InsureeUtils(ConnectionSource conn) {
+    private InsureeUtils() {
+    }
+
+    public static InsureeUtils getInstance() {
+        if (m_Instance == null) {
+            m_Instance = new InsureeUtils();
+        }
+        return m_Instance;
+    }
+
+    private void connect(ConnectionSource conn) {
         try {
             TableUtils.createTableIfNotExists(conn, ModelInsuree.class);
             insureeDao = DaoManager.createDao(conn, ModelInsuree.class);
@@ -73,7 +70,20 @@ public class InsureeUtils {
         }
     }
 
-    public static CloseableIterator<ModelInsuree> getResultSet() {
+    public int getRowCount() {
+        try {
+            return (int) insureeDao.countOf();
+        } catch (SQLException ex) {
+            Logger.logError(ex.getMessage(), ex);
+            return -1;
+        }
+    }
+
+    public int getColumnCount() {
+        return insureeDao.getTableInfo().getFieldTypes().length;
+    }
+
+    public CloseableIterator<ModelInsuree> getResultSet() {
         return insureeDao.iterator();
     }
 
@@ -81,12 +91,10 @@ public class InsureeUtils {
      * Gets ModelInsuree corresponding to id from insuree in database.
      *
      * @param id ID as key.
-     *
      * @return ModelInsuree corresponding to ID.
-     *
      * @see ModelInsuree
      */
-    public static ModelInsuree getValue(int id) {
+    public ModelInsuree getValue(int id) {
         ModelInsuree m = null;
         try {
             m = insureeDao.queryForId(id);
@@ -100,12 +108,10 @@ public class InsureeUtils {
      * Inserts or updates ModelInsuree corresponding to key in insuree database.
      *
      * @param m New ModelInsuree object to be inserted or updated.
-     *
      * @return true if the operation was successful; otherwise, false.
-     *
      * @see ModelInsuree
      */
-    public static boolean setValue(ModelInsuree m) {
+    public boolean setValue(ModelInsuree m) {
         try {
             CreateOrUpdateStatus status = insureeDao.createOrUpdate(m);
             if (status.isCreated() || status.isUpdated()) {
@@ -121,10 +127,9 @@ public class InsureeUtils {
      * Gets a list containing all ModelInsurees in the database.
      *
      * @return List of ModelInsurees.
-     *
      * @see ModelInsuree
      */
-    public static List<ModelInsuree> getAll() {
+    public List<ModelInsuree> getAll() {
         List<ModelInsuree> list = new ArrayList<>();
         try {
             list = insureeDao.queryForAll();
@@ -132,5 +137,12 @@ public class InsureeUtils {
             Logger.logError(e.getMessage(), e);
         }
         return list;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o == DatabaseUtils.getInstance()) {
+            connect(((ConnectionSource) arg));
+        }
     }
 }

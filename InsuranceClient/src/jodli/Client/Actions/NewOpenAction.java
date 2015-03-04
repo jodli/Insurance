@@ -35,11 +35,11 @@ import java.util.Objects;
 /**
  * Created by job87 on 3/3/2015.
  */
-public class OpenAction extends AbstractAction {
+public class NewOpenAction extends AbstractAction {
 
     private JFrame m_Frame;
 
-    public OpenAction(JFrame frame) {
+    public NewOpenAction(JFrame frame) {
         super("Öffnen");
         putValue(SHORT_DESCRIPTION, "Datenbank öffnen.");
         m_Frame = frame;
@@ -75,7 +75,7 @@ public class OpenAction extends AbstractAction {
         });
 
         if (fileChooser.showOpenDialog(m_Frame) == JFileChooser.APPROVE_OPTION) {
-            SettingsUtils.setValue(ESetting.LASTDATABASE, fileChooser.getSelectedFile().getAbsolutePath());
+            SettingsUtils.setValue(ESetting.LASTDATABASE, fileChooser.getSelectedFile().getAbsolutePath() + ".sqlite");
             return true;
         }
         return false;

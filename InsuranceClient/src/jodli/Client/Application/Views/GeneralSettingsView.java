@@ -83,10 +83,7 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
     public void loadSettings() {
         Logger.logDebug("Loading General Settings.");
         //load settings from database
-        String checkUpdate = SettingsUtils.getValue(ESetting.CHECKUPDATE);
-        chk_CheckUpdate.setSelected(Boolean.parseBoolean(checkUpdate));
-
-        String logtype = SettingsUtils.getValue(ESetting.LOGTYPE);
-        cb_LogType.setSelectedItem(ELogType.valueOf(logtype));
+        chk_CheckUpdate.setSelected(Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE)));
+        cb_LogType.setSelectedItem(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
     }
 }

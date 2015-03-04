@@ -49,9 +49,13 @@ public class UpdateChecker implements Observer {
     }
 
     public static void updateApp() {
-        UpdateChecker uc = new UpdateChecker(SettingsUtils.getValue(ESetting.BUILDNUMBER));
-        UpdateInfo ui = new UpdateInfo(uc.changeLog, uc.downloadAddress, uc.buildString);
-        ui.showFrame();
+        if (Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE))) {
+            UpdateChecker uc = new UpdateChecker(SettingsUtils.getValue(ESetting.BUILDNUMBER));
+            if (uc.shouldUpdate()) {
+                UpdateInfo ui = new UpdateInfo(uc.changeLog, uc.downloadAddress, uc.buildString);
+                ui.showFrame();
+            }
+        }
     }
 
     private void loadInfo() {
@@ -85,11 +89,7 @@ public class UpdateChecker implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof GeneralSettingsView) {
-            if (Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE))) {
-                if (shouldUpdate()) {
-                    updateApp();
-                }
-            }
+            updateApp();
         }
     }
 }

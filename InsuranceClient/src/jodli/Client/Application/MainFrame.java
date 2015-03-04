@@ -18,17 +18,14 @@
 package src.jodli.Client.Application;
 
 import src.jodli.Client.Actions.ExitAction;
-import src.jodli.Client.Actions.OpenAction;
+import src.jodli.Client.Actions.NewOpenAction;
 import src.jodli.Client.Actions.SettingsAction;
 import src.jodli.Client.Application.Views.ConsoleView;
 import src.jodli.Client.Application.Views.GeneralSettingsView;
 import src.jodli.Client.Application.Views.ISettingsView;
 import src.jodli.Client.Application.Views.MainTableView;
 import src.jodli.Client.Updater.UpdateChecker;
-import src.jodli.Client.Utilities.AppUtils;
-import src.jodli.Client.Utilities.DatabaseUtils;
-import src.jodli.Client.Utilities.ESetting;
-import src.jodli.Client.Utilities.SettingsUtils;
+import src.jodli.Client.Utilities.*;
 import src.jodli.Client.log.ELogType;
 import src.jodli.Client.log.Logger;
 
@@ -78,7 +75,11 @@ public final class MainFrame implements Observer {
         }
 
         DatabaseUtils.getInstance().addObserver(this);
+        DatabaseUtils.getInstance().addObserver(InsureeUtils.getInstance());
+
         DatabaseUtils.openDatabase();
+
+        InsureeUtils.getInstance().addObserver(this);
     }
 
     private void initFrame() {
@@ -102,7 +103,7 @@ public final class MainFrame implements Observer {
         java.util.List<ISettingsView> settingsViews = new ArrayList<>();
         settingsViews.add(m_GeneralSettingsView);
 
-        m_OpenAction = new OpenAction(m_Frame);
+        m_OpenAction = new NewOpenAction(m_Frame);
         m_SettingsAction = new SettingsAction(m_Frame, settingsViews);
         m_ExitAction = new ExitAction();
     }
@@ -182,13 +183,15 @@ public final class MainFrame implements Observer {
             Logger.logDebug("Notified by General Settings View.");
             // updating LogType
             m_ConsoleView.setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
-            m_ConsoleView.refreshLogs();
 
             // updating UpdateCheck
             UpdateChecker.updateApp();
         } else if (o == DatabaseUtils.getInstance()) {
             Logger.logDebug("Notified by Database Utilities.");
             updateTitle();
+        } else if (o == InsureeUtils.getInstance()) {
+            Logger.logDebug("Notified by Insuree Utilities.");
+
         }
     }
 }

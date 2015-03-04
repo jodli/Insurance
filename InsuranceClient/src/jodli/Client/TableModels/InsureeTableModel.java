@@ -18,13 +18,14 @@
 package src.jodli.Client.TableModels;
 
 import com.j256.ormlite.dao.CloseableIterator;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import javax.swing.SwingWorker;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.Utilities.InsureeUtils;
 import src.jodli.Client.log.Logger;
+
+import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * TableModel to be used to display the Insuree table in the database.
@@ -46,7 +47,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
 
             @Override
             protected Void doInBackground() throws Exception {
-                CloseableIterator<ModelInsuree> res = InsureeUtils.getResultSet();
+                CloseableIterator<ModelInsuree> res = InsureeUtils.getInstance().getResultSet();
 
                 columns = res.getRawResults().getColumnNames();
                 InsureeTableModel.this.fireTableStructureChanged();
@@ -85,7 +86,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
         // set column value in copy
         if (this.setColumnValue(insuree, columnIndex, aValue)) {
             // update database
-            if (InsureeUtils.setValue(insuree)) {
+            if (InsureeUtils.getInstance().setValue(insuree)) {
                 // if updated successful copy in rows list and fire event.
                 this.rows.set(rowIndex, insuree);
                 this.fireTableCellUpdated(rowIndex, columnIndex);
@@ -100,7 +101,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
     /**
      * Gets the value of the column of the specified row.
      *
-     * @param row The ModelInsuree object that is saved in the database.
+     * @param row    The ModelInsuree object that is saved in the database.
      * @param column The column where the value is saved in.
      */
     private Object getColumnValue(ModelInsuree row, int column) {
@@ -177,10 +178,9 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
     }
 
     /**
-     *
-     * @param row The ModelInsuree object that is saved in the database.
+     * @param row    The ModelInsuree object that is saved in the database.
      * @param column The column where the value is saved in.
-     * @param val The value that is saved in the cell.
+     * @param val    The value that is saved in the cell.
      * @return true if the value was set; otherwise, false.
      */
     private boolean setColumnValue(ModelInsuree row, int column, Object val) {
