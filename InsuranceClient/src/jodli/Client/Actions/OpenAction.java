@@ -21,7 +21,9 @@
 package src.jodli.Client.Actions;
 
 import src.jodli.Client.Utilities.DatabaseUtils;
+import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.FileUtils;
+import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -50,14 +52,13 @@ public class OpenAction extends AbstractAction {
     }
 
     private void showDialog() {
-        String path = openDialog();
-        if (path != null) {
-            DatabaseUtils.openDatabase(path);
+        if (openDialog()) {
+            DatabaseUtils.openDatabase();
         }
     }
 
-    private String openDialog() {
-        JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home"));
+    private boolean openDialog() {
+        JFileChooser fileChooser = new JFileChooser(new File(SettingsUtils.getValue(ESetting.LASTDATABASE)).getParent());
         fileChooser.setDialogTitle("Datenbank öffnen");
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -74,8 +75,9 @@ public class OpenAction extends AbstractAction {
         });
 
         if (fileChooser.showOpenDialog(m_Frame) == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFile().getAbsolutePath();
+            SettingsUtils.setValue(ESetting.LASTDATABASE, fileChooser.getSelectedFile().getAbsolutePath());
+            return true;
         }
-        return null;
+        return false;
     }
 }

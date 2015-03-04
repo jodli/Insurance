@@ -17,6 +17,9 @@
  */
 package src.jodli.Client.Utilities;
 
+import java.io.File;
+import java.util.Calendar;
+
 /**
  * Enum to store settings keys mapped to preferences.
  *
@@ -27,7 +30,8 @@ public enum ESetting {
     // constructor takes the default value!
     BUILDNUMBER("00"),
     CHECKUPDATE("true"),
-    LOGTYPE("MINIMAL");
+    LOGTYPE("MINIMAL"),
+    LASTDATABASE(System.getProperty("user.dir") + File.separator + "database_" + Calendar.getInstance().get(Calendar.YEAR) + ".sqlite");
 
     private String m_DefaultValue;
 

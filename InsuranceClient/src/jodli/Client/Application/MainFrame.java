@@ -37,6 +37,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -59,8 +60,8 @@ public final class MainFrame implements Observer {
     public MainFrame(String buildNumber) {
         this.m_BuildNumber = buildNumber;
 
-        initDatabase();
         initFrame();
+        initDatabase();
         initGUIComponents();
         initActions();
         initMainGUI();
@@ -69,13 +70,15 @@ public final class MainFrame implements Observer {
 
     private void initDatabase() {
         Logger.logDebug("Initializing database connection");
-        DatabaseUtils.init();
 
         if (m_BuildNumber != null) {
             SettingsUtils.setValue(ESetting.BUILDNUMBER, m_BuildNumber);
         } else {
             m_BuildNumber = SettingsUtils.getValue(ESetting.BUILDNUMBER);
         }
+
+        DatabaseUtils.getInstance().addObserver(this);
+        DatabaseUtils.openDatabase();
     }
 
     private void initFrame() {
@@ -83,8 +86,6 @@ public final class MainFrame implements Observer {
 
         m_Frame = new JFrame();
         m_Frame.setSize(new Dimension(800, 600));
-
-        updateTitle();
     }
 
     private void initGUIComponents() {
@@ -146,10 +147,11 @@ public final class MainFrame implements Observer {
     }
 
     private void updateTitle() {
+        Logger.logDebug("Updating title.");
         StringBuilder title = new StringBuilder("Insurance Client v");
         title.append(AppUtils.getVerboseVersion(m_BuildNumber));
         title.append(" - ");
-        title.append("database_bla.sqlite");
+        title.append(new File(SettingsUtils.getValue(ESetting.LASTDATABASE)).getName());
 
         m_Frame.setTitle(title.toString());
     }
@@ -175,7 +177,7 @@ public final class MainFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Logger.logDebug("Broadcast updates.");
+        Logger.logDebug("Receiving updates.");
         if (o == m_GeneralSettingsView) {
             Logger.logDebug("Notified by General Settings View.");
             // updating LogType
@@ -184,6 +186,9 @@ public final class MainFrame implements Observer {
 
             // updating UpdateCheck
             UpdateChecker.updateApp();
+        } else if (o == DatabaseUtils.getInstance()) {
+            Logger.logDebug("Notified by Database Utilities.");
+            updateTitle();
         }
     }
 }

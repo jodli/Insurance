@@ -21,8 +21,8 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import src.jodli.Client.log.Logger;
 
+import java.io.File;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Observable;
 
 /**
@@ -34,7 +34,7 @@ public class DatabaseUtils extends Observable {
 
     private static DatabaseUtils m_Instance = null;
     private final String DATABASEURL = "jdbc:sqlite:";
-    private String m_DatabasePath = "database_" + Calendar.getInstance().get(Calendar.YEAR) + ".sqlite";
+    private String m_DatabasePath;
     private ConnectionSource m_Connection = null;
 
     private DatabaseUtils() {
@@ -43,14 +43,12 @@ public class DatabaseUtils extends Observable {
         } catch (ClassNotFoundException e1) {
             Logger.logError(e1.getMessage(), e1);
         }
-        //openConnection();
-
-        //new InsureeUtils(m_Connection);
     }
 
-    public static void openDatabase(String filePath) {
+    public static void openDatabase() {
         closeDatabase();
-        m_Instance.m_DatabasePath = filePath;
+        File filePath = new File(SettingsUtils.getValue(ESetting.LASTDATABASE));
+        m_Instance.m_DatabasePath = filePath.getAbsolutePath();
         m_Instance.openConnection();
 
         m_Instance.setChanged();
@@ -66,10 +64,11 @@ public class DatabaseUtils extends Observable {
     /**
      * Initializes singleton.
      */
-    public static void init() {
+    public static DatabaseUtils getInstance() {
         if (m_Instance == null) {
             m_Instance = new DatabaseUtils();
         }
+        return m_Instance;
     }
 
     private void openConnection() {

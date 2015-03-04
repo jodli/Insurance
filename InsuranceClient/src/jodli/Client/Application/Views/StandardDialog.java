@@ -62,10 +62,9 @@ public abstract class StandardDialog {
         m_Dialog.setLocation(x, y);
     }
 
-    private final void initDialog() {
+    private void initDialog() {
         Logger.logDebug("Initializing dialog.");
-        boolean isModal = true;
-        m_Dialog = new JDialog(m_Parent, m_Title, isModal);
+        m_Dialog = new JDialog(m_Parent, m_Title, true);
         m_Dialog.setDefaultCloseOperation(m_CloseAction);
         m_Dialog.setResizable(false);
         m_Dialog.setSize(400, 300);

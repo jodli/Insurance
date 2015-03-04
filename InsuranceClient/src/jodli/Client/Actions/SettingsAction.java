@@ -92,9 +92,7 @@ public class SettingsAction extends AbstractAction {
         }
 
         public JComponent getContent() {
-            JPanel content = new JPanel();
-            content.add(getSettingsContent());
-            return content;
+            return getSettingsContent();
         }
     }
 }
