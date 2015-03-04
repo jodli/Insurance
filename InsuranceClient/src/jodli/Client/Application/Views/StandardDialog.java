@@ -24,8 +24,6 @@ import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public abstract class StandardDialog {
     private final String m_Title;
@@ -41,60 +39,45 @@ public abstract class StandardDialog {
         m_Title = title;
         m_Parent = parent;
         m_CloseAction = closeAction.getValue();
+
+        initDialog();
     }
 
     public final void showDialog() {
-        initDialog();
+        Logger.logDebug("Showing dialog.");
 
+        centerDialog();
+        m_Dialog.setVisible(true);
+    }
+
+    private void centerDialog() {
         Dimension parent = m_Parent.getSize();
         Dimension window = m_Dialog.getSize();
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
         int x = m_Parent.getLocationOnScreen().x +
                 (parent.width / 2 - window.width / 2);
         int y = m_Parent.getLocationOnScreen().y +
                 (parent.height / 2 - window.height / 2);
 
-        int xOffScreenExcess = x + window.width - screen.width;
-        if (xOffScreenExcess > 0) {
-            x = x - xOffScreenExcess;
-        }
-        if (x < 0) {
-            x = 0;
-        }
-        int yOffScreenExcess = y + window.height - screen.height;
-        if (yOffScreenExcess > 0) {
-            y = y - yOffScreenExcess;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-
         m_Dialog.setLocation(x, y);
-        m_Dialog.setVisible(true);
     }
 
     private final void initDialog() {
+        Logger.logDebug("Initializing dialog.");
         boolean isModal = true;
         m_Dialog = new JDialog(m_Parent, m_Title, isModal);
         m_Dialog.setDefaultCloseOperation(m_CloseAction);
         m_Dialog.setResizable(false);
         m_Dialog.setSize(400, 300);
 
-        buttonOK.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Logger.logInfo("Clicked Ok.");
-                okAction();
-            }
+        buttonOK.addActionListener(e -> {
+            Logger.logDebug("Clicked Ok.");
+            okAction();
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Logger.logInfo("Clicked Cancel");
-                cancelAction();
-            }
+        buttonCancel.addActionListener(e -> {
+            Logger.logDebug("Clicked Cancel");
+            cancelAction();
         });
 
         settingsContent.add(getContent());
@@ -114,7 +97,7 @@ public abstract class StandardDialog {
      * Close the editor dialog.
      */
     public final void dispose() {
-        Logger.logInfo("Disposing Dialog.");
+        Logger.logDebug("Disposing Dialog.");
         m_Dialog.dispose();
     }
 

@@ -46,7 +46,7 @@ public class SettingsAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Logger.logInfo("Showing user settings dialog.");
+        Logger.logDebug("Showing user settings dialog.");
         if (m_SettingsDialog == null) {
             m_SettingsDialog = new SettingsDialog("Einstellungen", m_Frame);
         }
@@ -54,14 +54,14 @@ public class SettingsAction extends AbstractAction {
     }
 
     private void saveSettings() {
-        Logger.logInfo("Saving settings.");
+        Logger.logDebug("Saving settings.");
         for (ISettingsView view : m_SettingsViews) {
             view.saveSettings();
         }
     }
 
     private void loadSettings() {
-        Logger.logInfo("Loading settings.");
+        Logger.logDebug("Loading settings.");
         for (ISettingsView view : m_SettingsViews) {
             view.loadSettings();
         }
@@ -74,6 +74,7 @@ public class SettingsAction extends AbstractAction {
         for (ISettingsView view : m_SettingsViews) {
             JComponent gui = view.getContent();
             content.addTab(view.getTabTitle(), gui);
+            loadSettings();
         }
         return content;
     }

@@ -20,9 +20,10 @@
 
 package src.jodli.Client.Application.Views;
 
-import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Updater.UpdateChecker;
+import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.SettingsUtils;
-import src.jodli.Client.log.LogType;
+import src.jodli.Client.log.ELogType;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -38,12 +39,16 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
     private JPanel content;
     private JCheckBox chk_CheckUpdate;
     private JComboBox cb_LogType;
+    private JButton btn_CheckUpdate;
+
+    public GeneralSettingsView() {
+    }
 
     private void createUIComponents() {
         chk_CheckUpdate = new JCheckBox();
-        cb_LogType = new JComboBox(LogType.values());
-
-        loadSettings();
+        cb_LogType = new JComboBox(ELogType.values());
+        btn_CheckUpdate = new JButton();
+        btn_CheckUpdate.addActionListener(e -> UpdateChecker.updateApp());
     }
 
     private void $$$setupUI$$$() {
@@ -62,22 +67,26 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
 
     @Override
     public void saveSettings() {
-        Logger.logInfo("Saving General Settings.");
+        Logger.logDebug("Saving General Settings.");
         //save settings to prefs
-    }
+        boolean changed = false;
+        changed |= SettingsUtils.setValue(ESetting.CHECKUPDATE, Boolean.toString(chk_CheckUpdate.isSelected()));
+        changed |= SettingsUtils.setValue(ESetting.LOGTYPE, cb_LogType.getSelectedItem().toString().toUpperCase());
 
-    public boolean getCheckUpdate() {
-        return chk_CheckUpdate.isSelected();
+        if (changed) {
+            setChanged();
+            notifyObservers();
+        }
     }
 
     @Override
     public void loadSettings() {
-        Logger.logInfo("Loading General Settings.");
+        Logger.logDebug("Loading General Settings.");
         //load settings from database
-        String checkUpdate = SettingsUtils.getValue(Setting.CHECKUPDATE);
+        String checkUpdate = SettingsUtils.getValue(ESetting.CHECKUPDATE);
         chk_CheckUpdate.setSelected(Boolean.parseBoolean(checkUpdate));
 
-        String logtype = SettingsUtils.getValue(Setting.LOGTYPE);
-        cb_LogType.setSelectedItem(LogType.valueOf(logtype));
+        String logtype = SettingsUtils.getValue(ESetting.LOGTYPE);
+        cb_LogType.setSelectedItem(ELogType.valueOf(logtype));
     }
 }

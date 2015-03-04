@@ -38,7 +38,7 @@ public class ExitAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Logger.logInfo("Exiting the Application.");
+        Logger.logDebug("Exiting the Application.");
 
         // Save Database.
 

@@ -45,7 +45,7 @@ public class OpenAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Logger.logInfo("Opening Database at path: ");
+        Logger.logDebug("Opening Database at path: ");
         showDialog();
     }
 

@@ -37,7 +37,7 @@ public class LogThread extends Thread {
             while ((entry = logQueue.take()) != null) {
                 if (listeners.isEmpty()) {
                     (entry.m_Level == LogLevel.ERROR ? System.err : System.out)
-                            .println(entry.toString(LogType.DEBUG));
+                            .println(entry.toString(ELogType.DEBUG));
                 } else {
                     List<ILogListener> tempListeners = new ArrayList<ILogListener>();
                     tempListeners.addAll(listeners);

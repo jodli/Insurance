@@ -27,8 +27,9 @@ import src.jodli.Client.Application.Views.MainTableView;
 import src.jodli.Client.Updater.UpdateChecker;
 import src.jodli.Client.Utilities.AppUtils;
 import src.jodli.Client.Utilities.DatabaseUtils;
-import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.SettingsUtils;
+import src.jodli.Client.log.ELogType;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -37,9 +38,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 @SuppressWarnings("serial")
-public final class MainFrame {
+public final class MainFrame implements Observer {
 
     private String m_BuildNumber;
     private JFrame m_Frame;
@@ -51,7 +54,7 @@ public final class MainFrame {
 
     private MainTableView m_TableView;
     private ConsoleView m_ConsoleView;
-    private GeneralSettingsView m_GeneralSettingsView;
+    private ISettingsView m_GeneralSettingsView;
 
     public MainFrame(String buildNumber) {
         this.m_BuildNumber = buildNumber;
@@ -62,46 +65,49 @@ public final class MainFrame {
         initActions();
         initMainGUI();
         showMainWindow();
-        checkUpdate();
     }
 
     private void initDatabase() {
-        // Initialise database connection.
+        Logger.logDebug("Initializing database connection");
         DatabaseUtils.init();
 
         if (m_BuildNumber != null) {
-            SettingsUtils.setValue(Setting.BUILDNUMBER, m_BuildNumber);
+            SettingsUtils.setValue(ESetting.BUILDNUMBER, m_BuildNumber);
         } else {
-            m_BuildNumber = SettingsUtils.getValue(Setting.BUILDNUMBER);
+            m_BuildNumber = SettingsUtils.getValue(ESetting.BUILDNUMBER);
         }
     }
 
     private void initFrame() {
-        Logger.logInfo("Initializing Main Window.");
+        Logger.logDebug("Initializing Main Window.");
+
         m_Frame = new JFrame();
         m_Frame.setSize(new Dimension(800, 600));
+
         updateTitle();
     }
 
-    private void initActions() {
-        Logger.logInfo("Initializing Actions.");
-        m_OpenAction = new OpenAction(m_Frame);
+    private void initGUIComponents() {
+        Logger.logDebug("Initializing GUI Components.");
 
+        m_TableView = new MainTableView();
+        m_ConsoleView = new ConsoleView();
+        m_GeneralSettingsView = new GeneralSettingsView();
+        m_GeneralSettingsView.addObserver(this);
+    }
+
+    private void initActions() {
+        Logger.logDebug("Initializing Actions.");
         java.util.List<ISettingsView> settingsViews = new ArrayList<>();
         settingsViews.add(m_GeneralSettingsView);
+
+        m_OpenAction = new OpenAction(m_Frame);
         m_SettingsAction = new SettingsAction(m_Frame, settingsViews);
         m_ExitAction = new ExitAction();
     }
 
-    private void initGUIComponents() {
-        Logger.logInfo("Initializing GUI Components.");
-        m_TableView = new MainTableView();
-        m_ConsoleView = new ConsoleView();
-        m_GeneralSettingsView = new GeneralSettingsView();
-    }
-
     private void initMainGUI() {
-        Logger.logInfo("Initializing Main GUI.");
+        Logger.logDebug("Initializing Main GUI.");
         m_MainTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 
         m_MainTabbedPane.addTab("Tabelle", m_TableView.getContent());
@@ -119,6 +125,11 @@ public final class MainFrame {
     }
 
     private void showMainWindow() {
+        centerWindow();
+        m_Frame.setVisible(true);
+    }
+
+    private void centerWindow() {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension window = m_Frame.getSize();
 
@@ -132,7 +143,6 @@ public final class MainFrame {
         int y = screen.height / 2 - window.height / 2;
 
         m_Frame.setLocation(x, y);
-        m_Frame.setVisible(true);
     }
 
     private void updateTitle() {
@@ -163,13 +173,17 @@ public final class MainFrame {
         return menubar;
     }
 
-    private void checkUpdate() {
-        // Check for update.
-        if (Boolean.parseBoolean(SettingsUtils.getValue(Setting.CHECKUPDATE))) {
-            UpdateChecker uc = new UpdateChecker(m_BuildNumber);
-            if (uc.shouldUpdate()) {
-                uc.update();
-            }
+    @Override
+    public void update(Observable o, Object arg) {
+        Logger.logDebug("Broadcast updates.");
+        if (o == m_GeneralSettingsView) {
+            Logger.logDebug("Notified by General Settings View.");
+            // updating LogType
+            m_ConsoleView.setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
+            m_ConsoleView.refreshLogs();
+
+            // updating UpdateCheck
+            UpdateChecker.updateApp();
         }
     }
 }

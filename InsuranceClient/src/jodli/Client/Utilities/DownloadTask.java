@@ -17,6 +17,11 @@
  */
 package src.jodli.Client.Utilities;
 
+import src.jodli.Client.Updater.SelfUpdate;
+import src.jodli.Client.Updater.UpdateInfo;
+import src.jodli.Client.log.Logger;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,113 +29,100 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
-
-import src.jodli.Client.Updater.SelfUpdate;
-import src.jodli.Client.Updater.UpdateInfo;
-import src.jodli.Client.log.Logger;
-
 /**
  * Async update downloader updating a ProgressBar.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
  */
 public class DownloadTask extends SwingWorker<Void, Void> {
-	private static final int BUFFER_SIZE = 4096;
-	private UpdateInfo gui;
-	private URL downloadURL;
-	private String tempUpdatePath;
-	private String executablePath;
-	private String buildNumber;
+    private static final int BUFFER_SIZE = 4096;
+    private UpdateInfo gui;
+    private URL downloadURL;
+    private String tempUpdatePath;
+    private String executablePath;
+    private String buildNumber;
 
-	/**
-	 * Creates a new DownloadTask object.
-	 * 
-	 * @param gui
-	 *            Gui to update and dispose.
-	 * @param downloadURL
-	 *            Download file from this URL.
-	 * @param tempUpdatePath
-	 *            Save downloaded file in this path.
-	 * @param executablePath
-	 *            Executable currently running this application.
-	 * @param buildNumber
-	 *            Latest build number corresponding to the downloaded update.
-	 */
-	public DownloadTask(UpdateInfo gui, URL downloadURL, String tempUpdatePath,
-			String executablePath, String buildNumber) {
-		this.gui = gui;
-		this.downloadURL = downloadURL;
-		this.tempUpdatePath = tempUpdatePath;
-		this.executablePath = executablePath;
-		this.buildNumber = buildNumber;
-	}
+    /**
+     * Creates a new DownloadTask object.
+     *
+     * @param gui            Gui to update and dispose.
+     * @param downloadURL    Download file from this URL.
+     * @param tempUpdatePath Save downloaded file in this path.
+     * @param executablePath Executable currently running this application.
+     * @param buildNumber    Latest build number corresponding to the downloaded update.
+     */
+    public DownloadTask(UpdateInfo gui, URL downloadURL, String tempUpdatePath,
+                        String executablePath, String buildNumber) {
+        this.gui = gui;
+        this.downloadURL = downloadURL;
+        this.tempUpdatePath = tempUpdatePath;
+        this.executablePath = executablePath;
+        this.buildNumber = buildNumber;
+    }
 
-	/**
-	 * Executed in background thread
-	 */
-	@Override
-	protected Void doInBackground() throws Exception {
-		try {
-			HttpURLConnection httpcon = (HttpURLConnection) downloadURL
-					.openConnection();
-			this.tempUpdatePath += downloadURL.getFile().substring(
-					downloadURL.getFile().lastIndexOf('/') + 1);
-			Logger.logInfo("Starting download of update from: "
-					+ downloadURL.toString() + " to file: " + tempUpdatePath);
-			File tempfile = new File(tempUpdatePath);
-			tempfile.getParentFile().mkdirs();
+    /**
+     * Executed in background thread
+     */
+    @Override
+    protected Void doInBackground() throws Exception {
+        try {
+            HttpURLConnection httpcon = (HttpURLConnection) downloadURL
+                    .openConnection();
+            this.tempUpdatePath += downloadURL.getFile().substring(
+                    downloadURL.getFile().lastIndexOf('/') + 1);
+            Logger.logDebug("Starting download of update from: "
+                    + downloadURL.toString() + " to file: " + tempUpdatePath);
+            File tempfile = new File(tempUpdatePath);
+            tempfile.getParentFile().mkdirs();
 
-			// opens an output stream to save into file
-			FileOutputStream os = new FileOutputStream(tempfile);
-			InputStream is = httpcon.getInputStream();
+            // opens an output stream to save into file
+            FileOutputStream os = new FileOutputStream(tempfile);
+            InputStream is = httpcon.getInputStream();
 
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead = -1;
-			long totalBytesRead = 0;
-			int percentCompleted = 0;
-			long fileSize = httpcon.getContentLengthLong();
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead = -1;
+            long totalBytesRead = 0;
+            int percentCompleted = 0;
+            long fileSize = httpcon.getContentLengthLong();
 
-			while ((bytesRead = is.read(buffer)) != -1) {
-				os.write(buffer, 0, bytesRead);
-				totalBytesRead += bytesRead;
-				percentCompleted = (int) (totalBytesRead * 100 / fileSize);
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+                totalBytesRead += bytesRead;
+                percentCompleted = (int) (totalBytesRead * 100 / fileSize);
 
-				setProgress(percentCompleted);
-			}
+                setProgress(percentCompleted);
+            }
 
-			is.close();
-			os.close();
-			httpcon.disconnect();
-		} catch (IOException ex) {
-			Logger.logError("Error downloading update file.", ex);
-			setProgress(0);
-			cancel(true);
-		}
-		return null;
-	}
+            is.close();
+            os.close();
+            httpcon.disconnect();
+        } catch (IOException ex) {
+            Logger.logError("Error downloading update file.", ex);
+            setProgress(0);
+            cancel(true);
+        }
+        return null;
+    }
 
-	/**
-	 * Executed in Swing's event dispatching thread
-	 */
-	@Override
-	protected void done() {
-		if (!isCancelled()) {
-			if (JOptionPane
-					.showOptionDialog(
-							gui,
-							"Update successfully downloaded.\n Do you want to install now?",
-							"Update complete", JOptionPane.YES_NO_OPTION,
-							JOptionPane.PLAIN_MESSAGE, null, null, null) == 0) {
-				SelfUpdate.runUpdate(this.executablePath, this.tempUpdatePath,
-						this.buildNumber);
-			} else {
-				gui.dispose();
-			}
-		} else {
-			Logger.logWarn("Update downloading cancelled.");
-		}
-	}
+    /**
+     * Executed in Swing's event dispatching thread
+     */
+    @Override
+    protected void done() {
+        if (!isCancelled()) {
+            if (JOptionPane
+                    .showOptionDialog(
+                            gui,
+                            "Update successfully downloaded.\n Do you want to install now?",
+                            "Update complete", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.PLAIN_MESSAGE, null, null, null) == 0) {
+                SelfUpdate.runUpdate(this.executablePath, this.tempUpdatePath,
+                        this.buildNumber);
+            } else {
+                gui.dispose();
+            }
+        } else {
+            Logger.logWarn("Update downloading cancelled.");
+        }
+    }
 }

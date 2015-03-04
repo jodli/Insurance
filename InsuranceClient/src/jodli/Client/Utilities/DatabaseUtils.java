@@ -78,7 +78,6 @@ public class DatabaseUtils extends Observable {
             m_Connection = new JdbcConnectionSource(DATABASEURL + m_DatabasePath);
 
             // create database utilities
-            addObserver(SettingsUtils.getInstance());
         } catch (SQLException e) {
             Logger.logError(e.getMessage(), e);
         }

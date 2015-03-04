@@ -86,10 +86,10 @@ public class Logger {
     }
 
     public static String getLogs() {
-        return getLogs(LogType.EXTENDED);
+        return getLogs(ELogType.EXTENDED);
     }
 
-    private static String getLogs(LogType type) {
+    private static String getLogs(ELogType type) {
         StringBuilder logStringBuilder = new StringBuilder();
         for (LogEntry entry : logEntries) {
             logStringBuilder.append(entry.toString(type)).append("\n");

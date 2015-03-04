@@ -21,8 +21,7 @@ package src.jodli.Client.Utilities;
 
 import src.jodli.Client.log.Logger;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 /**
@@ -30,7 +29,7 @@ import java.util.prefs.Preferences;
  *
  * @author Jan-Olaf Becker
  */
-public class SettingsUtils implements Observer {
+public class SettingsUtils {
 
     private final static String SETTINGS_NODE = "jodli/Settings";
     private static SettingsUtils m_Instance = null;
@@ -39,14 +38,20 @@ public class SettingsUtils implements Observer {
     private SettingsUtils() {
     }
 
-    public static String getValue(Setting s) {
-        Logger.logInfo("Getting value of " + s.getKey());
+    public static String getValue(ESetting s) {
+        Logger.logDebug("Getting value of " + s.getKey());
         return getInstance().m_Preferences.get(s.getKey(), s.getDefaultValue());
     }
 
-    public static void setValue(Setting s, String value) {
+    public static boolean setValue(ESetting s, String value) {
+        if (Objects.equals(getValue(s), value)) {
+            Logger.logDebug("Value not changed - Not saving.");
+            return false;
+        }
+        Logger.logDebug("Value changed - Saving.");
         getInstance().m_Preferences.put(s.getKey(), value);
-        Logger.logInfo("Setting value of " + s.getKey() + " to " + value);
+        Logger.logDebug("Setting value of " + s.getKey() + " to " + value);
+        return true;
     }
 
     public static SettingsUtils getInstance() {
@@ -54,10 +59,5 @@ public class SettingsUtils implements Observer {
             m_Instance = new SettingsUtils();
         }
         return m_Instance;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }

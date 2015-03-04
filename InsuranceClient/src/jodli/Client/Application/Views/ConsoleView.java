@@ -40,7 +40,11 @@ public class ConsoleView implements IView, ILogListener {
     private JEditorPane displayArea;
     private HTMLEditorKit kit;
     private HTMLDocument doc;
-    private LogType logType = LogType.DEBUG;
+    private ELogType logType = ELogType.DEBUG;
+
+    public void setLogType(ELogType logType) {
+        this.logType = logType;
+    }
 
     private void createUIComponents() {
         displayArea = new JEditorPane("text/html", "");
@@ -73,7 +77,7 @@ public class ConsoleView implements IView, ILogListener {
         return content;
     }
 
-    synchronized private void refreshLogs() {
+    synchronized public void refreshLogs() {
         doc = new HTMLDocument();
         displayArea.setDocument(doc);
         java.util.List<LogEntry> entries = Logger.getLogEntries();
@@ -88,9 +92,7 @@ public class ConsoleView implements IView, ILogListener {
         synchronized (kit) {
             try {
                 kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
-            } catch (BadLocationException ignored) {
-                Logger.logError(ignored.getMessage(), ignored);
-            } catch (IOException ignored) {
+            } catch (BadLocationException | IOException ignored) {
                 Logger.logError(ignored.getMessage(), ignored);
             }
             displayArea.setCaretPosition(displayArea.getDocument().getLength());

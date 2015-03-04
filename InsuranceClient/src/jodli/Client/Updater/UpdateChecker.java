@@ -19,16 +19,16 @@ package src.jodli.Client.Updater;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import src.jodli.Client.Updater.UpdateInfo;
-import src.jodli.Client.Utilities.AppUtils;
-import src.jodli.Client.Utilities.FileUtils;
-import src.jodli.Client.Utilities.OSUtils;
+import src.jodli.Client.Application.Views.GeneralSettingsView;
+import src.jodli.Client.Utilities.*;
 import src.jodli.Client.log.Logger;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 
-public class UpdateChecker {
+public class UpdateChecker implements Observer {
 
     private final static String updateFileURL = "https://raw.github.com/jodli/Insurance/master/InsuranceClient/res/updateFile.xml";
     private int buildNumber;
@@ -37,7 +37,7 @@ public class UpdateChecker {
     private String downloadAddress = "";
     private String changeLog = "";
 
-    public UpdateChecker(String buildNumber) {
+    private UpdateChecker(String buildNumber) {
         this.buildNumber = Integer.parseInt(buildNumber);
         loadInfo();
         try {
@@ -46,6 +46,12 @@ public class UpdateChecker {
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
+    }
+
+    public static void updateApp() {
+        UpdateChecker uc = new UpdateChecker(SettingsUtils.getValue(ESetting.BUILDNUMBER));
+        UpdateInfo ui = new UpdateInfo(uc.changeLog, uc.downloadAddress, uc.buildString);
+        ui.showFrame();
     }
 
     private void loadInfo() {
@@ -60,7 +66,7 @@ public class UpdateChecker {
             buildString = updateInfoNode.getAttribute("currentBuild");
             this.latestBuild = Integer.parseInt(buildString);
 
-            Logger.logInfo("Current build: " + AppUtils.getVerboseVersion(buildString));
+            Logger.logDebug("Current build: " + AppUtils.getVerboseVersion(buildString));
 
             downloadAddress = updateInfoNode.getAttribute("downloadURL");
 
@@ -72,12 +78,18 @@ public class UpdateChecker {
         }
     }
 
-    public boolean shouldUpdate() {
+    private boolean shouldUpdate() {
         return buildNumber < latestBuild;
     }
 
-    public void update() {
-        UpdateInfo ui = new UpdateInfo(changeLog, downloadAddress, buildString);
-        ui.showFrame();
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof GeneralSettingsView) {
+            if (Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE))) {
+                if (shouldUpdate()) {
+                    updateApp();
+                }
+            }
+        }
     }
 }

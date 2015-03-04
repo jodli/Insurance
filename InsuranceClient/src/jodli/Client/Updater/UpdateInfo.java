@@ -131,7 +131,7 @@ public class UpdateInfo extends JFrame implements PropertyChangeListener {
 
         String temporaryUpdatePath = OSUtils.getDynamicStorageLocation()
                 + "updatetemp" + File.separator;
-        Logger.logInfo("Temporary update path: " + temporaryUpdatePath);
+        Logger.logDebug("Temporary update path: " + temporaryUpdatePath);
         try {
             progbar.setValue(0);
             this.ok.setEnabled(false);
@@ -153,4 +153,5 @@ public class UpdateInfo extends JFrame implements PropertyChangeListener {
             progbar.setValue(progress);
         }
     }
+
 }

@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import java.util.Observer;
+
 /**
  * Created by job87 on 3/3/2015.
  */
@@ -29,4 +31,6 @@ public interface ISettingsView extends IView {
     void loadSettings();
 
     String getTabTitle();
+
+    void addObserver(Observer o);
 }

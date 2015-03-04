@@ -103,37 +103,37 @@ public class LogEntry {
     }
 
     public String toString() {
-        return toString(LogType.MINIMAL);
+        return toString(ELogType.MINIMAL);
     }
 
-    public String toString(LogType type) {
+    public String toString(ELogType type) {
         StringBuilder entryMessage = new StringBuilder();
 
         // Always display Time.
         entryMessage.append("[").append(m_DateString).append("] ");
 
         // Display LogLevel in EXTENDED.
-        if (type.includes(LogType.EXTENDED)) {
+        if (type.includes(ELogType.EXTENDED)) {
             entryMessage.append("[").append(m_Level).append("] ");
         }
 
         // Display Location when in DEBUG.
-        if (m_Location != null && type.includes(LogType.DEBUG)) {
+        if (m_Location != null && type.includes(ELogType.DEBUG)) {
             entryMessage.append(m_Location).append(": ");
         }
 
         // Do not display logDebug when in MINIMAL.
-        if (type == LogType.MINIMAL && m_Level == LogLevel.DEBUG) {
+        if (type == ELogType.MINIMAL && m_Level == LogLevel.DEBUG) {
             return null;
         }
 
         entryMessage.append(m_Message);
 
         // Display cause when in EXTENDED.
-        if (m_Cause != null && type.includes(LogType.EXTENDED)) {
+        if (m_Cause != null && type.includes(ELogType.EXTENDED)) {
             entryMessage.append(": ").append(m_Cause.toString());
             // Display StackTrace when in DEBUG.
-            if (type.includes(LogType.DEBUG)) {
+            if (type.includes(ELogType.DEBUG)) {
                 for (StackTraceElement stackTraceElement : m_Cause
                         .getStackTrace()) {
                     entryMessage.append("\n").append(

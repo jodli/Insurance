@@ -40,7 +40,7 @@ public class InsureeFrame extends javax.swing.JFrame {
     InsureeFrame(int id) {
         // get insuree from database.
         this.insuree = InsureeUtils.getValue(id);
-        Logger.logInfo("Opened Insuree with ID: " + id);
+        Logger.logDebug("Opened Insuree with ID: " + id);
 
         initComponents();
 
@@ -50,14 +50,14 @@ public class InsureeFrame extends javax.swing.JFrame {
 
         // add button actionlisteners.
         btn_Close.addActionListener((ActionEvent e) -> {
-            Logger.logInfo("Closing Insuree with ID: " + id);
+            Logger.logDebug("Closing Insuree with ID: " + id);
             this.dispose();
         });
         btn_Save.addActionListener((ActionEvent e) -> {
             //get entries, verify changes and save in database.
             this.getTextBoxes();
             if (this.verifyChanges()) {
-                Logger.logInfo("Saving Insuree with ID: " + id);
+                Logger.logDebug("Saving Insuree with ID: " + id);
                 InsureeUtils.setValue(insuree);
                 //TODO: notify mainframe to update this insuree entry.
                 this.dispose();

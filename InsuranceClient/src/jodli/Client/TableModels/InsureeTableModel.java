@@ -50,7 +50,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
 
                 columns = res.getRawResults().getColumnNames();
                 InsureeTableModel.this.fireTableStructureChanged();
-                Logger.logInfo("Insuree Columns: " + InsureeTableModel.this.getColumnCount());
+                Logger.logDebug("Insuree Columns: " + InsureeTableModel.this.getColumnCount());
 
                 while (res.hasNext()) {
                     publish(res.next());
@@ -63,7 +63,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
             ) {
                 rows.addAll(chunks);
                 InsureeTableModel.this.fireTableDataChanged();
-                Logger.logInfo("Processing " + chunks.size() + " chunks.");
+                Logger.logDebug("Processing " + chunks.size() + " chunks.");
             }
         }.
                 execute();
@@ -89,7 +89,7 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
                 // if updated successful copy in rows list and fire event.
                 this.rows.set(rowIndex, insuree);
                 this.fireTableCellUpdated(rowIndex, columnIndex);
-                Logger.logInfo("Row: " + rowIndex + " Column: " + columnIndex + " Value: " + aValue.toString() + " Updated successfully!");
+                Logger.logDebug("Row: " + rowIndex + " Column: " + columnIndex + " Value: " + aValue.toString() + " Updated successfully!");
                 return;
             }
         }

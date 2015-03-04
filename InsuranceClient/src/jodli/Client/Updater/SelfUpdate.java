@@ -45,7 +45,7 @@ public class SelfUpdate {
 		arguments.add(temporaryUpdatePath);
 		arguments.add(latestBuild);
 
-		Logger.logInfo(arguments.toString());
+		Logger.logDebug(arguments.toString());
 
 		ProcessBuilder processUpdate = new ProcessBuilder();
 		processUpdate.command(arguments);
@@ -55,7 +55,7 @@ public class SelfUpdate {
 			Logger.logError(e.getMessage(), e);
 		}
 		// exit application.
-		Logger.logInfo("Restarting application and applying update.");
+		Logger.logDebug("Restarting application and applying update.");
 		System.exit(0);
 	}
 
@@ -111,7 +111,7 @@ public class SelfUpdate {
 			Logger.logError(e.getMessage(), e);
 		}
 		// exit application.
-		Logger.logInfo("Restarting application and closing updater.");
+		Logger.logDebug("Restarting application and closing updater.");
 		System.exit(0);
 	}
 

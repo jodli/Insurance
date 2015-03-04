@@ -17,7 +17,7 @@
  */
 package src.jodli.Client.Utilities.DatabaseModels;
 
-import src.jodli.Client.Utilities.Setting;
+import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.SettingsUtils;
 
 /**
@@ -37,7 +37,7 @@ public class ModelSettings {
      *
      * @see SettingsUtils
      */
-    public ModelSettings(Setting s) {
+    public ModelSettings(ESetting s) {
 //        m_Key = s.getKey();
 //        m_DefaultValue = s.getDefaultValue();
         m_Value = null;
@@ -50,7 +50,7 @@ public class ModelSettings {
      * @param val Value of setting.
      * @see SettingsUtils
      */
-    public ModelSettings(Setting s, Object val) {
+    public ModelSettings(ESetting s, Object val) {
         this(s);
         m_Value = val;
     }

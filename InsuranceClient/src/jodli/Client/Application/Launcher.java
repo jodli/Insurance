@@ -35,7 +35,7 @@ public final class Launcher {
     }
 
     private static void showMainWindow(String buildNumber) {
-        Logger.logInfo("Showing main window.");
+        Logger.logDebug("Showing main window.");
         MainFrame frm = new MainFrame(buildNumber);
     }
 
