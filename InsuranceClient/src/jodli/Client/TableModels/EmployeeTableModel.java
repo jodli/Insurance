@@ -18,18 +18,16 @@
  *
  */
 
-package src.jodli.Client.Application.Views;
+package src.jodli.Client.TableModels;
 
-import javax.swing.*;
-import java.util.Observer;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsurance;
 
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/4/2015.
  */
-public interface IView {
-    JComponent getContent();
-
-    String getTabTitle();
-
-    void addObserver(Observer o);
+public final class EmployeeTableModel extends TableModel<ModelInsurance> {
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        return null;
+    }
 }

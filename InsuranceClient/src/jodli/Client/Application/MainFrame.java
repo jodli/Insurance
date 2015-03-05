@@ -20,10 +20,10 @@ package src.jodli.Client.Application;
 import src.jodli.Client.Actions.ExitAction;
 import src.jodli.Client.Actions.NewOpenAction;
 import src.jodli.Client.Actions.SettingsAction;
-import src.jodli.Client.Application.Views.ConsoleView;
-import src.jodli.Client.Application.Views.GeneralSettingsView;
-import src.jodli.Client.Application.Views.ISettingsView;
-import src.jodli.Client.Application.Views.MainTableView;
+import src.jodli.Client.Application.Views.*;
+import src.jodli.Client.TableModels.EmployeeTableModel;
+import src.jodli.Client.TableModels.InsuranceTableModel;
+import src.jodli.Client.TableModels.InsureeTableModel;
 import src.jodli.Client.Updater.UpdateChecker;
 import src.jodli.Client.Utilities.*;
 import src.jodli.Client.log.ELogType;
@@ -50,7 +50,10 @@ public final class MainFrame implements Observer {
     private Action m_SettingsAction;
     private Action m_ExitAction;
 
-    private MainTableView m_TableView;
+    private IView m_InsureeTableView;
+    private IView m_InsuranceTableView;
+    private IView m_EmployeeTableView;
+
     private ConsoleView m_ConsoleView;
     private ISettingsView m_GeneralSettingsView;
 
@@ -92,7 +95,10 @@ public final class MainFrame implements Observer {
     private void initGUIComponents() {
         Logger.logDebug("Initializing GUI Components.");
 
-        m_TableView = new MainTableView();
+        m_InsureeTableView = new InsureeTableView(new InsureeTableModel());
+        m_InsureeTableView.addObserver(this);
+        m_InsuranceTableView = new InsuranceTableView(new InsuranceTableModel());
+        m_EmployeeTableView = new EmployeeTableView(new EmployeeTableModel());
         m_ConsoleView = new ConsoleView();
         m_GeneralSettingsView = new GeneralSettingsView();
         m_GeneralSettingsView.addObserver(this);
@@ -112,8 +118,10 @@ public final class MainFrame implements Observer {
         Logger.logDebug("Initializing Main GUI.");
         m_MainTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 
-        m_MainTabbedPane.addTab("Tabelle", m_TableView.getContent());
-        m_MainTabbedPane.addTab("Console", m_ConsoleView.getContent());
+        m_MainTabbedPane.addTab(m_InsureeTableView.getTabTitle(), m_InsureeTableView.getContent());
+        m_MainTabbedPane.addTab(m_InsuranceTableView.getTabTitle(), m_InsuranceTableView.getContent());
+        m_MainTabbedPane.addTab(m_EmployeeTableView.getTabTitle(), m_EmployeeTableView.getContent());
+        m_MainTabbedPane.addTab(m_ConsoleView.getTabTitle(), m_ConsoleView.getContent());
 
         m_Frame.getContentPane().add(m_MainTabbedPane);
         m_Frame.setJMenuBar(getMenuBar());
@@ -176,13 +184,21 @@ public final class MainFrame implements Observer {
         return menubar;
     }
 
+    private void enableInsuranceTab() {
+        m_MainTabbedPane.setEnabledAt(1, true);
+    }
+
+    private void disableInsuranceTab() {
+        m_MainTabbedPane.setEnabledAt(1, false);
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Logger.logDebug("Receiving updates.");
         if (o == m_GeneralSettingsView) {
             Logger.logDebug("Notified by General Settings View.");
             // updating LogType
-            m_ConsoleView.setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
+            ((ConsoleView) m_ConsoleView).setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
 
             // updating UpdateCheck
             UpdateChecker.updateApp();
@@ -191,7 +207,10 @@ public final class MainFrame implements Observer {
             updateTitle();
         } else if (o == InsureeUtils.getInstance()) {
             Logger.logDebug("Notified by Insuree Utilities.");
-
+        } else if (o == m_InsureeTableView) {
+            Logger.logDebug("Notified by Insuree Table View.");
+            ((InsuranceTableView) m_InsuranceTableView).update(((Integer) arg));
+            enableInsuranceTab();
         }
     }
 }

@@ -20,16 +20,27 @@
 
 package src.jodli.Client.Application.Views;
 
-import javax.swing.*;
-import java.util.Observer;
+import src.jodli.Client.TableModels.TableModel;
+import src.jodli.Client.log.Logger;
 
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/4/2015.
  */
-public interface IView {
-    JComponent getContent();
+public final class InsuranceTableView extends StandardTableView {
 
-    String getTabTitle();
+    private static final String m_Title = "Versicherungen";
 
-    void addObserver(Observer o);
+    public InsuranceTableView(TableModel tableModel) {
+        super(tableModel);
+    }
+
+    @Override
+    public String getTabTitle() {
+        return m_Title;
+    }
+
+    public void update(int insureeID) {
+        Logger.logDebug("Getting Insurance rows for Insuree ID " + insureeID);
+
+    }
 }

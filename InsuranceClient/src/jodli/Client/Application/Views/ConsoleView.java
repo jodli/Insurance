@@ -36,8 +36,10 @@ import java.io.PrintStream;
 /**
  * Created by job87 on 3/2/2015.
  */
-public class ConsoleView implements IView, ILogListener {
+public class ConsoleView implements ILogListener {
     private final static String launcherLogFile = "InsuranceClientLog.txt";
+    private final static String m_TitleGeneral = "Console";
+
     private JPanel content;
     private JEditorPane displayArea;
     private HTMLEditorKit kit;
@@ -76,9 +78,12 @@ public class ConsoleView implements IView, ILogListener {
         createUIComponents();
     }
 
-    @Override
     public JComponent getContent() {
         return content;
+    }
+
+    public String getTabTitle() {
+        return m_TitleGeneral;
     }
 
     synchronized private void refreshLogs() {

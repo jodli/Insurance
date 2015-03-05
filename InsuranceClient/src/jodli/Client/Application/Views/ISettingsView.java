@@ -29,8 +29,4 @@ public interface ISettingsView extends IView {
     void saveSettings();
 
     void loadSettings();
-
-    String getTabTitle();
-
-    void addObserver(Observer o);
 }

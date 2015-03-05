@@ -20,16 +20,21 @@
 
 package src.jodli.Client.Application.Views;
 
-import javax.swing.*;
-import java.util.Observer;
+import src.jodli.Client.TableModels.TableModel;
 
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/4/2015.
  */
-public interface IView {
-    JComponent getContent();
+public final class EmployeeTableView extends StandardTableView {
 
-    String getTabTitle();
+    private static final String m_Title = "Mitarbeiter";
 
-    void addObserver(Observer o);
+    public EmployeeTableView(TableModel tableModel) {
+        super(tableModel);
+    }
+
+    @Override
+    public String getTabTitle() {
+        return m_Title;
+    }
 }

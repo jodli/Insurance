@@ -18,33 +18,16 @@
  *
  */
 
-package src.jodli.Client.Application.Views;
+package src.jodli.Client.TableModels;
 
-import org.jdesktop.swingx.JXTable;
-import src.jodli.Client.TableModels.InsureeTableModel;
-
-import javax.swing.*;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsurance;
 
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/4/2015.
  */
-public class MainTableView implements IView {
-    private JPanel content;
-    private JXTable table;
-
-    private void createUIComponents() {
-        table = new JXTable(new InsureeTableModel());
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.packTable(10);
-    }
-
-    private void $$$setupUI$$$() {
-        createUIComponents();
-    }
-
+public final class InsuranceTableModel extends TableModel<ModelInsurance> {
     @Override
-    public JComponent getContent() {
-        return content;
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        return null;
     }
 }
