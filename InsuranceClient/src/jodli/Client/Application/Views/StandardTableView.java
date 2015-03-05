@@ -35,11 +35,10 @@ import java.util.Observable;
 public abstract class StandardTableView extends Observable implements IView {
     protected ListSelectionModel m_ListSelectionModel;
     protected JXTable m_Table;
+    protected TableModel m_TableModel;
 
     private JPanel content;
     private TableFilterHeader m_FilterHeader;
-
-    private TableModel m_TableModel;
 
     protected StandardTableView(TableModel tableModel) {
         m_TableModel = tableModel;

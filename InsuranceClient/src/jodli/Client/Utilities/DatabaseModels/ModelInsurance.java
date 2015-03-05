@@ -22,15 +22,41 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Model for the Insurance table.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
  */
 @DatabaseTable(tableName = "Insurance")
 public class ModelInsurance {
-	@DatabaseField(generatedId = true, id = true)
-	private int ID;
 
-	public ModelInsurance() {
-	}
+    @DatabaseField(generatedId = true)
+    private int ID;
+
+    @DatabaseField(canBeNull = false, columnName = "Versicherungsnummer")
+    private String InsuranceNo;
+
+    public ModelInsurance() {
+    }
+
+    public ModelInsurance(ModelInsurance m) {
+        this();
+
+        this.ID = m.ID;
+        this.InsuranceNo = m.InsuranceNo;
+    }
+
+    public ModelInsurance(String insuranceNo) {
+        this.InsuranceNo = insuranceNo;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getInsuranceNo() {
+        return InsuranceNo;
+    }
+
+    public void setInsuranceNo(String insuranceNo) {
+        InsuranceNo = insuranceNo;
+    }
 }

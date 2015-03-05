@@ -20,6 +20,7 @@
 
 package src.jodli.Client.Application.Views;
 
+import src.jodli.Client.TableModels.InsuranceTableModel;
 import src.jodli.Client.TableModels.TableModel;
 import src.jodli.Client.log.Logger;
 
@@ -41,6 +42,6 @@ public final class InsuranceTableView extends StandardTableView {
 
     public void update(int insureeID) {
         Logger.logDebug("Getting Insurance rows for Insuree ID " + insureeID);
-
+        ((InsuranceTableModel) m_TableModel).update(insureeID);
     }
 }

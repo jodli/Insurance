@@ -79,6 +79,7 @@ public final class MainFrame implements Observer {
 
         DatabaseUtils.getInstance().addObserver(this);
         DatabaseUtils.getInstance().addObserver(InsureeUtils.getInstance());
+        DatabaseUtils.getInstance().addObserver(InsuranceUtils.getInstance());
 
         DatabaseUtils.openDatabase();
 
@@ -122,6 +123,8 @@ public final class MainFrame implements Observer {
         m_MainTabbedPane.addTab(m_InsuranceTableView.getTabTitle(), m_InsuranceTableView.getContent());
         m_MainTabbedPane.addTab(m_EmployeeTableView.getTabTitle(), m_EmployeeTableView.getContent());
         m_MainTabbedPane.addTab(m_ConsoleView.getTabTitle(), m_ConsoleView.getContent());
+
+        disableInsuranceTab();
 
         m_Frame.getContentPane().add(m_MainTabbedPane);
         m_Frame.setJMenuBar(getMenuBar());
