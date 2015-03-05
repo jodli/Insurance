@@ -75,7 +75,7 @@ public class NewOpenAction extends AbstractAction {
         });
 
         if (fileChooser.showOpenDialog(m_Frame) == JFileChooser.APPROVE_OPTION) {
-            SettingsUtils.setValue(ESetting.LASTDATABASE, fileChooser.getSelectedFile().getAbsolutePath() + ".sqlite");
+            SettingsUtils.setValue(ESetting.LASTDATABASE, fileChooser.getSelectedFile().getAbsolutePath());
             return true;
         }
         return false;

@@ -23,6 +23,7 @@ import src.jodli.Client.log.Logger;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Observable;
 
 /**
@@ -49,6 +50,9 @@ public class DatabaseUtils extends Observable {
         closeDatabase();
         File filePath = new File(SettingsUtils.getValue(ESetting.LASTDATABASE));
         m_Instance.m_DatabasePath = filePath.getAbsolutePath();
+        if (!Objects.equals(FileUtils.getExtension(filePath), "sqlite")) {
+            m_Instance.m_DatabasePath += ".sqlite";
+        }
         m_Instance.openConnection();
 
         m_Instance.setChanged();
