@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Jan-Olaf Becker <job87@web.de>
  */
-public class InsureeTableModel extends TableModel<ModelInsuree> {
+public final class InsureeTableModel extends TableModel<ModelInsuree> {
 
     private SimpleDateFormat dateFormatter;
 
@@ -110,65 +110,65 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
             case "ID":
                 ret = row.getID();
                 break;
-            case "Prename":
+            case "Vorname":
                 ret = row.getPrename();
                 break;
-            case "Surname":
+            case "Nachname":
                 ret = row.getSurname();
                 break;
-            case "Partner_Prename":
+            case "Vorname Partner":
                 ret = row.getPartner_Prename();
                 break;
-            case "Partner_Surname":
+            case "Nachname Partner":
                 ret = row.getPartner_Surname();
                 break;
-            case "BirthDate":
+            case "Geburtsdatum":
                 ret = dateFormatter.format(row.getBirthDate());
                 break;
-            case "Partner_BirthDate":
+            case "GD Partner":
                 ret = dateFormatter.format(row.getPartner_BirthDate());
                 break;
-            case "Street_Address":
+            case "Straße":
                 ret = row.getStreet_Address();
                 break;
-            case "Street_Number":
+            case "Hausnummer":
                 ret = row.getStreet_Number();
                 break;
-            case "Zipcode":
+            case "PLZ":
                 ret = row.getZipcode();
                 break;
-            case "City":
+            case "Wohnort":
                 ret = row.getCity();
                 break;
-            case "Telephone_Number":
+            case "Telefon":
                 ret = row.getTelephone_Number();
                 break;
-            case "Fax_Number":
+            case "Fax":
                 ret = row.getFax_Number();
                 break;
-            case "Cellphone_Number":
+            case "Handy":
                 ret = row.getCellphone_Number();
                 break;
             case "Email":
                 ret = row.getEmail();
                 break;
-            case "Bank_Name":
+            case "Bank Name":
                 ret = row.getBank_Name();
                 break;
-            case "Bank_IBAN":
+            case "IBAN":
                 ret = row.getBank_IBAN();
                 break;
-            case "Bank_BIC":
+            case "BIC":
                 ret = row.getBank_BIC();
                 break;
             case "Job":
                 ret = row.getJob();
                 break;
-            case "Partner_Job":
+            case "Job Partner":
                 ret = row.getPartner_Job();
                 break;
-            case "Contract":
-                ret = row.isContract();
+            case "Vollmacht":
+                ret = row.isContract() ? "ja" : "nein";
                 break;
             default:
                 ret = "ERROR";
@@ -185,64 +185,64 @@ public class InsureeTableModel extends TableModel<ModelInsuree> {
      */
     private boolean setColumnValue(ModelInsuree row, int column, Object val) {
         switch (this.columns[column]) {
-            case "Prename":
+            case "Vorname":
                 row.setPrename((String) val);
                 break;
-            case "Surname":
+            case "Nachname":
                 row.setSurname((String) val);
                 break;
-            case "Partner_Prename":
+            case "Vorname Partner":
                 row.setPartner_Prename((String) val);
                 break;
-            case "Partner_Surname":
+            case "Nachname Partner":
                 row.setPartner_Surname((String) val);
                 break;
-            case "BirthDate":
+            case "Geburtsdatum":
                 row.setBirthDate((Date) val);
                 break;
-            case "Partner_BirthDate":
+            case "GD Partner":
                 row.setPartner_BirthDate((Date) val);
                 break;
-            case "Street_Address":
+            case "Straße":
                 row.setStreet_Address((String) val);
                 break;
-            case "Street_Number":
+            case "Hausnummer":
                 row.setStreet_Number((String) val);
                 break;
-            case "Zipcode":
+            case "PLZ":
                 row.setZipcode((String) val);
                 break;
-            case "City":
+            case "Wohnort":
                 row.setCity((String) val);
                 break;
-            case "Telephone_Number":
+            case "Telefon":
                 row.setTelephone_Number((String) val);
                 break;
-            case "Fax_Number":
+            case "Fax":
                 row.setFax_Number((String) val);
                 break;
-            case "Cellphone_Number":
+            case "Handy":
                 row.setCellphone_Number((String) val);
                 break;
             case "Email":
                 row.setEmail((String) val);
                 break;
-            case "Bank_Name":
+            case "Bank Name":
                 row.setBank_Name((String) val);
                 break;
-            case "Bank_IBAN":
+            case "IBAN":
                 row.setBank_IBAN((String) val);
                 break;
-            case "Bank_BIC":
+            case "BIC":
                 row.setBank_BIC((String) val);
                 break;
             case "Job":
                 row.setJob((String) val);
                 break;
-            case "Partner_Job":
+            case "Job Partner":
                 row.setPartner_Job((String) val);
                 break;
-            case "Contract":
+            case "Vollmacht":
                 row.setContract((boolean) val);
                 break;
             default:

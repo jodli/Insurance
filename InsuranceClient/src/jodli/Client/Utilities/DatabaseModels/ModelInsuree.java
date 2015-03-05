@@ -19,13 +19,13 @@ package src.jodli.Client.Utilities.DatabaseModels;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
 import java.util.Date;
 
 /**
  * Model for the Insuree table.
  *
  * @author Jan-Olaf Becker
- *
  */
 @DatabaseTable(tableName = "Insuree")
 public class ModelInsuree {
@@ -33,53 +33,53 @@ public class ModelInsuree {
     @DatabaseField(generatedId = true)
     private int ID;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Vorname")
     private String Prename;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Nachname")
     private String Surname;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Vorname Partner")
     private String Partner_Prename;
-    @DatabaseField
+    @DatabaseField(columnName = "Nachname Partner")
     private String Partner_Surname;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Geburtsdatum")
     private Date BirthDate;
-    @DatabaseField
+    @DatabaseField(columnName = "GD Partner")
     private Date Partner_BirthDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Straße")
     private String Street_Address;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Hausnummer")
     private String Street_Number;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "PLZ")
     private String Zipcode;
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "Wohnort")
     private String City;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Telefon")
     private String Telephone_Number;
-    @DatabaseField
+    @DatabaseField(columnName = "Fax")
     private String Fax_Number;
-    @DatabaseField
+    @DatabaseField(columnName = "Handy")
     private String Cellphone_Number;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Email")
     private String Email;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Vollmacht")
     private boolean Contract;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Bank Name")
     private String Bank_Name;
-    @DatabaseField
+    @DatabaseField(columnName = "IBAN")
     private String Bank_IBAN;
-    @DatabaseField
+    @DatabaseField(columnName = "BIC")
     private String Bank_BIC;
 
-    @DatabaseField
+    @DatabaseField(columnName = "Job")
     private String Job;
-    @DatabaseField
+    @DatabaseField(columnName = "Job Partner")
     private String Partner_Job;
 
     public ModelInsuree() {
@@ -119,9 +119,9 @@ public class ModelInsuree {
     /**
      * @param prename
      * @param surname
-     * @param partner_Prename the value of partner_Prename
-     * @param partner_Surname the value of partner_Surname
-     * @param birthDate the value of birthDate
+     * @param partner_Prename   the value of partner_Prename
+     * @param partner_Surname   the value of partner_Surname
+     * @param birthDate         the value of birthDate
      * @param partner_BirthDate the value of partner_BirthDate
      * @param street_Address
      * @param street_Number
@@ -130,13 +130,13 @@ public class ModelInsuree {
      * @param telephone_Number
      * @param fax_Number
      * @param cellphone_Number
-     * @param email the value of email
-     * @param contract the value of contract
-     * @param bank_Name the value of bank_Name
-     * @param bank_IBAN the value of bank_IBAN
-     * @param bank_BIC the value of bank_BIC
-     * @param job the value of job
-     * @param partner_Job the value of partner_Job
+     * @param email             the value of email
+     * @param contract          the value of contract
+     * @param bank_Name         the value of bank_Name
+     * @param bank_IBAN         the value of bank_IBAN
+     * @param bank_BIC          the value of bank_BIC
+     * @param job               the value of job
+     * @param partner_Job       the value of partner_Job
      */
     public ModelInsuree(String prename, String surname, String partner_Prename, String partner_Surname, Date birthDate, Date partner_BirthDate, String street_Address, String street_Number, String zipcode, String city, String telephone_Number, String fax_Number, String cellphone_Number, String email, boolean contract, String bank_Name, String bank_IBAN, String bank_BIC, String job, String partner_Job) {
         this();
