@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.SettingsUtils;
 import src.jodli.Client.log.*;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Created by job87 on 3/2/2015.
@@ -74,10 +77,6 @@ public class ConsoleView implements ILogListener {
         }
     }
 
-    private void $$$setupUI$$$() {
-        createUIComponents();
-    }
-
     public JComponent getContent() {
         return content;
     }
@@ -89,7 +88,7 @@ public class ConsoleView implements ILogListener {
     synchronized private void refreshLogs() {
         doc = new HTMLDocument();
         displayArea.setDocument(doc);
-        java.util.List<LogEntry> entries = Logger.getLogEntries();
+        List<LogEntry> entries = Logger.getLogEntries();
         StringBuilder logHTML = new StringBuilder();
         for (LogEntry entry : entries) {
             logHTML.append(getMessage(entry));

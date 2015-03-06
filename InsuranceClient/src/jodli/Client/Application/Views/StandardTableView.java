@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.FilterSettings;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -27,12 +29,13 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
+import java.awt.*;
 import java.util.Observable;
 
 /**
  * Created by job87 on 3/2/2015.
  */
-public abstract class StandardTableView extends Observable implements IView {
+public abstract class StandardTableView extends Observable implements ITableView {
     protected ListSelectionModel m_ListSelectionModel;
     protected JXTable m_Table;
     protected TableModel m_TableModel;
@@ -59,10 +62,6 @@ public abstract class StandardTableView extends Observable implements IView {
         FilterSettings.ignoreCase = true;
     }
 
-    private void $$$setupUI$$$() {
-        createUIComponents();
-    }
-
     @Override
     public JComponent getContent() {
         return content;
@@ -70,4 +69,5 @@ public abstract class StandardTableView extends Observable implements IView {
 
     @Override
     public abstract String getTabTitle();
+
 }

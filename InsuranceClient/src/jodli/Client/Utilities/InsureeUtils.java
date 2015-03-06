@@ -37,7 +37,7 @@ import java.util.Observer;
  *
  * @author Jan-Olaf Becker
  */
-public class InsureeUtils extends Observable implements Observer {
+public class InsureeUtils implements Observer {
 
     private static BaseDaoImpl<ModelInsuree, Integer> insureeDao = null;
     private static InsureeUtils m_Instance;

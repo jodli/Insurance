@@ -20,7 +20,8 @@
 
 package src.jodli.Client.Actions;
 
-import src.jodli.Client.Application.Views.ISettingsView;
+import src.jodli.Client.Application.Views.IEditorView;
+import src.jodli.Client.Application.Views.ITabbedView;
 import src.jodli.Client.Application.Views.StandardDialog;
 import src.jodli.Client.log.Logger;
 
@@ -34,10 +35,10 @@ import java.util.List;
 public class SettingsAction extends AbstractAction {
 
     private JFrame m_Frame;
-    private List<ISettingsView> m_SettingsViews;
+    private List<IEditorView> m_SettingsViews;
     private SettingsDialog m_SettingsDialog;
 
-    public SettingsAction(JFrame frame, List<ISettingsView> views) {
+    public SettingsAction(JFrame frame, List<IEditorView> views) {
         super("Einstellungen");
         m_Frame = frame;
         m_SettingsViews = views;
@@ -55,34 +56,35 @@ public class SettingsAction extends AbstractAction {
 
     private void saveSettings() {
         Logger.logDebug("Saving settings.");
-        for (ISettingsView view : m_SettingsViews) {
+        for (IEditorView view : m_SettingsViews) {
             view.saveSettings();
         }
     }
 
     private void loadSettings() {
         Logger.logDebug("Loading settings.");
-        for (ISettingsView view : m_SettingsViews) {
+        for (IEditorView view : m_SettingsViews) {
             view.loadSettings();
         }
     }
 
     private JComponent getSettingsContent() {
-        JTabbedPane content = new JTabbedPane();
-        content.setTabPlacement(SwingConstants.TOP);
+        JTabbedPane tabPane = new JTabbedPane();
+        tabPane.setTabPlacement(SwingConstants.TOP);
 
-        for (ISettingsView view : m_SettingsViews) {
+        for (IEditorView view : m_SettingsViews) {
             JComponent gui = view.getContent();
-            content.addTab(view.getTabTitle(), gui);
+            tabPane.addTab(((ITabbedView) view).getTabTitle(), gui);
             loadSettings();
         }
-        return content;
+        return tabPane;
     }
 
     private final class SettingsDialog extends StandardDialog {
 
         SettingsDialog(String title, JFrame parent) {
             super(title, parent, StandardDialog.CloseAction.HIDE);
+            m_Dialog.setSize(350, 400);
         }
 
         @Override

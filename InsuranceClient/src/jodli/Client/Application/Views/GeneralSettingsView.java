@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import src.jodli.Client.Updater.UpdateChecker;
 import src.jodli.Client.Utilities.ESetting;
 import src.jodli.Client.Utilities.SettingsUtils;
@@ -32,7 +34,7 @@ import java.util.Observable;
 /**
  * Created by job87 on 3/2/2015.
  */
-public class GeneralSettingsView extends Observable implements ISettingsView {
+public class GeneralSettingsView extends Observable implements IEditorView, ITabbedView {
 
     private final static String m_TitleGeneral = "Allgemein";
 
@@ -51,10 +53,6 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
         btn_CheckUpdate.addActionListener(e -> UpdateChecker.updateApp(true));
     }
 
-    private void $$$setupUI$$$() {
-        createUIComponents();
-    }
-
     @Override
     public JComponent getContent() {
         return content;
@@ -66,7 +64,7 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
     }
 
     @Override
-    public void saveSettings() {
+    public boolean saveSettings() {
         Logger.logDebug("Saving General Settings.");
         //save settings to prefs
         boolean changed = false;
@@ -77,6 +75,7 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
             setChanged();
             notifyObservers();
         }
+        return changed;
     }
 
     @Override
@@ -86,4 +85,5 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
         chk_CheckUpdate.setSelected(Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE)));
         cb_LogType.setSelectedItem(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
     }
+
 }

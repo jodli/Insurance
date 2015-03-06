@@ -50,12 +50,13 @@ public final class MainFrame implements Observer {
     private Action m_SettingsAction;
     private Action m_ExitAction;
 
-    private IView m_InsureeTableView;
-    private IView m_InsuranceTableView;
-    private IView m_EmployeeTableView;
+    private ITableView m_InsureeTableView;
+    private ITableView m_InsuranceTableView;
+    private ITableView m_EmployeeTableView;
 
     private ConsoleView m_ConsoleView;
-    private ISettingsView m_GeneralSettingsView;
+    private IEditorView m_GeneralSettingsView;
+    private IView m_EditInsureeView;
 
     public MainFrame(String buildNumber) {
         this.m_BuildNumber = buildNumber;
@@ -83,7 +84,7 @@ public final class MainFrame implements Observer {
 
         DatabaseUtils.openDatabase();
 
-        InsureeUtils.getInstance().addObserver(this);
+        InsureeUtils.getInstance();
     }
 
     private void initFrame() {
@@ -96,10 +97,17 @@ public final class MainFrame implements Observer {
     private void initGUIComponents() {
         Logger.logDebug("Initializing GUI Components.");
 
+        // table views
         m_InsureeTableView = new InsureeTableView(new InsureeTableModel());
         m_InsureeTableView.addObserver(this);
         m_InsuranceTableView = new InsuranceTableView(new InsuranceTableModel());
         m_EmployeeTableView = new EmployeeTableView(new EmployeeTableModel());
+
+        // editor views
+        m_EditInsureeView = new InsureeEditorView();
+        m_EditInsureeView.addObserver(this);
+
+        // console + settings views
         m_ConsoleView = new ConsoleView();
         m_GeneralSettingsView = new GeneralSettingsView();
         m_GeneralSettingsView.addObserver(this);
@@ -107,7 +115,7 @@ public final class MainFrame implements Observer {
 
     private void initActions() {
         Logger.logDebug("Initializing Actions.");
-        java.util.List<ISettingsView> settingsViews = new ArrayList<>();
+        java.util.List<IEditorView> settingsViews = new ArrayList<>();
         settingsViews.add(m_GeneralSettingsView);
 
         m_OpenAction = new NewOpenAction(m_Frame);
@@ -187,18 +195,23 @@ public final class MainFrame implements Observer {
         if (o == m_GeneralSettingsView) {
             Logger.logDebug("Notified by General Settings View.");
             // updating LogType
-            ((ConsoleView) m_ConsoleView).setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
-
+            m_ConsoleView.setLogType(ELogType.valueOf(SettingsUtils.getValue(ESetting.LOGTYPE)));
             // updating UpdateCheck
             UpdateChecker.updateApp();
         } else if (o == DatabaseUtils.getInstance()) {
             Logger.logDebug("Notified by Database Utilities.");
+            // update title with database name
             updateTitle();
-        } else if (o == InsureeUtils.getInstance()) {
-            Logger.logDebug("Notified by Insuree Utilities.");
         } else if (o == m_InsureeTableView) {
             Logger.logDebug("Notified by Insuree Table View.");
+            // update insurance table with insuree id
             ((InsuranceTableView) m_InsuranceTableView).update(((Integer) arg));
+            // set insuree id in editor view
+            ((InsureeEditorView) m_EditInsureeView).setInsureeID((Integer) arg);
+        } else if (o == m_EditInsureeView) {
+            Logger.logDebug("Notified by Insuree Editor.");
+            // data changed in editor. update insuree table.
+            ((InsureeTableView) m_InsureeTableView).update();
         }
     }
 }

@@ -20,6 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+import com.jgoodies.forms.debug.FormDebugPanel;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -30,17 +32,22 @@ public abstract class StandardDialog {
     private final JFrame m_Parent;
     private final int m_CloseAction;
     protected JPanel settingsContent;
+    protected JDialog m_Dialog;
     private JPanel content;
+    private JPanel buttonContent;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JDialog m_Dialog;
 
     protected StandardDialog(String title, JFrame parent, CloseAction closeAction) {
+        this(title, parent, closeAction, true);
+    }
+
+    protected StandardDialog(String title, JFrame parent, CloseAction closeAction, boolean isModal) {
         m_Title = title;
         m_Parent = parent;
         m_CloseAction = closeAction.getValue();
 
-        initDialog();
+        initDialog(isModal);
     }
 
     public final void showDialog() {
@@ -62,12 +69,11 @@ public abstract class StandardDialog {
         m_Dialog.setLocation(x, y);
     }
 
-    private void initDialog() {
+    private void initDialog(boolean isModal) {
         Logger.logDebug("Initializing dialog.");
-        m_Dialog = new JDialog(m_Parent, m_Title, true);
+        m_Dialog = new JDialog(m_Parent, m_Title, isModal);
         m_Dialog.setDefaultCloseOperation(m_CloseAction);
         m_Dialog.setResizable(false);
-        m_Dialog.setSize(400, 300);
 
         buttonOK.addActionListener(e -> {
             Logger.logDebug("Clicked Ok.");
@@ -80,8 +86,17 @@ public abstract class StandardDialog {
         });
 
         settingsContent.add(getContent());
-
+        buttonContent.add(getButtonBar());
         m_Dialog.getContentPane().add(content);
+    }
+
+    private JPanel getButtonBar() {
+        ButtonBarBuilder builder = new ButtonBarBuilder();
+        builder.setLeftToRight(true);
+        builder.addGlue();
+        builder.addButton(buttonOK);
+        builder.addButton(buttonCancel);
+        return builder.getPanel();
     }
 
     private void cancelAction() {
@@ -101,12 +116,13 @@ public abstract class StandardDialog {
     }
 
     private void createUIComponents() {
-        content = new JPanel();
+        content = new FormDebugPanel();
         settingsContent = new JPanel();
-    }
 
-    private void $$$setupUI$$$() {
-        createUIComponents();
+        buttonOK = new JButton("Speichern");
+        buttonCancel = new JButton("Abbrechen");
+
+        buttonContent = new JPanel();
     }
 
     protected enum CloseAction {

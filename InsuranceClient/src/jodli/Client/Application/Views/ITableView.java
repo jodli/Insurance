@@ -20,14 +20,8 @@
 
 package src.jodli.Client.Application.Views;
 
-import javax.swing.*;
-import java.util.Observer;
-
 /**
- * Created by job87 on 3/2/2015.
+ * Created by job87 on 3/6/2015.
  */
-public interface IView {
-    JComponent getContent();
-
-    void addObserver(Observer o);
+public interface ITableView extends ITabbedView {
 }

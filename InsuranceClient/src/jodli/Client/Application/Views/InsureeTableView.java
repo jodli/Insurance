@@ -59,4 +59,8 @@ public class InsureeTableView extends StandardTableView {
     public String getTabTitle() {
         return m_Title;
     }
+
+    public void update() {
+        ((InsureeTableModel) m_TableModel).update();
+    }
 }
