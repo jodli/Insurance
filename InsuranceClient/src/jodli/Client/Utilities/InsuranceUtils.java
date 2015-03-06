@@ -54,6 +54,7 @@ public class InsuranceUtils implements Observer {
     }
 
     private void connect(ConnectionSource conn) {
+        Logger.logDebug("Connecting to Insurance Table.");
         try {
             TableUtils.createTableIfNotExists(conn, ModelInsurance.class);
             m_InsuranceDao = DaoManager.createDao(conn, ModelInsurance.class);
@@ -82,7 +83,7 @@ public class InsuranceUtils implements Observer {
                 it = m_InsuranceDao.iterator(p);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.logError(e.getMessage(), e);
         }
         return it;
     }

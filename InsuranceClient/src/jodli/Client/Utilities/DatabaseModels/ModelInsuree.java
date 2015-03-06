@@ -30,56 +30,78 @@ import java.util.Date;
 @DatabaseTable(tableName = "Insuree")
 public class ModelInsuree {
 
-    @DatabaseField(generatedId = true)
+    public static final String FIELD_ID = "ID";
+    public static final String FIELD_PRENAME = "Vorname";
+    public static final String FIELD_SURNAME = "Nachname";
+    public static final String FIELD_PRENAME_PARTNER = "Vorname Partner";
+    public static final String FIELD_SURNAME_PARTNER = "Nachname Partner";
+    public static final String FIELD_BIRTHDATE = "Geburtsdatum";
+    public static final String FIELD_BIRTHDATE_PARTNER = "GD Partner";
+    public static final String FIELD_STREET = "Straße";
+    public static final String FIELD_STREET_NUMBER = "Hausnummer";
+    public static final String FIELD_ZIPCODE = "PLZ";
+    public static final String FIELD_CITY = "Wohnort";
+    public static final String FIELD_TELEPHONE = "Telefon";
+    public static final String FIELD_FAX = "Fax";
+    public static final String FIELD_CELLPHONE = "Handy";
+    public static final String FIELD_EMAIL = "Email";
+    public static final String FIELD_CONTRACT = "Vollmacht";
+    public static final String FIELD_BANK_NAME = "Bank Name";
+    public static final String FIELD_BANK_IBAN = "IBAN";
+    public static final String FIELD_BANK_BIC = "BIC";
+    public static final String FIELD_JOB = "Job";
+    public static final String FIELD_JOB_PARTNER = "Job Partner";
+
+    @DatabaseField(generatedId = true, columnName = FIELD_ID)
     private int ID;
 
-    @DatabaseField(canBeNull = false, columnName = "Vorname")
+    @DatabaseField(canBeNull = false, columnName = FIELD_PRENAME)
     private String Prename;
-    @DatabaseField(canBeNull = false, columnName = "Nachname")
+    @DatabaseField(canBeNull = false, columnName = FIELD_SURNAME)
     private String Surname;
 
-    @DatabaseField(columnName = "Vorname Partner")
+    @DatabaseField(columnName = FIELD_PRENAME_PARTNER)
     private String Partner_Prename;
-    @DatabaseField(columnName = "Nachname Partner")
+    @DatabaseField(columnName = FIELD_SURNAME_PARTNER)
     private String Partner_Surname;
 
-    @DatabaseField(canBeNull = false, columnName = "Geburtsdatum")
+    @DatabaseField(canBeNull = false, columnName = FIELD_BIRTHDATE)
     private Date BirthDate;
-    @DatabaseField(columnName = "GD Partner")
+    @DatabaseField(columnName = FIELD_BIRTHDATE_PARTNER)
     private Date Partner_BirthDate;
 
-    @DatabaseField(canBeNull = false, columnName = "Straße")
+    @DatabaseField(canBeNull = false, columnName = FIELD_STREET)
     private String Street_Address;
-    @DatabaseField(canBeNull = false, columnName = "Hausnummer")
+    @DatabaseField(canBeNull = false, columnName = FIELD_STREET_NUMBER)
     private String Street_Number;
-    @DatabaseField(canBeNull = false, columnName = "PLZ")
+    @DatabaseField(canBeNull = false, columnName = FIELD_ZIPCODE)
     private String Zipcode;
-    @DatabaseField(canBeNull = false, columnName = "Wohnort")
+    @DatabaseField(canBeNull = false, columnName = FIELD_CITY)
     private String City;
 
-    @DatabaseField(columnName = "Telefon")
+    @DatabaseField(columnName = FIELD_TELEPHONE)
     private String Telephone_Number;
-    @DatabaseField(columnName = "Fax")
+    @DatabaseField(columnName = FIELD_FAX)
     private String Fax_Number;
-    @DatabaseField(columnName = "Handy")
+    @DatabaseField(columnName = FIELD_CELLPHONE)
     private String Cellphone_Number;
 
-    @DatabaseField(columnName = "Email")
+    @DatabaseField(columnName = FIELD_EMAIL)
     private String Email;
 
-    @DatabaseField(columnName = "Vollmacht")
+    @DatabaseField(columnName = FIELD_CONTRACT)
     private boolean Contract;
 
-    @DatabaseField(columnName = "Bank Name")
+    @DatabaseField(columnName = FIELD_BANK_NAME)
     private String Bank_Name;
-    @DatabaseField(columnName = "IBAN")
+    @DatabaseField(columnName = FIELD_BANK_IBAN)
     private String Bank_IBAN;
-    @DatabaseField(columnName = "BIC")
+    @DatabaseField(columnName = FIELD_BANK_BIC)
     private String Bank_BIC;
 
-    @DatabaseField(columnName = "Job")
+    @DatabaseField(columnName = FIELD_JOB)
     private String Job;
-    @DatabaseField(columnName = "Job Partner")
+    @DatabaseField(columnName = FIELD_JOB_PARTNER)
     private String Partner_Job;
 
     public ModelInsuree() {

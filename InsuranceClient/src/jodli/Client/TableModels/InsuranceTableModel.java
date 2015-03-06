@@ -28,6 +28,7 @@ import src.jodli.Client.log.Logger;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -92,11 +93,23 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
     private Object getColumnValue(ModelInsurance row, int column) {
         Object ret = null;
         switch (this.columns[column]) {
-            case "ID":
+            case ModelInsurance.FIELD_ID:
                 ret = row.getID();
                 break;
-            case "Versicherungsnummer":
+            case ModelInsurance.FIELD_INSURANCENO:
                 ret = row.getInsuranceNo();
+                break;
+            case ModelInsurance.FIELD_START:
+                ret = dateFormatter.format(row.getStart());
+                break;
+            case ModelInsurance.FIELD_CONTRACT_DATE:
+                ret = dateFormatter.format(row.getContractDate());
+                break;
+            case ModelInsurance.FIELD_END:
+                ret = dateFormatter.format(row.getEnd());
+                break;
+            case ModelInsurance.FIELD_TYPE:
+                ret = row.getType();
                 break;
             default:
                 ret = "ERROR";
@@ -113,9 +126,20 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
      */
     private boolean setColumnValue(ModelInsurance row, int column, Object val) {
         switch (this.columns[column]) {
-            case "Versicherungsnummer":
+            case ModelInsurance.FIELD_INSURANCENO:
                 row.setInsuranceNo(val.toString());
                 break;
+            case ModelInsurance.FIELD_START:
+                row.setStart((Date) val);
+                break;
+            case ModelInsurance.FIELD_CONTRACT_DATE:
+                row.setContractDate((Date) val);
+                break;
+            case ModelInsurance.FIELD_END:
+                row.setEnd((Date) val);
+                break;
+            case ModelInsurance.FIELD_TYPE:
+                row.setType((String) val);
             default:
                 return false;
         }

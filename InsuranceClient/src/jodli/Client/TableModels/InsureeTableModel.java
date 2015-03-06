@@ -89,67 +89,67 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
     private Object getColumnValue(ModelInsuree row, int column) {
         Object ret = null;
         switch (this.columns[column]) {
-            case "ID":
+            case ModelInsuree.FIELD_ID:
                 ret = row.getID();
                 break;
-            case "Vorname":
+            case ModelInsuree.FIELD_PRENAME:
                 ret = row.getPrename();
                 break;
-            case "Nachname":
+            case ModelInsuree.FIELD_SURNAME:
                 ret = row.getSurname();
                 break;
-            case "Vorname Partner":
+            case ModelInsuree.FIELD_PRENAME_PARTNER:
                 ret = row.getPartner_Prename();
                 break;
-            case "Nachname Partner":
+            case ModelInsuree.FIELD_SURNAME_PARTNER:
                 ret = row.getPartner_Surname();
                 break;
-            case "Geburtsdatum":
+            case ModelInsuree.FIELD_BIRTHDATE:
                 ret = dateFormatter.format(row.getBirthDate());
                 break;
-            case "GD Partner":
+            case ModelInsuree.FIELD_BIRTHDATE_PARTNER:
                 ret = dateFormatter.format(row.getPartner_BirthDate());
                 break;
-            case "Straße":
+            case ModelInsuree.FIELD_STREET:
                 ret = row.getStreet_Address();
                 break;
-            case "Hausnummer":
+            case ModelInsuree.FIELD_STREET_NUMBER:
                 ret = row.getStreet_Number();
                 break;
-            case "PLZ":
+            case ModelInsuree.FIELD_ZIPCODE:
                 ret = row.getZipcode();
                 break;
-            case "Wohnort":
+            case ModelInsuree.FIELD_CITY:
                 ret = row.getCity();
                 break;
-            case "Telefon":
+            case ModelInsuree.FIELD_TELEPHONE:
                 ret = row.getTelephone_Number();
                 break;
-            case "Fax":
+            case ModelInsuree.FIELD_FAX:
                 ret = row.getFax_Number();
                 break;
-            case "Handy":
+            case ModelInsuree.FIELD_CELLPHONE:
                 ret = row.getCellphone_Number();
                 break;
-            case "Email":
+            case ModelInsuree.FIELD_EMAIL:
                 ret = row.getEmail();
                 break;
-            case "Bank Name":
+            case ModelInsuree.FIELD_BANK_NAME:
                 ret = row.getBank_Name();
                 break;
-            case "IBAN":
+            case ModelInsuree.FIELD_BANK_IBAN:
                 ret = row.getBank_IBAN();
                 break;
-            case "BIC":
+            case ModelInsuree.FIELD_BANK_BIC:
                 ret = row.getBank_BIC();
                 break;
-            case "Job":
+            case ModelInsuree.FIELD_JOB:
                 ret = row.getJob();
                 break;
-            case "Job Partner":
+            case ModelInsuree.FIELD_JOB_PARTNER:
                 ret = row.getPartner_Job();
                 break;
-            case "Vollmacht":
+            case ModelInsuree.FIELD_CONTRACT:
                 ret = row.isContract() ? "ja" : "nein";
                 break;
             default:
@@ -167,64 +167,64 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
      */
     private boolean setColumnValue(ModelInsuree row, int column, Object val) {
         switch (this.columns[column]) {
-            case "Vorname":
+            case ModelInsuree.FIELD_PRENAME:
                 row.setPrename((String) val);
                 break;
-            case "Nachname":
+            case ModelInsuree.FIELD_SURNAME:
                 row.setSurname((String) val);
                 break;
-            case "Vorname Partner":
+            case ModelInsuree.FIELD_PRENAME_PARTNER:
                 row.setPartner_Prename((String) val);
                 break;
-            case "Nachname Partner":
+            case ModelInsuree.FIELD_SURNAME_PARTNER:
                 row.setPartner_Surname((String) val);
                 break;
-            case "Geburtsdatum":
+            case ModelInsuree.FIELD_BIRTHDATE:
                 row.setBirthDate((Date) val);
                 break;
-            case "GD Partner":
+            case ModelInsuree.FIELD_BIRTHDATE_PARTNER:
                 row.setPartner_BirthDate((Date) val);
                 break;
-            case "Straße":
+            case ModelInsuree.FIELD_STREET:
                 row.setStreet_Address((String) val);
                 break;
-            case "Hausnummer":
+            case ModelInsuree.FIELD_STREET_NUMBER:
                 row.setStreet_Number((String) val);
                 break;
-            case "PLZ":
+            case ModelInsuree.FIELD_ZIPCODE:
                 row.setZipcode((String) val);
                 break;
-            case "Wohnort":
+            case ModelInsuree.FIELD_CITY:
                 row.setCity((String) val);
                 break;
-            case "Telefon":
+            case ModelInsuree.FIELD_TELEPHONE:
                 row.setTelephone_Number((String) val);
                 break;
-            case "Fax":
+            case ModelInsuree.FIELD_FAX:
                 row.setFax_Number((String) val);
                 break;
-            case "Handy":
+            case ModelInsuree.FIELD_CELLPHONE:
                 row.setCellphone_Number((String) val);
                 break;
-            case "Email":
+            case ModelInsuree.FIELD_EMAIL:
                 row.setEmail((String) val);
                 break;
-            case "Bank Name":
+            case ModelInsuree.FIELD_BANK_NAME:
                 row.setBank_Name((String) val);
                 break;
-            case "IBAN":
+            case ModelInsuree.FIELD_BANK_IBAN:
                 row.setBank_IBAN((String) val);
                 break;
-            case "BIC":
+            case ModelInsuree.FIELD_BANK_BIC:
                 row.setBank_BIC((String) val);
                 break;
-            case "Job":
+            case ModelInsuree.FIELD_JOB:
                 row.setJob((String) val);
                 break;
-            case "Job Partner":
+            case ModelInsuree.FIELD_JOB_PARTNER:
                 row.setPartner_Job((String) val);
                 break;
-            case "Vollmacht":
+            case ModelInsuree.FIELD_CONTRACT:
                 row.setContract((boolean) val);
                 break;
             default:
