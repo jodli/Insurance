@@ -24,6 +24,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsurance;
@@ -72,7 +73,18 @@ public class InsuranceUtils implements Observer {
     }
 
     public CloseableIterator<ModelInsurance> getResultSet(int insureeID) {
-        return m_InsuranceDao.iterator();
+        CloseableIterator<ModelInsurance> it = null;
+        try {
+            if (insureeID < 0) {
+                it = m_InsuranceDao.iterator();
+            } else {
+                PreparedQuery p = m_InsuranceDao.queryBuilder().where().eq(ModelInsurance.FIELD_ID, insureeID).prepare();
+                it = m_InsuranceDao.iterator(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return it;
     }
 
     public boolean setValue(ModelInsurance m) {

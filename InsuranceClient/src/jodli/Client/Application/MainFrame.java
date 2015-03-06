@@ -124,8 +124,6 @@ public final class MainFrame implements Observer {
         m_MainTabbedPane.addTab(m_EmployeeTableView.getTabTitle(), m_EmployeeTableView.getContent());
         m_MainTabbedPane.addTab(m_ConsoleView.getTabTitle(), m_ConsoleView.getContent());
 
-        disableInsuranceTab();
-
         m_Frame.getContentPane().add(m_MainTabbedPane);
         m_Frame.setJMenuBar(getMenuBar());
 
@@ -160,12 +158,8 @@ public final class MainFrame implements Observer {
 
     private void updateTitle() {
         Logger.logDebug("Updating title.");
-        StringBuilder title = new StringBuilder("Insurance Client v");
-        title.append(AppUtils.getVerboseVersion(m_BuildNumber));
-        title.append(" - ");
-        title.append(new File(SettingsUtils.getValue(ESetting.LASTDATABASE)).getName());
 
-        m_Frame.setTitle(title.toString());
+        m_Frame.setTitle("Insurance Client v" + AppUtils.getVerboseVersion(m_BuildNumber) + " - " + new File(SettingsUtils.getValue(ESetting.LASTDATABASE)).getName());
     }
 
     private JMenuBar getMenuBar() {
@@ -187,14 +181,6 @@ public final class MainFrame implements Observer {
         return menubar;
     }
 
-    private void enableInsuranceTab() {
-        m_MainTabbedPane.setEnabledAt(1, true);
-    }
-
-    private void disableInsuranceTab() {
-        m_MainTabbedPane.setEnabledAt(1, false);
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         Logger.logDebug("Receiving updates.");
@@ -213,7 +199,6 @@ public final class MainFrame implements Observer {
         } else if (o == m_InsureeTableView) {
             Logger.logDebug("Notified by Insuree Table View.");
             ((InsuranceTableView) m_InsuranceTableView).update(((Integer) arg));
-            enableInsuranceTab();
         }
     }
 }

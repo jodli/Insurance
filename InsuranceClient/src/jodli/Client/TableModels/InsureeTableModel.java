@@ -24,7 +24,9 @@ import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -42,32 +44,12 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
      */
     public InsureeTableModel() {
         dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+        update();
+    }
 
-        new SwingWorker<Void, ModelInsuree>() {
-
-            @Override
-            protected Void doInBackground() throws Exception {
-                CloseableIterator<ModelInsuree> res = InsureeUtils.getInstance().getResultSet();
-
-                columns = res.getRawResults().getColumnNames();
-                InsureeTableModel.this.fireTableStructureChanged();
-                Logger.logDebug("Insuree Columns: " + InsureeTableModel.this.getColumnCount());
-
-                while (res.hasNext()) {
-                    publish(res.next());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<ModelInsuree> chunks
-            ) {
-                rows.addAll(chunks);
-                InsureeTableModel.this.fireTableDataChanged();
-                Logger.logDebug("Processing " + chunks.size() + " chunks.");
-            }
-        }.
-                execute();
+    public void update() {
+        Logger.logDebug("Updating Insuree Table.");
+        new InsureeTableTask().execute();
     }
 
     public int getId(int row) {
@@ -249,5 +231,36 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
                 return false;
         }
         return true;
+    }
+
+    private final class InsureeTableTask extends SwingWorker<Void, ModelInsuree> {
+
+        public InsureeTableTask() {
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            CloseableIterator<ModelInsuree> res = InsureeUtils.getInstance().getResultSet();
+
+            columns = res.getRawResults().getColumnNames();
+            List<String> columList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
+            columList.remove(0);
+            columns = columList.toArray(new String[0]);
+            InsureeTableModel.this.fireTableStructureChanged();
+            Logger.logDebug("Insuree Columns: " + InsureeTableModel.this.getColumnCount());
+
+            while (res.hasNext()) {
+                publish(res.next());
+            }
+            return null;
+        }
+
+        @Override
+        protected void process(List<ModelInsuree> chunks
+        ) {
+            rows.addAll(chunks);
+            InsureeTableModel.this.fireTableDataChanged();
+            Logger.logDebug("Processing " + chunks.size() + " chunks.");
+        }
     }
 }

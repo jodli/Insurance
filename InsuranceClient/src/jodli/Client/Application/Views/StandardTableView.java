@@ -57,9 +57,6 @@ public abstract class StandardTableView extends Observable implements IView {
 
         m_FilterHeader = new TableFilterHeader(m_Table, AutoChoices.ENABLED);
         FilterSettings.ignoreCase = true;
-
-        // Remove ID column
-        //m_Table.removeColumn(m_Table.getColumn(0));
     }
 
     private void $$$setupUI$$$() {

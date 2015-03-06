@@ -27,6 +27,8 @@ import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,46 +37,22 @@ import java.util.List;
 public final class InsuranceTableModel extends TableModel<ModelInsurance> {
 
     private SimpleDateFormat dateFormatter;
-    private SwingWorker<Void, ModelInsurance> worker;
     private int m_InsureeID;
 
     /**
-     * Creates a new InsureeTableModel object. Starts the SwingWorker to process
-     * the rows and columns in the database.
+     * Creates a new InsuranceTableModel object.
      */
     public InsuranceTableModel() {
         dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
-        m_InsureeID = -1;
-        worker = new SwingWorker<Void, ModelInsurance>() {
-
-            @Override
-            protected Void doInBackground() throws Exception {
-                CloseableIterator<ModelInsurance> res = InsuranceUtils.getInstance().getResultSet(m_InsureeID);
-
-                columns = res.getRawResults().getColumnNames();
-                InsuranceTableModel.this.fireTableStructureChanged();
-                Logger.logDebug("Insurance Columns: " + InsuranceTableModel.this.getColumnCount());
-
-                while (res.hasNext()) {
-                    publish(res.next());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<ModelInsurance> chunks
-            ) {
-                rows.addAll(chunks);
-                InsuranceTableModel.this.fireTableDataChanged();
-                Logger.logDebug("Processing " + chunks.size() + " chunks.");
-            }
-        };
+        update(-1);
     }
 
     public void update(int insureeID) {
         Logger.logDebug("Updating Insurance Table.");
+        if (m_InsureeID != insureeID) {
+            new InsuranceTableTask(insureeID).execute();
+        }
         m_InsureeID = insureeID;
-        worker.execute();
     }
 
     public int getId(int row) {
@@ -142,5 +120,41 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
                 return false;
         }
         return true;
+    }
+
+    private final class InsuranceTableTask extends SwingWorker<Void, ModelInsurance> {
+
+        private int m_InsureeID;
+
+        public InsuranceTableTask(int insureeID) {
+            m_InsureeID = insureeID;
+            rows.clear();
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            CloseableIterator<ModelInsurance> res = InsuranceUtils.getInstance().getResultSet(m_InsureeID);
+
+            List<String> columList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
+            columList.remove(0);
+            columList.remove(0);
+            columns = columList.toArray(new String[0]);
+            InsuranceTableModel.this.fireTableStructureChanged();
+
+            Logger.logDebug("Insurance Columns: " + InsuranceTableModel.this.getColumnCount());
+
+            while (res.hasNext()) {
+                publish(res.next());
+            }
+            return null;
+        }
+
+        @Override
+        protected void process(List<ModelInsurance> chunks
+        ) {
+            rows.addAll(chunks);
+            InsuranceTableModel.this.fireTableDataChanged();
+            Logger.logDebug("Processing " + chunks.size() + " chunks.");
+        }
     }
 }

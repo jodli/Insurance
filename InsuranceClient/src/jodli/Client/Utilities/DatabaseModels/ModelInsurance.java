@@ -28,11 +28,18 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "Insurance")
 public class ModelInsurance {
 
-    @DatabaseField(generatedId = true)
+    public static final String FIELD_ID = "ID";
+    public static final String FIELD_INSURANCENO = "Versicherungsnummer";
+
+    @DatabaseField(generatedId = true, columnName = FIELD_ID)
     private int ID;
 
-    @DatabaseField(canBeNull = false, columnName = "Versicherungsnummer")
+    @DatabaseField(canBeNull = false, foreign = true)
+    private ModelInsuree Insuree;
+
+    @DatabaseField(canBeNull = false, columnName = FIELD_INSURANCENO)
     private String InsuranceNo;
+
 
     public ModelInsurance() {
     }
@@ -41,11 +48,17 @@ public class ModelInsurance {
         this();
 
         this.ID = m.ID;
+        this.Insuree = m.Insuree;
         this.InsuranceNo = m.InsuranceNo;
     }
 
-    public ModelInsurance(String insuranceNo) {
+    public ModelInsurance(String insuranceNo, ModelInsuree insureeID) {
+        this.Insuree = insureeID;
         this.InsuranceNo = insuranceNo;
+    }
+
+    public ModelInsuree getInsuree() {
+        return Insuree;
     }
 
     public int getID() {

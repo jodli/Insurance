@@ -24,8 +24,6 @@ import src.jodli.Client.TableModels.InsureeTableModel;
 import src.jodli.Client.TableModels.TableModel;
 import src.jodli.Client.log.Logger;
 
-import javax.swing.*;
-
 /**
  * Created by job87 on 3/4/2015.
  */
@@ -39,16 +37,19 @@ public class InsureeTableView extends StandardTableView {
         m_ListSelectionModel = m_Table.getSelectionModel();
 
         m_ListSelectionModel.addListSelectionListener(e -> {
-            ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
+            int selected = m_Table.getSelectedRow();
 
-            if (!(listSelectionModel.getValueIsAdjusting() || listSelectionModel.isSelectionEmpty())) {
-                int selectedId = ((InsureeTableModel) m_Table.getModel()).getId(m_Table.convertRowIndexToModel(m_Table.getSelectedRow()));
 
-                Logger.logDebug("Insuree table selection changed. Selected ID " + selectedId);
-                // Notify Insurance view.
-                setChanged();
-                notifyObservers(selectedId);
+            if (selected < 0) {
+                Logger.logDebug("Insuree table selection changed. Deselected row.");
+            } else {
+                selected = ((InsureeTableModel) m_Table.getModel()).getId(m_Table.convertRowIndexToModel(selected));
+                Logger.logDebug("Insuree table selection changed. Selected ID " + selected);
             }
+
+            // Notify Insurance view.
+            setChanged();
+            notifyObservers(selected);
         });
 
         m_Table.setSelectionModel(m_ListSelectionModel);
