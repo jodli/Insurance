@@ -24,15 +24,12 @@ package src.jodli.Client.Utilities;
  * Created by job87 on 3/6/2015.
  */
 public enum EInsurance {
-    PHP("Privathaftpflicht");
+    PRIVATHAFTPFLICHT,
+    HAUSRAT;
 
-    private String m_Description;
-
-    private EInsurance(String s) {
-        m_Description = s;
-    }
-
-    public String getDescription() {
-        return m_Description;
+    @Override
+    public String toString() {
+        String s = super.toString();
+        return s.substring(0, 1) + s.substring(1).toLowerCase();
     }
 }

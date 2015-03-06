@@ -88,7 +88,7 @@ public class ModelInsurance {
     }
 
     public void setType(String type) {
-        Type = EInsurance.valueOf(type);
+        Type = EInsurance.valueOf(type.toUpperCase());
     }
 
     public Date getEnd() {
