@@ -17,6 +17,7 @@
  */
 package src.jodli.Client.Application;
 
+import src.jodli.Client.Actions.EditInsureeAction;
 import src.jodli.Client.Actions.ExitAction;
 import src.jodli.Client.Actions.NewOpenAction;
 import src.jodli.Client.Actions.SettingsAction;
@@ -49,6 +50,7 @@ public final class MainFrame implements Observer {
     private Action m_OpenAction;
     private Action m_SettingsAction;
     private Action m_ExitAction;
+    private Action m_EditInsureeAction;
 
     private ITableView m_InsureeTableView;
     private ITableView m_InsuranceTableView;
@@ -56,7 +58,7 @@ public final class MainFrame implements Observer {
 
     private ConsoleView m_ConsoleView;
     private IEditorView m_GeneralSettingsView;
-    private IView m_EditInsureeView;
+    private IEditorView m_EditInsureeView;
 
     public MainFrame(String buildNumber) {
         this.m_BuildNumber = buildNumber;
@@ -117,10 +119,12 @@ public final class MainFrame implements Observer {
         Logger.logDebug("Initializing Actions.");
         java.util.List<IEditorView> settingsViews = new ArrayList<>();
         settingsViews.add(m_GeneralSettingsView);
+        m_SettingsAction = new SettingsAction(m_Frame, settingsViews);
 
         m_OpenAction = new NewOpenAction(m_Frame);
-        m_SettingsAction = new SettingsAction(m_Frame, settingsViews);
         m_ExitAction = new ExitAction();
+
+        m_EditInsureeAction = new EditInsureeAction(m_Frame, m_EditInsureeView);
     }
 
     private void initMainGUI() {
@@ -181,6 +185,7 @@ public final class MainFrame implements Observer {
         menubar.add(fileMenu);
 
         JMenu editMenu = new JMenu("Bearbeiten");
+        editMenu.add(m_EditInsureeAction);
         menubar.add(editMenu);
 
         JMenu infoMenu = new JMenu("Info");

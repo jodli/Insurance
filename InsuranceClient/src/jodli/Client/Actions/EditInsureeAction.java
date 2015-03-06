@@ -20,8 +20,7 @@
 
 package src.jodli.Client.Actions;
 
-import src.jodli.Client.Application.Views.InsureeEditorView;
-import src.jodli.Client.Application.Views.IView;
+import src.jodli.Client.Application.Views.IEditorView;
 import src.jodli.Client.Application.Views.StandardDialog;
 import src.jodli.Client.log.Logger;
 
@@ -35,11 +34,11 @@ public class EditInsureeAction extends AbstractAction {
 
     public static final String TITLE = "Kunde bearbeiten";
 
-    private IView m_EditInsureeView;
+    private IEditorView m_EditInsureeView;
     private JFrame m_Frame;
     private InsureeEditor m_InsureeEditor;
 
-    public EditInsureeAction(JFrame frame, InsureeEditorView editInsureeView) {
+    public EditInsureeAction(JFrame frame, IEditorView editInsureeView) {
         super(TITLE);
         m_Frame = frame;
         m_EditInsureeView = editInsureeView;
@@ -52,6 +51,7 @@ public class EditInsureeAction extends AbstractAction {
         if (m_InsureeEditor == null) {
             m_InsureeEditor = new InsureeEditor(TITLE, m_Frame);
         }
+        m_EditInsureeView.loadSettings();
         m_InsureeEditor.showDialog();
     }
 
@@ -63,7 +63,7 @@ public class EditInsureeAction extends AbstractAction {
 
     private boolean saveInsuree() {
         Logger.logDebug("Saving Insuree Data.");
-        ((InsureeEditorView) m_EditInsureeView).saveSettings();
+        m_EditInsureeView.saveSettings();
         return false;
     }
 
