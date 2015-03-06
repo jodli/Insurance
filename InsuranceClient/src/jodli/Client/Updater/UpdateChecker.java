@@ -49,7 +49,11 @@ public class UpdateChecker implements Observer {
     }
 
     public static void updateApp() {
-        if (Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE))) {
+        updateApp(false);
+    }
+
+    public static void updateApp(boolean overrideUpdateFlag) {
+        if (Boolean.parseBoolean(SettingsUtils.getValue(ESetting.CHECKUPDATE)) || overrideUpdateFlag) {
             UpdateChecker uc = new UpdateChecker(SettingsUtils.getValue(ESetting.BUILDNUMBER));
             if (uc.shouldUpdate()) {
                 UpdateInfo ui = new UpdateInfo(uc.changeLog, uc.downloadAddress, uc.buildString);

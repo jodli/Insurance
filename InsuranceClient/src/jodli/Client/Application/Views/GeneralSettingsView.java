@@ -48,7 +48,7 @@ public class GeneralSettingsView extends Observable implements ISettingsView {
         chk_CheckUpdate = new JCheckBox();
         cb_LogType = new JComboBox(ELogType.values());
         btn_CheckUpdate = new JButton();
-        btn_CheckUpdate.addActionListener(e -> UpdateChecker.updateApp());
+        btn_CheckUpdate.addActionListener(e -> UpdateChecker.updateApp(true));
     }
 
     private void $$$setupUI$$$() {
