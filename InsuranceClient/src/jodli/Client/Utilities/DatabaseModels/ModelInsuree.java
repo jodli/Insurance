@@ -65,18 +65,18 @@ public class ModelInsuree {
     @DatabaseField(columnName = FIELD_SURNAME_PARTNER)
     private String Partner_Surname;
 
-    @DatabaseField(canBeNull = false, columnName = FIELD_BIRTHDATE)
+    @DatabaseField(columnName = FIELD_BIRTHDATE)
     private Date BirthDate;
     @DatabaseField(columnName = FIELD_BIRTHDATE_PARTNER)
     private Date Partner_BirthDate;
 
-    @DatabaseField(canBeNull = false, columnName = FIELD_STREET)
+    @DatabaseField(columnName = FIELD_STREET)
     private String Street_Address;
-    @DatabaseField(canBeNull = false, columnName = FIELD_STREET_NUMBER)
+    @DatabaseField(columnName = FIELD_STREET_NUMBER)
     private String Street_Number;
-    @DatabaseField(canBeNull = false, columnName = FIELD_ZIPCODE)
+    @DatabaseField(columnName = FIELD_ZIPCODE)
     private String Zipcode;
-    @DatabaseField(canBeNull = false, columnName = FIELD_CITY)
+    @DatabaseField(columnName = FIELD_CITY)
     private String City;
 
     @DatabaseField(columnName = FIELD_TELEPHONE)
@@ -402,7 +402,7 @@ public class ModelInsuree {
      *
      * @return the value of Contract
      */
-    public boolean isContract() {
+    public boolean hasContract() {
         return Contract;
     }
 

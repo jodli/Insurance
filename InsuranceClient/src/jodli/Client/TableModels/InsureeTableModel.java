@@ -150,7 +150,7 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
                 ret = row.getPartner_Job();
                 break;
             case ModelInsuree.FIELD_CONTRACT:
-                ret = row.isContract() ? "ja" : "nein";
+                ret = row.hasContract() ? "ja" : "nein";
                 break;
             default:
                 ret = "ERROR";
@@ -236,6 +236,7 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
     private final class InsureeTableTask extends SwingWorker<Void, ModelInsuree> {
 
         public InsureeTableTask() {
+            rows.clear();
         }
 
         @Override
