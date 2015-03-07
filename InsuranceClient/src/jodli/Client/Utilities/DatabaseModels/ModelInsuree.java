@@ -21,6 +21,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Model for the Insuree table.
@@ -105,6 +106,27 @@ public class ModelInsuree {
     private String Partner_Job;
 
     public ModelInsuree() {
+        this.ID = 0;
+        this.Prename = "";
+        this.Surname = "";
+        this.Partner_Prename = "";
+        this.Partner_Surname = "";
+        this.BirthDate = null;
+        this.Partner_BirthDate = null;
+        this.Street_Address = "";
+        this.Street_Number = "";
+        this.Zipcode = "";
+        this.City = "";
+        this.Telephone_Number = "";
+        this.Fax_Number = "";
+        this.Cellphone_Number = "";
+        this.Email = "";
+        this.Contract = false;
+        this.Bank_Name = "";
+        this.Bank_IBAN = "";
+        this.Bank_BIC = "";
+        this.Job = "";
+        this.Partner_Job = "";
     }
 
     /**
@@ -195,8 +217,12 @@ public class ModelInsuree {
     /**
      * @param prename the prename to set
      */
-    public void setPrename(String prename) {
-        this.Prename = prename;
+    public boolean setPrename(String prename) {
+        if (!Objects.equals(this.Prename, prename)) {
+            this.Prename = prename;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -209,8 +235,12 @@ public class ModelInsuree {
     /**
      * @param surname the surname to set
      */
-    public void setSurname(String surname) {
-        this.Surname = surname;
+    public boolean setSurname(String surname) {
+        if (!Objects.equals(this.Surname, surname)) {
+            this.Surname = surname;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -223,8 +253,12 @@ public class ModelInsuree {
     /**
      * @param Partner_Prename new value of Partner_Prename
      */
-    public void setPartner_Prename(String Partner_Prename) {
-        this.Partner_Prename = Partner_Prename;
+    public boolean setPartner_Prename(String Partner_Prename) {
+        if (!Objects.equals(this.Partner_Prename, Partner_Prename)) {
+            this.Partner_Prename = Partner_Prename;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -241,8 +275,12 @@ public class ModelInsuree {
      *
      * @param Partner_Surname new value of Partner_Surname
      */
-    public void setPartner_Surname(String Partner_Surname) {
-        this.Partner_Surname = Partner_Surname;
+    public boolean setPartner_Surname(String Partner_Surname) {
+        if (!Objects.equals(this.Partner_Surname, Partner_Surname)) {
+            this.Partner_Surname = Partner_Surname;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -259,8 +297,12 @@ public class ModelInsuree {
      *
      * @param BirthDate new value of BirthDate
      */
-    public void setBirthDate(Date BirthDate) {
-        this.BirthDate = BirthDate;
+    public boolean setBirthDate(Date BirthDate) {
+        if (this.BirthDate == null || this.BirthDate.compareTo(BirthDate) != 0) {
+            this.BirthDate = BirthDate;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -277,8 +319,12 @@ public class ModelInsuree {
      *
      * @param Partner_BirthDate new value of Partner_BirthDate
      */
-    public void setPartner_BirthDate(Date Partner_BirthDate) {
-        this.Partner_BirthDate = Partner_BirthDate;
+    public boolean setPartner_BirthDate(Date Partner_BirthDate) {
+        if (this.Partner_BirthDate == null || this.Partner_BirthDate.compareTo(Partner_BirthDate) != 0) {
+            this.Partner_BirthDate = Partner_BirthDate;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -291,8 +337,12 @@ public class ModelInsuree {
     /**
      * @param street_Address the street_Address to set
      */
-    public void setStreet_Address(String street_Address) {
-        this.Street_Address = street_Address;
+    public boolean setStreet_Address(String street_Address) {
+        if (!Objects.equals(this.Street_Address, street_Address)) {
+            this.Street_Address = street_Address;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -305,8 +355,12 @@ public class ModelInsuree {
     /**
      * @param street_Number the street_Number to set
      */
-    public void setStreet_Number(String street_Number) {
-        this.Street_Number = street_Number;
+    public boolean setStreet_Number(String street_Number) {
+        if (!Objects.equals(this.Street_Number, street_Number)) {
+            this.Street_Number = street_Number;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -319,8 +373,12 @@ public class ModelInsuree {
     /**
      * @param zipcode the zipcode to set
      */
-    public void setZipcode(String zipcode) {
-        this.Zipcode = zipcode;
+    public boolean setZipcode(String zipcode) {
+        if (!Objects.equals(this.Zipcode, zipcode)) {
+            this.Zipcode = zipcode;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -333,8 +391,12 @@ public class ModelInsuree {
     /**
      * @param city the city to set
      */
-    public void setCity(String city) {
-        this.City = city;
+    public boolean setCity(String city) {
+        if (!Objects.equals(this.City, city)) {
+            this.City = city;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -347,8 +409,12 @@ public class ModelInsuree {
     /**
      * @param telephone_Number the telephone_Number to set
      */
-    public void setTelephone_Number(String telephone_Number) {
-        this.Telephone_Number = telephone_Number;
+    public boolean setTelephone_Number(String telephone_Number) {
+        if (!Objects.equals(this.Telephone_Number, telephone_Number)) {
+            this.Telephone_Number = telephone_Number;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -361,8 +427,12 @@ public class ModelInsuree {
     /**
      * @param fax_Number the fax_Number to set
      */
-    public void setFax_Number(String fax_Number) {
-        this.Fax_Number = fax_Number;
+    public boolean setFax_Number(String fax_Number) {
+        if (!Objects.equals(this.Fax_Number, fax_Number)) {
+            this.Fax_Number = fax_Number;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -375,8 +445,12 @@ public class ModelInsuree {
     /**
      * @param cellphone_Number the cellphone_Number to set
      */
-    public void setCellphone_Number(String cellphone_Number) {
-        this.Cellphone_Number = cellphone_Number;
+    public boolean setCellphone_Number(String cellphone_Number) {
+        if (!Objects.equals(this.Cellphone_Number, cellphone_Number)) {
+            this.Cellphone_Number = cellphone_Number;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -393,8 +467,12 @@ public class ModelInsuree {
      *
      * @param Email new value of Email
      */
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public boolean setEmail(String Email) {
+        if (!Objects.equals(this.Email, Email)) {
+            this.Email = Email;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -411,8 +489,12 @@ public class ModelInsuree {
      *
      * @param Contract new value of Contract
      */
-    public void setContract(boolean Contract) {
-        this.Contract = Contract;
+    public boolean setContract(boolean Contract) {
+        if (this.Contract != Contract) {
+            this.Contract = Contract;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -429,8 +511,12 @@ public class ModelInsuree {
      *
      * @param Bank_Name new value of Bank_Name
      */
-    public void setBank_Name(String Bank_Name) {
-        this.Bank_Name = Bank_Name;
+    public boolean setBank_Name(String Bank_Name) {
+        if (!Objects.equals(this.Bank_Name, Bank_Name)) {
+            this.Bank_Name = Bank_Name;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -438,6 +524,7 @@ public class ModelInsuree {
      *
      * @return the value of Bank_IBAN
      */
+
     public String getBank_IBAN() {
         return Bank_IBAN;
     }
@@ -447,8 +534,12 @@ public class ModelInsuree {
      *
      * @param Bank_IBAN new value of Bank_IBAN
      */
-    public void setBank_IBAN(String Bank_IBAN) {
-        this.Bank_IBAN = Bank_IBAN;
+    public boolean setBank_IBAN(String Bank_IBAN) {
+        if (!Objects.equals(this.Bank_IBAN, Bank_IBAN)) {
+            this.Bank_IBAN = Bank_IBAN;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -465,8 +556,12 @@ public class ModelInsuree {
      *
      * @param Bank_BIC new value of Bank_BIC
      */
-    public void setBank_BIC(String Bank_BIC) {
-        this.Bank_BIC = Bank_BIC;
+    public boolean setBank_BIC(String Bank_BIC) {
+        if (!Objects.equals(this.Bank_BIC, Bank_BIC)) {
+            this.Bank_BIC = Bank_BIC;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -483,8 +578,12 @@ public class ModelInsuree {
      *
      * @param Job new value of Job
      */
-    public void setJob(String Job) {
-        this.Job = Job;
+    public boolean setJob(String Job) {
+        if (!Objects.equals(this.Job, Job)) {
+            this.Job = Job;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -501,8 +600,12 @@ public class ModelInsuree {
      *
      * @param Partner_Job new value of Partner_Job
      */
-    public void setPartner_Job(String Partner_Job) {
-        this.Partner_Job = Partner_Job;
+    public boolean setPartner_Job(String Partner_Job) {
+        if (!Objects.equals(this.Partner_Job, Partner_Job)) {
+            this.Partner_Job = Partner_Job;
+            return true;
+        }
+        return false;
     }
 
     /**

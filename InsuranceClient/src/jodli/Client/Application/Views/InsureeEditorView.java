@@ -76,41 +76,40 @@ public class InsureeEditorView extends Observable implements IEditorView {
     }
 
     public boolean saveSettings() {
-        m_Insuree.setPrename(prenameTextField.getText());
-        m_Insuree.setSurname(surnameTextField.getText());
-        m_Insuree.setBirthDate(birthdateDatePicker.getDate());
-        m_Insuree.setJob(jobTextField.getText());
+        boolean changed = false;
+        changed |= m_Insuree.setPrename(prenameTextField.getText());
+        changed |= m_Insuree.setSurname(surnameTextField.getText());
+        changed |= m_Insuree.setBirthDate(birthdateDatePicker.getDate());
+        changed |= m_Insuree.setJob(jobTextField.getText());
 
-        m_Insuree.setPartner_Prename(prenamePartnerTextField.getText());
-        m_Insuree.setPartner_Surname(surnamePartnerTextField.getText());
-        m_Insuree.setPartner_BirthDate(birthdatePartnerDatePicker.getDate());
-        m_Insuree.setPartner_Job(jobPartnerTextField.getText());
+        changed |= m_Insuree.setPartner_Prename(prenamePartnerTextField.getText());
+        changed |= m_Insuree.setPartner_Surname(surnamePartnerTextField.getText());
+        changed |= m_Insuree.setPartner_BirthDate(birthdatePartnerDatePicker.getDate());
+        changed |= m_Insuree.setPartner_Job(jobPartnerTextField.getText());
 
-        m_Insuree.setTelephone_Number(telephoneTextField.getText());
-        m_Insuree.setFax_Number(faxTextField.getText());
-        m_Insuree.setCellphone_Number(cellphoneTextField.getText());
-        m_Insuree.setEmail(emailTextField.getText());
+        changed |= m_Insuree.setTelephone_Number(telephoneTextField.getText());
+        changed |= m_Insuree.setFax_Number(faxTextField.getText());
+        changed |= m_Insuree.setCellphone_Number(cellphoneTextField.getText());
+        changed |= m_Insuree.setEmail(emailTextField.getText());
 
-        m_Insuree.setBank_Name(bankTextField.getText());
-        m_Insuree.setBank_IBAN(ibanTextField.getText());
-        m_Insuree.setBank_BIC(bicTextField.getText());
+        changed |= m_Insuree.setBank_Name(bankTextField.getText());
+        changed |= m_Insuree.setBank_IBAN(ibanTextField.getText());
+        changed |= m_Insuree.setBank_BIC(bicTextField.getText());
 
-        m_Insuree.setContract(contractCheckBox.isSelected());
+        changed |= m_Insuree.setContract(contractCheckBox.isSelected());
 
-        if (InsureeUtils.getInstance().setValue(m_Insuree)) {
-            setChanged();
-            notifyObservers();
-            return true;
+        if (changed) {
+            if (changed = InsureeUtils.getInstance().setValue(m_Insuree)) {
+                setChanged();
+                notifyObservers();
+            }
         }
-        return false;
+        return changed;
     }
 
     @Override
     public void loadSettings() {
-        if (m_InsureeID < 0) {
-            Logger.logDebug("Creating new Insuree.");
-            clearFields();
-        } else {
+        if (m_InsureeID > 0) {
             Logger.logDebug("Getting Insuree data for Insuree ID " + m_InsureeID);
 
             m_Insuree = InsureeUtils.getInstance().getValue(m_InsureeID);
@@ -140,10 +139,16 @@ public class InsureeEditorView extends Observable implements IEditorView {
             bicTextField.setText(m_Insuree.getBank_BIC());
 
             contractCheckBox.setSelected(m_Insuree.hasContract());
+        } else {
+            Logger.logDebug("Creating new Insuree.");
+            clearFields();
         }
     }
 
     private void clearFields() {
+        m_Insuree = new ModelInsuree();
+        m_InsureeID = 0;
+
         prenameTextField.setText("");
         surnameTextField.setText("");
         birthdateDatePicker.setDate(new Date());
