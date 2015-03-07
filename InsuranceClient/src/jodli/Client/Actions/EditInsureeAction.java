@@ -56,23 +56,19 @@ public class EditInsureeAction extends AbstractAction {
     }
 
     private JComponent getEditorContent() {
-        JPanel content = new JPanel();
-        content.add(m_EditInsureeView.getContent());
-        return content;
+        return m_EditInsureeView.getContent();
     }
 
     private boolean saveInsuree() {
         Logger.logDebug("Saving Insuree Data.");
-        m_EditInsureeView.saveSettings();
-        return false;
+        return m_EditInsureeView.saveSettings();
     }
 
     private final class InsureeEditor extends StandardDialog {
 
         InsureeEditor(String title, JFrame parent) {
-            super(title, parent, CloseAction.HIDE);
-            m_Dialog.setSize(800, 600);
-            m_Dialog.setResizable(true);
+            super(title, parent, CloseAction.HIDE, false);
+            m_Dialog.setSize(650, 480);
         }
 
         @Override

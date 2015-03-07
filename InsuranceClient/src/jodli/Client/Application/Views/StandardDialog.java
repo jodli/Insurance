@@ -21,7 +21,6 @@
 package src.jodli.Client.Application.Views;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
@@ -31,10 +30,10 @@ public abstract class StandardDialog {
     private final String m_Title;
     private final JFrame m_Parent;
     private final int m_CloseAction;
-    protected JPanel settingsContent;
+    protected JPanel content;
     protected JDialog m_Dialog;
-    private JPanel content;
     private JPanel buttonContent;
+    private JPanel dialogContent;
     private JButton buttonOK;
     private JButton buttonCancel;
 
@@ -85,7 +84,7 @@ public abstract class StandardDialog {
             cancelAction();
         });
 
-        settingsContent.add(getContent());
+        dialogContent.add(getContent());
         buttonContent.add(getButtonBar());
         m_Dialog.getContentPane().add(content);
     }
@@ -116,13 +115,11 @@ public abstract class StandardDialog {
     }
 
     private void createUIComponents() {
-        content = new FormDebugPanel();
-        settingsContent = new JPanel();
+        dialogContent = new JPanel();
+        buttonContent = new JPanel();
 
         buttonOK = new JButton("Speichern");
         buttonCancel = new JButton("Abbrechen");
-
-        buttonContent = new JPanel();
     }
 
     protected enum CloseAction {

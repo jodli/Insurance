@@ -32,6 +32,21 @@ import java.util.Observable;
  */
 public class InsureeEditorView extends Observable implements IEditorView {
     private JPanel content;
+    private JTextField telephoneTextField;
+    private JTextField streetTextField;
+    private JTextField numberTextField;
+    private JTextField zipcodeTextField;
+    private JTextField cityTextField;
+    private JTextField faxTextField;
+    private JTextField cellphoneTextField;
+    private JTextField emailTextField;
+    private JTextField bankTextField;
+    private JTextField ibanTextField;
+    private JTextField bicTextField;
+    private JCheckBox contractCheckBox;
+    private JTextField surnameTextField;
+    private JTextField prenameTextField;
+    private JTextField jobTextField;
     private int m_InsureeID;
 
     private void createUIComponents() {

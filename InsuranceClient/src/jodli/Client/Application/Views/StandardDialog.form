@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="src.jodli.Client.Application.Views.StandardDialog">
-  <grid id="cbd77" binding="content" custom-create="true" layout-manager="FormLayout">
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):noGrow"/>
+  <grid id="cbd77" binding="content" layout-manager="FormLayout">
+    <rowspec value="fill:p:grow"/>
+    <rowspec value="center:p:noGrow"/>
     <colspec value="fill:d:grow"/>
     <constraints>
-      <xy x="48" y="54" width="436" height="297"/>
+      <xy x="48" y="54" width="436" height="414"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="e3588" binding="settingsContent" custom-create="true" layout-manager="FormLayout">
+      <grid id="e3588" binding="dialogContent" custom-create="true" layout-manager="FormLayout">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
@@ -24,7 +23,7 @@
         <rowspec value="center:d:grow"/>
         <colspec value="fill:d:grow"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false"/>
         </constraints>
         <properties/>
