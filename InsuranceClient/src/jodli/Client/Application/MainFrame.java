@@ -211,8 +211,8 @@ public final class MainFrame implements Observer {
             Logger.logDebug("Notified by Insuree Table View.");
             // update insurance table with insuree id
             ((InsuranceTableView) m_InsuranceTableView).update(((Integer) arg));
-            // set insuree id in editor view
-            ((InsureeEditorView) m_EditInsureeView).setInsureeID((Integer) arg);
+            // set insuree in editor view
+            ((InsureeEditorView) m_EditInsureeView).setInsuree(InsureeUtils.getInstance().getValue(((Integer) arg)));
         } else if (o == m_EditInsureeView) {
             Logger.logDebug("Notified by Insuree Editor.");
             // data changed in editor. update insuree table.

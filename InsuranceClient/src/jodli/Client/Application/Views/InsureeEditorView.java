@@ -27,7 +27,6 @@ import src.jodli.Client.log.Logger;
 
 import javax.swing.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Observable;
 
 /**
@@ -55,13 +54,11 @@ public class InsureeEditorView extends Observable implements IEditorView {
     private JTextField surnamePartnerTextField;
     private JXDatePicker birthdatePartnerDatePicker;
     private JXDatePicker birthdateDatePicker;
-    private int m_InsureeID;
 
     private ModelInsuree m_Insuree;
 
     private void createUIComponents() {
         content = new JPanel();
-        m_InsureeID = -1;
         m_Insuree = new ModelInsuree();
 
         birthdateDatePicker = new JXDatePicker();
@@ -87,6 +84,11 @@ public class InsureeEditorView extends Observable implements IEditorView {
         changed |= m_Insuree.setPartner_BirthDate(birthdatePartnerDatePicker.getDate());
         changed |= m_Insuree.setPartner_Job(jobPartnerTextField.getText());
 
+        changed |= m_Insuree.setStreet_Address(streetTextField.getText());
+        changed |= m_Insuree.setStreet_Number(numberTextField.getText());
+        changed |= m_Insuree.setZipcode(zipcodeTextField.getText());
+        changed |= m_Insuree.setCity(cityTextField.getText());
+
         changed |= m_Insuree.setTelephone_Number(telephoneTextField.getText());
         changed |= m_Insuree.setFax_Number(faxTextField.getText());
         changed |= m_Insuree.setCellphone_Number(cellphoneTextField.getText());
@@ -109,75 +111,41 @@ public class InsureeEditorView extends Observable implements IEditorView {
 
     @Override
     public void loadSettings() {
-        if (m_InsureeID > 0) {
-            Logger.logDebug("Getting Insuree data for Insuree ID " + m_InsureeID);
-
-            m_Insuree = InsureeUtils.getInstance().getValue(m_InsureeID);
-
-            prenameTextField.setText(m_Insuree.getPrename());
-            surnameTextField.setText(m_Insuree.getSurname());
-            birthdateDatePicker.setDate(m_Insuree.getBirthDate());
-            jobTextField.setText(m_Insuree.getJob());
-
-            prenamePartnerTextField.setText(m_Insuree.getPartner_Prename());
-            surnamePartnerTextField.setText(m_Insuree.getPartner_Surname());
-            birthdatePartnerDatePicker.setDate(m_Insuree.getPartner_BirthDate());
-            jobPartnerTextField.setText(m_Insuree.getPartner_Job());
-
-            streetTextField.setText(m_Insuree.getStreet_Address());
-            numberTextField.setText(m_Insuree.getStreet_Number());
-            zipcodeTextField.setText(m_Insuree.getZipcode());
-            cityTextField.setText(m_Insuree.getCity());
-
-            telephoneTextField.setText(m_Insuree.getTelephone_Number());
-            faxTextField.setText(m_Insuree.getFax_Number());
-            cellphoneTextField.setText(m_Insuree.getCellphone_Number());
-            emailTextField.setText(m_Insuree.getEmail());
-
-            bankTextField.setText(m_Insuree.getBank_Name());
-            ibanTextField.setText(m_Insuree.getBank_IBAN());
-            bicTextField.setText(m_Insuree.getBank_BIC());
-
-            contractCheckBox.setSelected(m_Insuree.hasContract());
+        if (m_Insuree != null) {
+            Logger.logDebug("Loading Insuree data.");
         } else {
             Logger.logDebug("Creating new Insuree.");
-            clearFields();
+            m_Insuree = new ModelInsuree();
         }
+        prenameTextField.setText(m_Insuree.getPrename());
+        surnameTextField.setText(m_Insuree.getSurname());
+        birthdateDatePicker.setDate(m_Insuree.getBirthDate());
+        jobTextField.setText(m_Insuree.getJob());
+
+        prenamePartnerTextField.setText(m_Insuree.getPartner_Prename());
+        surnamePartnerTextField.setText(m_Insuree.getPartner_Surname());
+        birthdatePartnerDatePicker.setDate(m_Insuree.getPartner_BirthDate());
+        jobPartnerTextField.setText(m_Insuree.getPartner_Job());
+
+        streetTextField.setText(m_Insuree.getStreet_Address());
+        numberTextField.setText(m_Insuree.getStreet_Number());
+        zipcodeTextField.setText(m_Insuree.getZipcode());
+        cityTextField.setText(m_Insuree.getCity());
+
+        telephoneTextField.setText(m_Insuree.getTelephone_Number());
+        faxTextField.setText(m_Insuree.getFax_Number());
+        cellphoneTextField.setText(m_Insuree.getCellphone_Number());
+        emailTextField.setText(m_Insuree.getEmail());
+
+        bankTextField.setText(m_Insuree.getBank_Name());
+        ibanTextField.setText(m_Insuree.getBank_IBAN());
+        bicTextField.setText(m_Insuree.getBank_BIC());
+
+        contractCheckBox.setSelected(m_Insuree.hasContract());
     }
 
-    private void clearFields() {
-        m_Insuree = new ModelInsuree();
-        m_InsureeID = 0;
-
-        prenameTextField.setText("");
-        surnameTextField.setText("");
-        birthdateDatePicker.setDate(new Date());
-        jobTextField.setText("");
-
-        prenamePartnerTextField.setText("");
-        surnamePartnerTextField.setText("");
-        birthdatePartnerDatePicker.setDate(new Date());
-        jobPartnerTextField.setText("");
-
-        streetTextField.setText("");
-        numberTextField.setText("");
-        zipcodeTextField.setText("");
-        cityTextField.setText("");
-
-        telephoneTextField.setText("");
-        faxTextField.setText("");
-        cellphoneTextField.setText("");
-        emailTextField.setText("");
-
-        bankTextField.setText("");
-        ibanTextField.setText("");
-        bicTextField.setText("");
-
-        contractCheckBox.setSelected(false);
-    }
-
-    public void setInsureeID(int insureeID) {
-        m_InsureeID = insureeID;
+    public void setInsuree(ModelInsuree insuree) {
+        m_Insuree = insuree;
     }
 
 }
