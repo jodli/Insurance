@@ -88,6 +88,23 @@ public class InsuranceUtils implements Observer {
         return it;
     }
 
+    /**
+     * Gets ModelInsurance corresponding to id from insurance in database.
+     *
+     * @param id ID as key.
+     * @return ModelInsurance corresponding to ID.
+     * @see src.jodli.Client.Utilities.DatabaseModels.ModelInsurance
+     */
+    public ModelInsurance getValue(int id) {
+        ModelInsurance m = null;
+        try {
+            m = m_InsuranceDao.queryForId(id);
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+        return m;
+    }
+
     public boolean setValue(ModelInsurance m) {
         try {
             Dao.CreateOrUpdateStatus status = m_InsuranceDao.createOrUpdate(m);

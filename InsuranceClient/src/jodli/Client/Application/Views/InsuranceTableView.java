@@ -40,6 +40,10 @@ public final class InsuranceTableView extends StandardTableView {
         return m_Title;
     }
 
+    public void update() {
+        update(-1);
+    }
+
     public void update(int insureeID) {
         Logger.logDebug("Getting Insurance rows for Insuree ID " + insureeID);
         ((InsuranceTableModel) m_TableModel).update(insureeID);

@@ -147,5 +147,4 @@ public class InsureeEditorView extends Observable implements IEditorView {
     public void setInsuree(ModelInsuree insuree) {
         m_Insuree = insuree;
     }
-
 }

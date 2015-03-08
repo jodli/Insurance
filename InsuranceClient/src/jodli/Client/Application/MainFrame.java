@@ -17,16 +17,15 @@
  */
 package src.jodli.Client.Application;
 
-import src.jodli.Client.Actions.EditInsureeAction;
-import src.jodli.Client.Actions.ExitAction;
-import src.jodli.Client.Actions.NewOpenAction;
-import src.jodli.Client.Actions.SettingsAction;
+import src.jodli.Client.Actions.*;
 import src.jodli.Client.Application.Views.*;
 import src.jodli.Client.TableModels.EmployeeTableModel;
 import src.jodli.Client.TableModels.InsuranceTableModel;
 import src.jodli.Client.TableModels.InsureeTableModel;
 import src.jodli.Client.Updater.UpdateChecker;
 import src.jodli.Client.Utilities.*;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsurance;
+import src.jodli.Client.Utilities.DatabaseModels.ModelInsuree;
 import src.jodli.Client.log.ELogType;
 import src.jodli.Client.log.Logger;
 
@@ -51,6 +50,7 @@ public final class MainFrame implements Observer {
     private Action m_SettingsAction;
     private Action m_ExitAction;
     private Action m_EditInsureeAction;
+    private Action m_EditInsuranceAction;
 
     private ITableView m_InsureeTableView;
     private ITableView m_InsuranceTableView;
@@ -59,6 +59,7 @@ public final class MainFrame implements Observer {
     private ConsoleView m_ConsoleView;
     private IEditorView m_GeneralSettingsView;
     private IEditorView m_EditInsureeView;
+    private IEditorView m_EditInsuranceView;
 
     public MainFrame(String buildNumber) {
         this.m_BuildNumber = buildNumber;
@@ -108,6 +109,8 @@ public final class MainFrame implements Observer {
         // editor views
         m_EditInsureeView = new InsureeEditorView();
         m_EditInsureeView.addObserver(this);
+        m_EditInsuranceView = new InsuranceEditorView();
+        m_EditInsuranceView.addObserver(this);
 
         // console + settings views
         m_ConsoleView = new ConsoleView();
@@ -125,6 +128,7 @@ public final class MainFrame implements Observer {
         m_ExitAction = new ExitAction();
 
         m_EditInsureeAction = new EditInsureeAction(m_Frame, m_EditInsureeView);
+        m_EditInsuranceAction = new EditInsuranceAction(m_Frame, m_EditInsuranceView);
     }
 
     private void initMainGUI() {
@@ -186,6 +190,7 @@ public final class MainFrame implements Observer {
 
         JMenu editMenu = new JMenu("Bearbeiten");
         editMenu.add(m_EditInsureeAction);
+        editMenu.add(m_EditInsuranceAction);
         menubar.add(editMenu);
 
         JMenu infoMenu = new JMenu("Info");
@@ -211,12 +216,23 @@ public final class MainFrame implements Observer {
             Logger.logDebug("Notified by Insuree Table View.");
             // update insurance table with insuree id
             ((InsuranceTableView) m_InsuranceTableView).update(((Integer) arg));
-            // set insuree in editor view
-            ((InsureeEditorView) m_EditInsureeView).setInsuree(InsureeUtils.getInstance().getValue(((Integer) arg)));
+            // set insuree in editor views
+            ModelInsuree m = InsureeUtils.getInstance().getValue(((Integer) arg));
+            ((InsureeEditorView) m_EditInsureeView).setInsuree(m);
+            ((InsuranceEditorView) m_EditInsuranceView).setInsuree(m);
+        } else if (o == m_InsuranceTableView) {
+            Logger.logDebug("Notified by Insurance Table View.");
+            // set insurance in editor view
+            ModelInsurance m = InsuranceUtils.getInstance().getValue(((Integer) arg));
+            ((InsuranceEditorView) m_EditInsuranceView).setInsurance(m);
         } else if (o == m_EditInsureeView) {
             Logger.logDebug("Notified by Insuree Editor.");
             // data changed in editor. update insuree table.
             ((InsureeTableView) m_InsureeTableView).update();
+        } else if (o == m_EditInsuranceView) {
+            Logger.logDebug("Notified by Insurance Editor.");
+            // data changed in editor. update insurance table.
+            ((InsuranceTableView) m_InsuranceTableView).update();
         }
     }
 }

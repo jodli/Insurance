@@ -22,6 +22,7 @@ package src.jodli.Client.TableModels;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import src.jodli.Client.Utilities.DatabaseModels.ModelInsurance;
+import src.jodli.Client.Utilities.EInsurance;
 import src.jodli.Client.Utilities.InsuranceUtils;
 import src.jodli.Client.log.Logger;
 
@@ -100,16 +101,16 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
                 ret = row.getInsuranceNo();
                 break;
             case ModelInsurance.FIELD_START:
-                ret = dateFormatter.format(row.getStart());
+                ret = row.getStart() != null ? dateFormatter.format(row.getStart()) : null;
                 break;
             case ModelInsurance.FIELD_CONTRACT_DATE:
-                ret = dateFormatter.format(row.getContractDate());
+                ret = row.getContractDate() != null ? dateFormatter.format(row.getContractDate()) : null;
                 break;
             case ModelInsurance.FIELD_END:
-                ret = dateFormatter.format(row.getEnd());
+                ret = row.getEnd() != null ? dateFormatter.format(row.getEnd()) : null;
                 break;
             case ModelInsurance.FIELD_TYPE:
-                ret = row.getType();
+                ret = row.getType().toString();
                 break;
             default:
                 ret = "ERROR";
@@ -139,7 +140,7 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
                 row.setEnd((Date) val);
                 break;
             case ModelInsurance.FIELD_TYPE:
-                row.setType((String) val);
+                row.setType(EInsurance.valueOf((String) val));
             default:
                 return false;
         }

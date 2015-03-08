@@ -22,6 +22,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import src.jodli.Client.Utilities.EInsurance;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Model for the Insurance table.
@@ -40,26 +41,28 @@ public class ModelInsurance {
 
     @DatabaseField(generatedId = true, columnName = FIELD_ID)
     private int ID;
-
     @DatabaseField(canBeNull = false, foreign = true)
     private ModelInsuree Insuree;
-
     @DatabaseField(canBeNull = false, columnName = FIELD_INSURANCENO)
     private String InsuranceNo;
-
     @DatabaseField(canBeNull = false, columnName = FIELD_TYPE)
     private EInsurance Type;
-
     @DatabaseField(columnName = FIELD_CONTRACT_DATE)
     private Date ContractDate;
-
     @DatabaseField(columnName = FIELD_START)
     private Date Start;
-
-    @DatabaseField(canBeNull = false, columnName = FIELD_END)
+    @DatabaseField(columnName = FIELD_END)
     private Date End;
 
     public ModelInsurance() {
+
+        this.ID = 0;
+        this.Insuree = new ModelInsuree();
+        this.InsuranceNo = "";
+        this.Start = null;
+        this.ContractDate = null;
+        this.Type = EInsurance.UNDEFINIERT;
+        this.End = null;
     }
 
     public ModelInsurance(ModelInsurance m) {
@@ -74,8 +77,8 @@ public class ModelInsurance {
         this.End = m.End;
     }
 
-    public ModelInsurance(String insuranceNo, ModelInsuree insureeID, Date start, Date contractDate, EInsurance type, Date end) {
-        this.Insuree = insureeID;
+    public ModelInsurance(String insuranceNo, ModelInsuree insuree, Date start, Date contractDate, EInsurance type, Date end) {
+        this.Insuree = insuree;
         this.InsuranceNo = insuranceNo;
         this.Start = start;
         this.ContractDate = contractDate;
@@ -83,40 +86,60 @@ public class ModelInsurance {
         this.End = end;
     }
 
-    public String getType() {
-        return Type.toString();
+    public EInsurance getType() {
+        return Type;
     }
 
-    public void setType(String type) {
-        Type = EInsurance.valueOf(type.toUpperCase());
+    public boolean setType(EInsurance type) {
+        if (Type == type) {
+            Type = type;
+            return true;
+        }
+        return false;
     }
 
     public Date getEnd() {
         return End;
     }
 
-    public void setEnd(Date end) {
-        End = end;
+    public boolean setEnd(Date end) {
+        if (End == null || End.compareTo(end) != 0) {
+            End = end;
+            return true;
+        }
+        return false;
     }
 
     public Date getStart() {
         return Start;
     }
 
-    public void setStart(Date start) {
-        Start = start;
+    public boolean setStart(Date start) {
+        if (Start == null || Start.compareTo(start) != 0) {
+            Start = start;
+            return true;
+        }
+        return false;
     }
 
     public Date getContractDate() {
         return ContractDate;
     }
 
-    public void setContractDate(Date contractDate) {
-        ContractDate = contractDate;
+    public boolean setContractDate(Date contractDate) {
+        if (ContractDate == null || ContractDate.compareTo(contractDate) != 0) {
+            ContractDate = contractDate;
+            return true;
+        }
+        return false;
     }
 
     public ModelInsuree getInsuree() {
         return Insuree;
+    }
+
+    public void setInsuree(ModelInsuree insuree) {
+        Insuree = insuree;
     }
 
     public int getID() {
@@ -127,7 +150,11 @@ public class ModelInsurance {
         return InsuranceNo;
     }
 
-    public void setInsuranceNo(String insuranceNo) {
-        InsuranceNo = insuranceNo;
+    public boolean setInsuranceNo(String insuranceNo) {
+        if (!Objects.equals(InsuranceNo, insuranceNo)) {
+            InsuranceNo = insuranceNo;
+            return true;
+        }
+        return false;
     }
 }

@@ -105,10 +105,10 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
                 ret = row.getPartner_Surname();
                 break;
             case ModelInsuree.FIELD_BIRTHDATE:
-                ret = dateFormatter.format(row.getBirthDate());
+                ret = row.getBirthDate() != null ? dateFormatter.format(row.getBirthDate()) : null;
                 break;
             case ModelInsuree.FIELD_BIRTHDATE_PARTNER:
-                ret = dateFormatter.format(row.getPartner_BirthDate());
+                ret = row.getPartner_BirthDate() != null ? dateFormatter.format(row.getPartner_BirthDate()) : null;
                 break;
             case ModelInsuree.FIELD_STREET:
                 ret = row.getStreet_Address();

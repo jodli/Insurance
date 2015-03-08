@@ -25,7 +25,8 @@ package src.jodli.Client.Utilities;
  */
 public enum EInsurance {
     PRIVATHAFTPFLICHT,
-    HAUSRAT;
+    HAUSRAT,
+    UNDEFINIERT;
 
     @Override
     public String toString() {
