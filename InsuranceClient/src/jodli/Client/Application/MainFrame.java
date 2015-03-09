@@ -138,7 +138,7 @@ public final class MainFrame implements Observer {
 
         m_MainTabbedPane.addTab(m_InsureeTableView.getTabTitle(), m_InsureeTableView.getContent());
         m_MainTabbedPane.addTab(m_InsuranceTableView.getTabTitle(), m_InsuranceTableView.getContent());
-        m_MainTabbedPane.addTab(m_EmployeeTableView.getTabTitle(), m_EmployeeTableView.getContent());
+//        m_MainTabbedPane.addTab(m_EmployeeTableView.getTabTitle(), m_EmployeeTableView.getContent());
         m_MainTabbedPane.addTab(m_ConsoleView.getTabTitle(), m_ConsoleView.getContent());
 
         m_Frame.getContentPane().add(m_MainTabbedPane);

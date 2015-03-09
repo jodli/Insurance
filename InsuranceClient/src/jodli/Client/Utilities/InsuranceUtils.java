@@ -79,7 +79,7 @@ public class InsuranceUtils implements Observer {
             if (insureeID < 0) {
                 it = m_InsuranceDao.iterator();
             } else {
-                PreparedQuery p = m_InsuranceDao.queryBuilder().where().eq(ModelInsurance.FIELD_ID, insureeID).prepare();
+                PreparedQuery p = m_InsuranceDao.queryBuilder().where().eq(ModelInsurance.FIELD_INSUREEID, insureeID).prepare();
                 it = m_InsuranceDao.iterator(p);
             }
         } catch (SQLException e) {

@@ -30,9 +30,10 @@ import java.util.Objects;
  * @author Jan-Olaf Becker
  */
 @DatabaseTable(tableName = "Insurance")
-public class ModelInsurance implements IModel{
+public class ModelInsurance implements IModel {
 
     public static final String FIELD_ID = "ID";
+    public static final String FIELD_INSUREEID = "InsureeID";
     public static final String FIELD_INSURANCENO = "Versicherungsnummer";
     public static final String FIELD_TYPE = "Versicherungsart";
     public static final String FIELD_CONTRACT_DATE = "Antragsdatum";
@@ -41,7 +42,7 @@ public class ModelInsurance implements IModel{
 
     @DatabaseField(generatedId = true, columnName = FIELD_ID)
     private int ID;
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(canBeNull = false, foreign = true, columnName = FIELD_INSUREEID)
     private ModelInsuree Insuree;
     @DatabaseField(canBeNull = false, columnName = FIELD_INSURANCENO)
     private String InsuranceNo;
@@ -91,7 +92,7 @@ public class ModelInsurance implements IModel{
     }
 
     public boolean setType(EInsurance type) {
-        if (Type == type) {
+        if (Type != type) {
             Type = type;
             return true;
         }

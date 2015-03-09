@@ -85,6 +85,7 @@ public class InsuranceEditorView extends Observable implements IEditorView {
         } else {
             Logger.logDebug("Creating new Insurance.");
             m_Insurance = new ModelInsurance();
+            m_Insurance.setInsuree(m_Insuree);
         }
         insuranceNoTextField.setText(m_Insurance.getInsuranceNo());
         insuranceTypeComboBox.setSelectedItem(m_Insurance.getType());
