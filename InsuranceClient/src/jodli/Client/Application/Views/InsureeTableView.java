@@ -37,19 +37,20 @@ public class InsureeTableView extends StandardTableView {
         m_ListSelectionModel = m_Table.getSelectionModel();
 
         m_ListSelectionModel.addListSelectionListener(e -> {
-            int selected = m_Table.getSelectedRow();
+            if (e.getValueIsAdjusting()) {
+                int selected = m_Table.getSelectedRow();
 
+                if (selected < 0) {
+                    Logger.logDebug("Insuree table selection changed. Deselected row.");
+                } else {
+                    selected = ((InsureeTableModel) m_Table.getModel()).getId(m_Table.convertRowIndexToModel(selected));
+                    Logger.logDebug("Insuree table selection changed. Selected ID " + selected);
+                }
 
-            if (selected < 0) {
-                Logger.logDebug("Insuree table selection changed. Deselected row.");
-            } else {
-                selected = ((InsureeTableModel) m_Table.getModel()).getId(m_Table.convertRowIndexToModel(selected));
-                Logger.logDebug("Insuree table selection changed. Selected ID " + selected);
+                // Notify Insurance view.
+                setChanged();
+                notifyObservers(selected);
             }
-
-            // Notify Insurance view.
-            setChanged();
-            notifyObservers(selected);
         });
 
         m_Table.setSelectionModel(m_ListSelectionModel);

@@ -91,6 +91,7 @@ public class InsuranceEditorView extends Observable implements IEditorView {
         contractDatePicker.setDate(m_Insurance.getContractDate());
         startDatePicker.setDate(m_Insurance.getStart());
         endDatePicker.setDate(m_Insurance.getEnd());
+        m_Insuree = m_Insurance.getInsuree();
     }
 
     @Override

@@ -30,7 +30,7 @@ import java.util.Objects;
  * @author Jan-Olaf Becker
  */
 @DatabaseTable(tableName = "Insurance")
-public class ModelInsurance {
+public class ModelInsurance implements IModel{
 
     public static final String FIELD_ID = "ID";
     public static final String FIELD_INSURANCENO = "Versicherungsnummer";

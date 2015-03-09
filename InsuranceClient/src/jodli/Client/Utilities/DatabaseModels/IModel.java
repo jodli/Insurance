@@ -18,14 +18,11 @@
  *
  */
 
-package src.jodli.Client.TableModels;
+package src.jodli.Client.Utilities.DatabaseModels;
 
 /**
- * Created by job87 on 3/4/2015.
+ * Created by job87 on 3/8/2015.
  */
-public final class EmployeeTableModel extends TableModel {
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        return null;
-    }
+public interface IModel {
+    int getID();
 }

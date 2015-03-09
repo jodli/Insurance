@@ -22,15 +22,19 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Model for the Employee table.
- * 
+ *
  * @author Jan-Olaf Becker
- * 
  */
 @DatabaseTable(tableName = "Employee")
-public class ModelEmployee {
-	@DatabaseField(generatedId = true, id = true)
-	private int ID;
+public class ModelEmployee implements IModel {
+    @DatabaseField(generatedId = true, id = true)
+    private int ID;
 
-	public ModelEmployee() {
-	}
+    public ModelEmployee() {
+    }
+
+    @Override
+    public int getID() {
+        return -1;
+    }
 }

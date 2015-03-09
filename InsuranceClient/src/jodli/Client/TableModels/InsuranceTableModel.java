@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by job87 on 3/4/2015.
  */
-public final class InsuranceTableModel extends TableModel<ModelInsurance> {
+public final class InsuranceTableModel extends TableModel {
 
     private SimpleDateFormat dateFormatter;
     private int m_InsureeID;
@@ -51,25 +51,21 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
 
     public void update(int insureeID) {
         Logger.logDebug("Updating Insurance Table.");
-        if (m_InsureeID != insureeID) {
+        if (insureeID < 0 || m_InsureeID != insureeID) {
             new InsuranceTableTask(insureeID).execute();
+            m_InsureeID = insureeID;
         }
-        m_InsureeID = insureeID;
     }
 
-    public int getId(int row) {
-        return this.rows.get(row).getID();
-    }
-
-    @Override
     public Object getValueAt(int row, int column) {
-        return getColumnValue(this.rows.get(row), column);
+        ModelInsurance m = (ModelInsurance) this.rows.get(row);
+        return getColumnValue(m, column);
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        // make a copy of the insuree MEMENTO
-        ModelInsurance insurance = new ModelInsurance(this.rows.get(rowIndex));
+        // make a copy of the insurance MEMENTO
+        ModelInsurance insurance = new ModelInsurance((ModelInsurance) this.rows.get(rowIndex));
         // set column value in copy
         if (this.setColumnValue(insurance, columnIndex, aValue)) {
             // update database
@@ -160,26 +156,32 @@ public final class InsuranceTableModel extends TableModel<ModelInsurance> {
         protected Void doInBackground() throws Exception {
             CloseableIterator<ModelInsurance> res = InsuranceUtils.getInstance().getResultSet(m_InsureeID);
 
-            List<String> columList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
-            columList.remove(0);
-            columList.remove(0);
-            columns = columList.toArray(new String[0]);
-            InsuranceTableModel.this.fireTableStructureChanged();
+            if (columns == null) {
+                List<String> columnList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
+                columnList.remove(0);
+                columnList.remove(0);
+                columns = columnList.toArray(new String[0]);
+                InsuranceTableModel.this.fireTableStructureChanged();
+            }
 
             Logger.logDebug("Insurance Columns: " + InsuranceTableModel.this.getColumnCount());
 
+            boolean hasEntry = false;
             while (res.hasNext()) {
                 publish(res.next());
+                hasEntry = true;
+            }
+            if (!hasEntry) {
+                InsuranceTableModel.this.fireTableStructureChanged();
             }
             return null;
         }
 
         @Override
-        protected void process(List<ModelInsurance> chunks
-        ) {
+        protected void process(List<ModelInsurance> chunks) {
+            Logger.logDebug("Processing " + chunks.size() + " chunks.");
             rows.addAll(chunks);
             InsuranceTableModel.this.fireTableDataChanged();
-            Logger.logDebug("Processing " + chunks.size() + " chunks.");
         }
     }
 }

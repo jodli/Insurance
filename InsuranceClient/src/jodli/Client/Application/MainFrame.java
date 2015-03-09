@@ -104,6 +104,7 @@ public final class MainFrame implements Observer {
         m_InsureeTableView = new InsureeTableView(new InsureeTableModel());
         m_InsureeTableView.addObserver(this);
         m_InsuranceTableView = new InsuranceTableView(new InsuranceTableModel());
+        m_InsuranceTableView.addObserver(this);
         m_EmployeeTableView = new EmployeeTableView(new EmployeeTableModel());
 
         // editor views

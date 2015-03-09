@@ -33,6 +33,27 @@ public final class InsuranceTableView extends StandardTableView {
 
     public InsuranceTableView(TableModel tableModel) {
         super(tableModel);
+
+        m_ListSelectionModel = m_Table.getSelectionModel();
+
+        m_ListSelectionModel.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selected = m_Table.getSelectedRow();
+
+                if (selected < 0) {
+                    Logger.logDebug("Insurance table selection changed. Deselected row.");
+                } else {
+                    selected = ((InsuranceTableModel) m_Table.getModel()).getId(m_Table.convertRowIndexToModel(selected));
+                    Logger.logDebug("Insurance table selection changed. Selected ID " + selected);
+                }
+
+                // Notify Insurance view.
+                setChanged();
+                notifyObservers(selected);
+            }
+        });
+
+        m_Table.setSelectionModel(m_ListSelectionModel);
     }
 
     @Override

@@ -17,23 +17,25 @@
  */
 package src.jodli.Client.TableModels;
 
-import java.util.ArrayList;
-import java.util.List;
+import src.jodli.Client.Utilities.DatabaseModels.IModel;
+import src.jodli.Client.log.Logger;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-
-import src.jodli.Client.log.Logger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Abstract Table Model to be implemented by Database Models.
  *
- * @author Jan-Olaf Becker <job87@web.de>
  * @param <T> Database Model Class.
+ * @author Jan-Olaf Becker <job87@web.de>
  */
-public abstract class TableModel<T> extends AbstractTableModel implements TableModelListener {
+public abstract class TableModel extends AbstractTableModel implements TableModelListener {
 
-    protected final List<T> rows;
+    protected final Vector<IModel> rows;
     protected String[] columns;
 
     /**
@@ -41,7 +43,7 @@ public abstract class TableModel<T> extends AbstractTableModel implements TableM
      * names array.
      */
     protected TableModel() {
-        this.rows = new ArrayList();
+        this.rows = new Vector<>();
         this.columns = null;
 
         this.addTableModelListener(this);
@@ -68,5 +70,9 @@ public abstract class TableModel<T> extends AbstractTableModel implements TableM
     @Override
     public void tableChanged(TableModelEvent e) {
         Logger.logDebug(e.toString());
+    }
+
+    public int getId(int row) {
+        return this.rows.get(row).getID();
     }
 }

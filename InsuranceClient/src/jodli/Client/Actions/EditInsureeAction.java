@@ -67,7 +67,7 @@ public class EditInsureeAction extends AbstractAction {
     private final class InsureeEditor extends StandardDialog {
 
         InsureeEditor(String title, JFrame parent) {
-            super(title, parent, CloseAction.HIDE, false);
+            super(title, parent, CloseAction.HIDE);
             m_Dialog.setSize(650, 480);
         }
 

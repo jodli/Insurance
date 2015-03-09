@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author Jan-Olaf Becker <job87@web.de>
  */
-public final class InsureeTableModel extends TableModel<ModelInsuree> {
+public final class InsureeTableModel extends TableModel {
 
     private SimpleDateFormat dateFormatter;
 
@@ -58,13 +58,14 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
 
     @Override
     public Object getValueAt(int row, int column) {
-        return getColumnValue(this.rows.get(row), column);
+        ModelInsuree m = (ModelInsuree) this.rows.get(row);
+        return getColumnValue(m, column);
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         // make a copy of the insuree MEMENTO
-        ModelInsuree insuree = new ModelInsuree(this.rows.get(rowIndex));
+        ModelInsuree insuree = new ModelInsuree((ModelInsuree) this.rows.get(rowIndex));
         // set column value in copy
         if (this.setColumnValue(insuree, columnIndex, aValue)) {
             // update database
@@ -243,11 +244,14 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
         protected Void doInBackground() throws Exception {
             CloseableIterator<ModelInsuree> res = InsureeUtils.getInstance().getResultSet();
 
-            columns = res.getRawResults().getColumnNames();
-            List<String> columList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
-            columList.remove(0);
-            columns = columList.toArray(new String[0]);
-            InsureeTableModel.this.fireTableStructureChanged();
+            if (columns == null) {
+                columns = res.getRawResults().getColumnNames();
+                List<String> columnList = new LinkedList<>(Arrays.asList(res.getRawResults().getColumnNames()));
+                columnList.remove(0);
+                columns = columnList.toArray(new String[0]);
+                InsureeTableModel.this.fireTableStructureChanged();
+            }
+
             Logger.logDebug("Insuree Columns: " + InsureeTableModel.this.getColumnCount());
 
             while (res.hasNext()) {
@@ -257,11 +261,10 @@ public final class InsureeTableModel extends TableModel<ModelInsuree> {
         }
 
         @Override
-        protected void process(List<ModelInsuree> chunks
-        ) {
+        protected void process(List<ModelInsuree> chunks) {
+            Logger.logDebug("Processing " + chunks.size() + " chunks.");
             rows.addAll(chunks);
             InsureeTableModel.this.fireTableDataChanged();
-            Logger.logDebug("Processing " + chunks.size() + " chunks.");
         }
     }
 }

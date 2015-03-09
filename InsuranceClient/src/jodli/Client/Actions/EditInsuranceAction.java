@@ -62,7 +62,7 @@ public class EditInsuranceAction extends AbstractAction {
         return m_EditInsuranceView.getContent();
     }
 
-    private boolean saveInsuree() {
+    private boolean saveInsurance() {
         Logger.logDebug("Saving Insurance Data.");
         return m_EditInsuranceView.saveSettings();
     }
@@ -70,13 +70,13 @@ public class EditInsuranceAction extends AbstractAction {
     private final class InsuranceEditor extends StandardDialog {
 
         InsuranceEditor(String title, JFrame parent) {
-            super(title, parent, CloseAction.HIDE, false);
+            super(title, parent, CloseAction.HIDE);
             m_Dialog.setSize(650, 480);
         }
 
         @Override
         protected void okAction() {
-            if (saveInsuree()) {
+            if (saveInsurance()) {
                 Logger.logDebug("Saved Insurance.");
                 dispose();
             } else {
